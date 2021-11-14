@@ -38,6 +38,6 @@ export const StyledLink = styled(NavLink).attrs({ activeClassName })`
   transition: color 0.3s ease-in;
 
   &.${activeClassName} {
-    color: ${({ theme }) => theme.colors.textSecondary};
+    color: ${({ theme }) => theme.colors.textTertiary};
   }
 `;
