@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+import { employesDyspo } from 'data/employesDyspo';
 import { shiftsSchema } from 'data/shiftsSchema';
 import { getPeoplePerShift } from 'generatorGraph/getPeoplePerShift';
 import { getShiftPriority } from 'generatorGraph/getShiftPriority';
@@ -19,7 +20,7 @@ export const getGraph = () => {
   };
   const days = Object.keys(graph);
 
-  days.forEach((dayName) => {
+  days.forEach((dayName, dayNumber) => {
     const shifts = shiftPriority[dayName];
 
     // creating strcuture for everyone day which will reflect the structure of shifts from shiftsSchema
@@ -34,12 +35,42 @@ export const getGraph = () => {
       }
     });
 
-    // peoplePerShift[dayName].forEach((shiftType) => {
-    //   const lastDay = dayName === 'friday' ? 'oldThursday' : days[dayNumber - 1];
-    //   const actualDay = dayName;
+    peoplePerShift[dayName].forEach((shiftType) => {
+      let shiftarray;
+      const lastDay = dayName === 'friday' ? 'oldThursday' : days[dayNumber - 1];
+      const actualDay = dayName;
 
-    //   // here it will be checked if the employee can be assigned to the selected shift. (e.g. an employee will start work in the morning if he/she finished work at night the day before)
-    // });
+      if (lastDay !== 'oldThursday' && shiftarray) {
+        shiftarray.forEach((employee) => {
+          const dyspo = getEmployeeDyspo(employee);
+
+          if ((dyspo[lastDay].to = '24')) {
+            const shiftsTypesNames = Object.keys(shiftsSchema[lastDay]);
+            const arrDeletes = [];
+
+            shiftsTypesNames.forEach((shiftTypeName, shiftTypeIndex) => {
+              shifts[lastDay][shiftTypeName].forEach((shift) => {
+                if (parseFloat(shift[0]) < 12) {
+                  arrDeletes.push(shiftTypeIndex);
+                }
+              });
+            });
+            console.log(employee);
+            console.log(arrDeletes);
+          }
+        });
+      }
+
+      if (shiftType) {
+        shiftarray = [...shiftType];
+      } else {
+        shiftarray = false;
+      }
+
+      console.log(shiftarray);
+
+      // here it will be checked if the employee can be assigned to the selected shift. (e.g. an employee will start work in the morning if he/she finished work at night the day before)
+    });
 
     // selecting the employee who will take the shift
     shifts.forEach((shift) => {

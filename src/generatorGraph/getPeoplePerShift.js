@@ -17,8 +17,14 @@ const validateEmployee = (nameEmployee, shiftType, shiftEndHour) => {
     }
     return false;
   }
-  if ((shiftType === 2 && shiftEndHour > 23) || (shiftType === 3 && shiftEndHour > 23)) {
-    if (employee.sex === 'male') {
+  if (shiftType === 2 || shiftType === 3) {
+    if (employee.obs1 || employee.obs2) {
+      if (shiftEndHour > 23 || shiftEndHour > 23) {
+        if (employee.sex === 'male') {
+          return true;
+        }
+        return false;
+      }
       return true;
     }
     return false;

@@ -15,7 +15,7 @@ const Table = styled.table`
   }
 
   td {
-    width: 5rem;
+    width: 6rem;
     padding: 0.3rem 0.2rem;
     text-align: center;
     background-color: ${({ theme }) => theme.colors.white};
