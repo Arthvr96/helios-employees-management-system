@@ -27,6 +27,14 @@ a, button{
     font-family: 'Roboto', sans-serif;
 }
 
+table{
+  border-collapse:collapse;
+}
+
+td, th{
+  border: 1px solid black;
+}
+
 main {
   display: block;
 }

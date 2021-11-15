@@ -69,3 +69,21 @@ export const getDataForDashboard = () => {
     count2,
   };
 };
+
+export const getHourFormat = (value) => {
+  let result = 0;
+  if (value % 1 === 0) {
+    result = `${value}:00`;
+  } else {
+    if (value % 1 === 0.5) {
+      result = `${parseInt(`${value}`, 10)}:30`;
+    }
+    if (value % 1 === 0.25) {
+      result = `${parseInt(`${value}`, 10)}:15`;
+    }
+    if (value % 1 === 0.75) {
+      result = `${parseInt(`${value}`, 10)}:45`;
+    }
+  }
+  return result;
+};

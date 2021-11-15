@@ -8,6 +8,8 @@ export const theme = {
     darkGrey: '#3D3D3D',
     primary: '#002047',
     secondary: '#F40000',
+    button: '#0C3E7A',
+    buttonHover: '#378BF2',
     textPrimary: '#FFFFFF',
     textSecondary: '#000000',
     textTertiary: '#F40000',
