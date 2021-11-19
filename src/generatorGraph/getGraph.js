@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-import { employesDyspo } from 'data/employesDyspo';
 import { shiftsSchema } from 'data/shiftsSchema';
 import { getPeoplePerShift } from 'generatorGraph/getPeoplePerShift';
 import { getShiftPriority } from 'generatorGraph/getShiftPriority';
@@ -7,6 +5,7 @@ import { getEmployeeDyspo, getNameShift } from './helpers';
 
 const peoplePerShift = getPeoplePerShift();
 let shiftPriority = getShiftPriority(peoplePerShift);
+
 // object with employes who took shift
 export const getGraph = () => {
   const graph = {
@@ -24,52 +23,40 @@ export const getGraph = () => {
     const shifts = shiftPriority[dayName];
 
     // creating strcuture for everyone day which will reflect the structure of shifts from shiftsSchema
-    peoplePerShift[dayName].forEach((shiftType, indexShiftType) => {
+    peoplePerShift[dayName].forEach((shiftType, shiftTypeIndex) => {
       if (shiftType) {
         graph[dayName].push([]);
         for (let i = 0; i < shiftType.length; i += 1) {
-          graph[dayName][indexShiftType].push([]);
+          graph[dayName][shiftTypeIndex].push([]);
         }
       } else {
         graph[dayName].push(false);
       }
     });
 
-    peoplePerShift[dayName].forEach((shiftType) => {
-      let shiftarray;
+    // Removing an employee from morning shifts if he or she closed the cinema the day before, unless the employee agreed to a short rest between shifts
+    peoplePerShift[dayName].forEach((shiftType, shiftTypeIndex) => {
       const lastDay = dayName === 'friday' ? 'oldThursday' : days[dayNumber - 1];
-      const actualDay = dayName;
 
-      if (lastDay !== 'oldThursday' && shiftarray) {
-        shiftarray.forEach((employee) => {
-          const dyspo = getEmployeeDyspo(employee);
+      if (shiftType) {
+        shiftType.forEach((shiftEmployesList, shiftNumber) => {
+          const shiftStart = parseFloat(
+            shiftsSchema[dayName][getNameShift(shiftTypeIndex)][shiftNumber][0],
+          );
+          if (shiftStart < 11) {
+            shiftEmployesList.forEach((employee) => {
+              const { dyspo, shift } = getEmployeeDyspo(employee);
+              const employeePrevShiftEnd = shift[lastDay].length > 0 ? shift[lastDay][0][1] : null;
 
-          if ((dyspo[lastDay].to = '24')) {
-            const shiftsTypesNames = Object.keys(shiftsSchema[lastDay]);
-            const arrDeletes = [];
-
-            shiftsTypesNames.forEach((shiftTypeName, shiftTypeIndex) => {
-              shifts[lastDay][shiftTypeName].forEach((shift) => {
-                if (parseFloat(shift[0]) < 12) {
-                  arrDeletes.push(shiftTypeIndex);
-                }
-              });
+              if (!dyspo[dayName].shortRest && employeePrevShiftEnd === '24') {
+                const arr1 = [...peoplePerShift[dayName][shiftTypeIndex][shiftNumber]];
+                const filterArr1 = arr1.filter((value) => value !== employee);
+                peoplePerShift[dayName][shiftTypeIndex][shiftNumber] = [...filterArr1];
+              }
             });
-            console.log(employee);
-            console.log(arrDeletes);
           }
         });
       }
-
-      if (shiftType) {
-        shiftarray = [...shiftType];
-      } else {
-        shiftarray = false;
-      }
-
-      console.log(shiftarray);
-
-      // here it will be checked if the employee can be assigned to the selected shift. (e.g. an employee will start work in the morning if he/she finished work at night the day before)
     });
 
     // selecting the employee who will take the shift

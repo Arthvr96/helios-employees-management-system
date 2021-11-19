@@ -1,4 +1,4 @@
-export const employesDyspo = [
+export const employesDyspoOnlyRead = [
   {
     name: 'Bał Dan',
     dyspo: {

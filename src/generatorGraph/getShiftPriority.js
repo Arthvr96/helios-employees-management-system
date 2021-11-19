@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-return-assign */
 const sortShiftPriority = (shiftPriority) => {
   const days = Object.keys(shiftPriority);
 
