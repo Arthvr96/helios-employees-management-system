@@ -16,7 +16,7 @@ const TableShifts = ({ shiftName, shiftId, maxShifts }) => {
           <td key={uniqid()}>{item}</td>
         ))}
       </ShiftType>
-      <tr>
+      <tr className="shifts">
         {arr.map((item, i) => (
           <TabShifts key={uniqid()} shiftId={shiftId} maxShifts={maxShifts} dayNumber={i} />
         ))}

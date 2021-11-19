@@ -12,7 +12,7 @@ const TabShifts = ({ shiftId, maxShifts, dayNumber }) => {
       <Table>
         <tbody>
           {arr2.map((item, i) => (
-            <Shifts key={uniqid()}>
+            <Shifts className={`row${i}`} key={uniqid()}>
               <td className={`shiftCell ${item}-${dayNumber}-${shiftId}-${i}-0`}>.</td>
               <td className={`shiftCell ${item}-${dayNumber}-${shiftId}-${i}-1`}>.</td>
               <td className={`shiftCell ${item}-${dayNumber}-${shiftId}-${i}-2`}>.</td>

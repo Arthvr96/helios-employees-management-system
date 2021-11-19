@@ -1,10 +1,11 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import TableGraph from 'components/organisms/TableGraph/TableGraph';
 import TableEmployess from 'components/organisms/TableEmployees/TableEmployess';
 import { useGraph } from 'generatorGraph/useGraph';
 import { getNameShift, getHourFormat } from 'generatorGraph/helpers';
 import { shiftsSchema } from 'data/shiftsSchema';
 import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
+import { csvGenerator } from 'generatorGraph/csvGenerator';
 import { Wrapper, WrapperButtons, Button, WrapperTabs } from './GraphGeneratorView.style';
 
 const GraphGeneratorView = () => {
@@ -63,22 +64,6 @@ const GraphGeneratorView = () => {
     });
   };
 
-  useEffect(() => {
-    const graphWrapper = document.querySelector('.graph');
-
-    const handleClick = (e) => {
-      if (e.target.classList.contains('shiftCell')) {
-        // const el = e.target;
-      }
-    };
-
-    graphWrapper.addEventListener('click', handleClick);
-
-    return () => {
-      graphWrapper.removeEventListener('click', handleClick);
-    };
-  }, []);
-
   return (
     <Wrapper>
       <WrapperButtons>
@@ -87,6 +72,8 @@ const GraphGeneratorView = () => {
         </Button>
         <Button disabled>Spróbuj uzupełnic luki</Button>
         <Button onClick={handleClearGraph}>Wyczyśc grafik</Button>
+        <Button onClick={csvGenerator}>Pobierz csv</Button>
+        <div className="placeholder" />
       </WrapperButtons>
       <WrapperTabs>
         <TableGraph />

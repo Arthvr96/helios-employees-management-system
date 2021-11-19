@@ -26,6 +26,7 @@ const TableGraph = () => {
       }
     });
   });
+
   return (
     <Table className="graph">
       <thead>
