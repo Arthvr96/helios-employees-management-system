@@ -1,5 +1,6 @@
 import { shiftsSchema } from 'data/shiftsSchema';
-import { employesDyspo } from 'data/employesDyspo';
+import { useContext } from 'react';
+import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import { getEmployeeInfo } from './helpers';
 
 const validateEmployee = (nameEmployee, shiftType, shiftEndHour) => {
@@ -32,7 +33,8 @@ const validateEmployee = (nameEmployee, shiftType, shiftEndHour) => {
   return true;
 };
 
-export const getPeoplePerShift = () => {
+export const usePeoplePerShift = () => {
+  const { employesDyspo } = useContext(AdminStateContext);
   const peoplePerShift = {
     friday: [],
     saturday: [],

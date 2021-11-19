@@ -5,14 +5,18 @@ import { employesDyspoOnlyRead } from 'data/employesDyspoOnlyRead';
 export const AdminStateContext = createContext({});
 
 const AdminStateProvider = ({ children }) => {
-  const [employesDyspo, setEmployesDyspo] = useState([]);
+  const [employesDyspo, setEmployesDyspo] = useState(employesDyspoOnlyRead);
 
   const getEmployesDyspo = () => {
     setEmployesDyspo(employesDyspoOnlyRead);
   };
 
+  const resetEmployesDyspo = () => {
+    setEmployesDyspo([]);
+  };
+
   return (
-    <AdminStateContext.Provider value={{ employesDyspo, getEmployesDyspo }}>
+    <AdminStateContext.Provider value={{ employesDyspo, getEmployesDyspo, resetEmployesDyspo }}>
       {children}
     </AdminStateContext.Provider>
   );

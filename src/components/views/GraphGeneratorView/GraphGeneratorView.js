@@ -1,15 +1,18 @@
-import React, { useEffect } from 'react';
-import TableGraph from 'components/organisms/TableGraph/TableGraph/TableGraph';
+import React, { useEffect, useContext } from 'react';
+import TableGraph from 'components/organisms/TableGraph/TableGraph';
 import TableEmployess from 'components/organisms/TableEmployees/TableEmployess';
-import { getGraph } from 'generatorGraph/getGraph';
+import { useGraph } from 'generatorGraph/useGraph';
 import { getNameShift, getHourFormat } from 'generatorGraph/helpers';
 import { shiftsSchema } from 'data/shiftsSchema';
-import { employesDyspo } from 'data/employesDyspo';
+import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import { Wrapper, WrapperButtons, Button, WrapperTabs } from './GraphGeneratorView.style';
 
 const GraphGeneratorView = () => {
+  const graph = useGraph();
+  const { employesDyspo, getEmployesDyspo, resetEmployesDyspo } = useContext(AdminStateContext);
+
   const handleGetGraph = () => {
-    const graph = getGraph();
+    getEmployesDyspo();
     const days = Object.keys(graph);
     const cells = [...document.querySelectorAll('.shiftCell')];
     const cells2 = [];
@@ -52,6 +55,7 @@ const GraphGeneratorView = () => {
   };
 
   const handleClearGraph = () => {
+    resetEmployesDyspo();
     const cells = [...document.querySelectorAll('.shiftCell')];
 
     cells.forEach((cell) => {
@@ -60,7 +64,7 @@ const GraphGeneratorView = () => {
   };
 
   useEffect(() => {
-    const graph = document.querySelector('.graph');
+    const graphWrapper = document.querySelector('.graph');
 
     const handleClick = (e) => {
       if (e.target.classList.contains('shiftCell')) {
@@ -68,21 +72,21 @@ const GraphGeneratorView = () => {
       }
     };
 
-    graph.addEventListener('click', handleClick);
+    graphWrapper.addEventListener('click', handleClick);
 
     return () => {
-      graph.removeEventListener('click', handleClick);
+      graphWrapper.removeEventListener('click', handleClick);
     };
   }, []);
 
   return (
     <Wrapper>
       <WrapperButtons>
-        <Button onClick={handleGetGraph}>Generuj grafik</Button>
-        <Button disabled>Spróbuj uzupełnic luki</Button>
-        <Button disabled onClick={handleClearGraph}>
-          Wyczyśc grafik
+        <Button onClick={handleGetGraph}>
+          {employesDyspo.length > 0 ? 'generuj grafik' : 'pobierz dyspozycje'}
         </Button>
+        <Button disabled>Spróbuj uzupełnic luki</Button>
+        <Button onClick={handleClearGraph}>Wyczyśc grafik</Button>
       </WrapperButtons>
       <WrapperTabs>
         <TableGraph />

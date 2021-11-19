@@ -1,13 +1,16 @@
 import { shiftsSchema } from 'data/shiftsSchema';
-import { getPeoplePerShift } from 'generatorGraph/getPeoplePerShift';
+import { usePeoplePerShift } from 'generatorGraph/getPeoplePerShift';
 import { getShiftPriority } from 'generatorGraph/getShiftPriority';
+import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
+import { useContext } from 'react';
 import { getEmployeeDyspo, getNameShift } from './helpers';
 
-const peoplePerShift = getPeoplePerShift();
-let shiftPriority = getShiftPriority(peoplePerShift);
-
 // object with employes who took shift
-export const getGraph = () => {
+export const useGraph = () => {
+  const { employesDyspo } = useContext(AdminStateContext);
+  const peoplePerShift = usePeoplePerShift();
+  let shiftPriority = getShiftPriority(peoplePerShift);
+
   const graph = {
     friday: [],
     saturday: [],
@@ -45,7 +48,7 @@ export const getGraph = () => {
           );
           if (shiftStart < 11) {
             shiftEmployesList.forEach((employee) => {
-              const { dyspo, shift } = getEmployeeDyspo(employee);
+              const { dyspo, shift } = getEmployeeDyspo(employee, employesDyspo);
               const employeePrevShiftEnd = shift[lastDay].length > 0 ? shift[lastDay][0][1] : null;
 
               if (!dyspo[dayName].shortRest && employeePrevShiftEnd === '24') {
@@ -71,7 +74,7 @@ export const getGraph = () => {
         // calculate priority for employee
         employes.forEach((employeeName) => {
           const { numberOfDyspo, numberOfShifts, additionalPriority, isSkipShift } =
-            getEmployeeDyspo(employeeName);
+            getEmployeeDyspo(employeeName, employesDyspo);
           const addPriority = isSkipShift ? -0.5 : 0;
           const priority =
             numberOfShifts / numberOfDyspo +
@@ -86,7 +89,7 @@ export const getGraph = () => {
         priorityEmployes.sort((a, b) => a[1] - b[1]);
         graph[dayName][typeOfShift][numberOfShift].push(priorityEmployes[0][0]);
         // increase numberOfShifts for selected employee
-        const employee = getEmployeeDyspo(priorityEmployes[0][0]);
+        const employee = getEmployeeDyspo(priorityEmployes[0][0], employesDyspo);
         employee.numberOfShifts += 1;
         employee.shift[dayName].push(
           shiftsSchema[dayName][getNameShift(typeOfShift)][numberOfShift],
@@ -125,7 +128,7 @@ export const getGraph = () => {
       }
     });
     employesWithOutShift.forEach((nameEmployee) => {
-      const employeeDyspo = getEmployeeDyspo(nameEmployee);
+      const employeeDyspo = getEmployeeDyspo(nameEmployee, employesDyspo);
       employeeDyspo.isSkipShift = true;
     });
   });

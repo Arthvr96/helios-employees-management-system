@@ -1,7 +1,7 @@
 import TableEmployee from 'components/molecues/TableEmployee/TableEmployee';
-import React from 'react';
-import { employesDyspo } from 'data/employesDyspo';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 
 const Table = styled.table`
   position: absolute;
@@ -28,6 +28,7 @@ const Table = styled.table`
 `;
 
 const TableEmployess = () => {
+  const { employesDyspo } = useContext(AdminStateContext);
   return (
     <Table>
       <thead>

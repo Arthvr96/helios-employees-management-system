@@ -1,10 +1,10 @@
 import React from 'react';
 import DropList from 'components/organisms/DropList/DropList';
-import { getDataForDashboard } from 'generatorGraph/helpers';
+import { useDataForDashboard } from 'generatorGraph/helpers';
 import { Wrapper } from './DashboardView.style';
 
 const DashBoard = () => {
-  const { arr, arr2, count, count2 } = getDataForDashboard();
+  const { arr, arr2, count, count2 } = useDataForDashboard();
 
   return (
     <Wrapper>
