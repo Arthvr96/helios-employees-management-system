@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { getEmployeeInfo } from 'generatorGraph/helpers';
+import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import { Employee, Avatar, Wrapper, AvatarFullName, AvatarMail } from './EmployeeListItem.style';
 
 const EmployeeListItem = ({ name }) => {
-  const employee = getEmployeeInfo(name);
+  const { employeesInfo } = useContext(AdminStateContext);
+  const employee = getEmployeeInfo(name, employeesInfo);
   const fullName = employee.fullName.replace(' ', '.');
 
   return (

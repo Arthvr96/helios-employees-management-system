@@ -3,17 +3,16 @@ import TableGraph from 'components/organisms/TableGraph/TableGraph';
 import TableEmployess from 'components/organisms/TableEmployees/TableEmployess';
 import { useGraph } from 'generatorGraph/useGraph';
 import { getNameShift, getHourFormat } from 'generatorGraph/helpers';
-import { shiftsSchema } from 'data/shiftsSchema';
 import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import { csvGenerator } from 'generatorGraph/csvGenerator';
 import { Wrapper, WrapperButtons, Button, WrapperTabs } from './GraphGeneratorView.style';
 
 const GraphGeneratorView = () => {
+  const { employeesDispo, getDataUpdate, shiftsSchema } = useContext(AdminStateContext);
   const graph = useGraph();
-  const { employesDyspo, getEmployesDyspo, resetEmployesDyspo } = useContext(AdminStateContext);
 
   const handleGetGraph = () => {
-    getEmployesDyspo();
+    getDataUpdate();
     const days = Object.keys(graph);
     const cells = [...document.querySelectorAll('.shiftCell')];
     const cells2 = [];
@@ -45,7 +44,7 @@ const GraphGeneratorView = () => {
       });
     });
 
-    employesDyspo.forEach((employee) => {
+    employeesDispo.forEach((employee) => {
       days.forEach((day, i) => {
         if (employee.shift[day].length) {
           const cell = document.querySelector(`.${employee.name.replace(' ', '')}${i}`);
@@ -53,23 +52,23 @@ const GraphGeneratorView = () => {
         }
       });
     });
+
+    console.log(graph.saturday);
   };
 
   const handleClearGraph = () => {
-    resetEmployesDyspo();
     const cells = [...document.querySelectorAll('.shiftCell')];
 
     cells.forEach((cell) => {
-      cell.innerHTML = '';
+      cell.innerHTML = ' . ';
+      cell.style.background = '#fff';
     });
   };
 
   return (
     <Wrapper>
       <WrapperButtons>
-        <Button onClick={handleGetGraph}>
-          {employesDyspo.length > 0 ? 'generuj grafik' : 'pobierz dyspozycje'}
-        </Button>
+        <Button onClick={handleGetGraph}>Generuj grafik</Button>
         <Button disabled>Spróbuj uzupełnic luki</Button>
         <Button onClick={handleClearGraph}>Wyczyśc grafik</Button>
         <Button onClick={csvGenerator}>Pobierz csv</Button>

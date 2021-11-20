@@ -1,4 +1,4 @@
-export const employesDyspoOnlyRead = [
+export const cmsResponseEmployeesDispo = [
   {
     name: 'Bał Dan',
     dyspo: {

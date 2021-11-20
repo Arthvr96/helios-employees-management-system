@@ -1,10 +1,9 @@
-import { heliosEmployes } from 'data/heliosEmployes';
 import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import { useContext } from 'react';
 
-export const getEmployeeInfo = (name) => {
+export const getEmployeeInfo = (name, employeesInfo) => {
   let result;
-  heliosEmployes.forEach((employee) => {
+  employeesInfo.forEach((employee) => {
     if (employee.name === name) {
       result = employee;
     }
@@ -49,12 +48,12 @@ export const getNameShift = (idexOfShift) => {
 };
 
 export const useDataForDashboard = () => {
-  const { employesDyspo } = useContext(AdminStateContext);
+  const { employeesDispo } = useContext(AdminStateContext);
   const arr = [];
   let count = 0;
   const arr2 = [];
   let count2 = 0;
-  employesDyspo.forEach((employee) => {
+  employeesDispo.forEach((employee) => {
     if (employee.numberOfDyspo === 0) {
       arr.push(employee.name);
       count += 1;

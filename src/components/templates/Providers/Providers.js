@@ -6,6 +6,7 @@ import SEO from 'components/molecues/SEO/SEO';
 import { ThemeProvider } from 'styled-components';
 import { theme } from 'themes/theme';
 import { GlobalStyle } from 'themes/GlobalStyles';
+import AdminStateProvider from 'providers/AdminStateProvider/AdminStateProvider';
 
 const Providers = ({ children }) => {
   return (
@@ -13,7 +14,9 @@ const Providers = ({ children }) => {
       <Router>
         <ThemeProvider theme={theme}>
           <GlobalStyle />
-          <GlobalStateProvider>{children}</GlobalStateProvider>
+          <GlobalStateProvider>
+            <AdminStateProvider>{children}</AdminStateProvider>
+          </GlobalStateProvider>
         </ThemeProvider>
       </Router>
     </SEO>

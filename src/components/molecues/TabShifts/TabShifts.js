@@ -5,8 +5,11 @@ import { Table, Shifts } from './TabShifts.style';
 
 const TabShifts = ({ shiftId, maxShifts, dayNumber }) => {
   const arr2 = [];
-  arr2.length = maxShifts + 1;
-  arr2.fill('cell');
+  if (maxShifts > -1) {
+    arr2.length = maxShifts + 1;
+    arr2.fill('cell');
+  }
+
   return (
     <td>
       <Table>

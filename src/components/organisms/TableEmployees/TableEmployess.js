@@ -28,9 +28,24 @@ const Table = styled.table`
 `;
 
 const TableEmployess = () => {
-  const { employesDyspo } = useContext(AdminStateContext);
+  const { employeesDispo } = useContext(AdminStateContext);
+
+  React.useEffect(() => {
+    const table = document.querySelector('.tableEmployeeDyspo');
+
+    const handleClick = (e) => {
+      e.target.style.background = 'red';
+    };
+
+    table.addEventListener('click', handleClick);
+
+    return () => {
+      table.removeEventListener('click', handleClick);
+    };
+  }, []);
+
   return (
-    <Table>
+    <Table className="tableEmployeeDyspo">
       <thead>
         <tr>
           <th>Name</th>
@@ -44,7 +59,7 @@ const TableEmployess = () => {
         </tr>
       </thead>
       <tbody>
-        {employesDyspo.map((employee) => (
+        {employeesDispo.map((employee) => (
           <TableEmployee key={employee.name} employee={employee} />
         ))}
       </tbody>

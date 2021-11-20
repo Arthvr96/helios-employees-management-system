@@ -1,9 +1,10 @@
-import React from 'react';
-import { shiftsSchema } from 'data/shiftsSchema';
+import React, { useContext } from 'react';
 import TableShifts from 'components/molecues/TableShifts/TableShifts';
+import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import { Table } from './TableGraph.style';
 
 const TableGraph = () => {
+  const { shiftsSchema } = useContext(AdminStateContext);
   const days = Object.keys(shiftsSchema);
   const daysSizes = {
     bar1: [],
