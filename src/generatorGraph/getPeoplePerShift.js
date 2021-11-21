@@ -76,9 +76,9 @@ export const getPeoplePerShift = (employeesDispo, shiftsSchema, employeesInfo) =
           const shiftEnd = shift[1];
           const employeesPerShift = [];
 
-          employeesDispo.forEach(({ dyspo, name }) => {
-            const employeeDispoStart = parseFloat(dyspo[dayName].from) - 0.75;
-            const employeeDispoEnd = parseFloat(dyspo[dayName].to) + 0.75;
+          employeesDispo.forEach(({ dispo, name }) => {
+            const employeeDispoStart = parseFloat(dispo[dayName].from) - 0.75;
+            const employeeDispoEnd = parseFloat(dispo[dayName].to) + 0.75;
             if (employeeDispoStart <= shiftStart && employeeDispoEnd >= shiftEnd) {
               if (validateEmployee(name, workplaceID, shiftEnd, employeesInfo)) {
                 employeesPerShift.push(name);

@@ -1,6 +1,6 @@
 import { getPeoplePerShift } from 'generatorGraph/getPeoplePerShift';
 import { getShiftPriority } from 'generatorGraph/getShiftPriority';
-import { getEmployeeDyspo, getNameShift } from './helpers';
+import { getEmployeeDispo, getNameShift } from './helpers';
 
 // creating strcuture for everyone day which will reflect the structure of shifts from shiftsSchema
 const createStructureOfGraph = (days, peoplePerShift, graph) => {
@@ -31,10 +31,10 @@ const checkIsShortBreak = (values, days, dayNumber) => {
         );
         if (shiftStart < 11) {
           shiftEmployesList.forEach((employee) => {
-            const { dyspo, shift } = getEmployeeDyspo(employee, employeesDispo);
+            const { dispo, shift } = getEmployeeDispo(employee, employeesDispo);
             const employeePrevShiftEnd = shift[lastDay].length > 0 ? shift[lastDay][0][1] : null;
 
-            if (!dyspo[dayName].shortRest && employeePrevShiftEnd === '24') {
+            if (!dispo[dayName].shortRest && employeePrevShiftEnd === '24') {
               const arr1 = [...peoplePerShift[dayName][shiftTypeIndex][shiftNumber]];
               const filterArr1 = arr1.filter((value) => value !== employee);
               peoplePerShift[dayName][shiftTypeIndex][shiftNumber] = [...filterArr1];
@@ -61,8 +61,8 @@ const handleSetAdditionalPriority = (peoplePerShift, employeesDispo, dayName) =>
     }
   });
   employesWithOutShift.forEach((nameEmployee) => {
-    const employeeDyspo = getEmployeeDyspo(nameEmployee, employeesDispo);
-    employeeDyspo.isSkipShift = true;
+    const employeeDispo = getEmployeeDispo(nameEmployee, employeesDispo);
+    employeeDispo.lastDispoSkipped = true;
   });
 };
 
@@ -80,28 +80,32 @@ const getEmployeePerShift = (values, shiftPriority, graph) => {
 
     if (employees.length !== 0) {
       employees.forEach((employeeName) => {
-        const { numberOfDyspo, numberOfShifts, additionalPriority, isSkipShift } = getEmployeeDyspo(
+        const { numberOfDispo, numberOfShifts, lastDispoSkipped } = getEmployeeDispo(
           employeeName,
           employeesDispo,
         );
-        const addPriority = isSkipShift ? -0.5 : 0;
+        const percentageShifts = numberOfShifts / numberOfDispo;
+        const priorityMultiplerShifts = numberOfShifts / 4;
+        const priorityMultiplerDispo = -numberOfDispo / 50;
+        const lastDispoSkippedPriority = lastDispoSkipped ? -0.5 : 0;
+        const lessThanThreeDispoPriority = numberOfDispo < 3 ? -1 : 0;
         const priority =
-          numberOfShifts / numberOfDyspo +
-          numberOfShifts / 4 -
-          numberOfDyspo / 50 +
-          additionalPriority +
-          addPriority;
+          percentageShifts +
+          priorityMultiplerShifts +
+          priorityMultiplerDispo +
+          lastDispoSkippedPriority +
+          lessThanThreeDispoPriority;
         priorityEmployees.push([employeeName, priority]);
       });
       priorityEmployees.sort((a, b) => a[1] - b[1]);
       graph[dayName][workpalceID][shiftID].push(priorityEmployees[0][0]);
 
       // increase numberOfShifts for selected employee
-      const employee = getEmployeeDyspo(priorityEmployees[0][0], employeesDispo);
+      const employee = getEmployeeDispo(priorityEmployees[0][0], employeesDispo);
       employee.numberOfShifts += 1;
       employee.shift[dayName].push(shiftsSchema[dayName][getNameShift(workpalceID)][shiftID]);
       // It is not always required but if the employee has been selected then surely his shift has not been missed
-      employee.isSkipShift = false;
+      employee.lastDispoSkipped = false;
 
       peoplePerShift[dayName].forEach((workplaceType, workplaceTypeID) => {
         if (workplaceType) {
@@ -118,7 +122,7 @@ const getEmployeePerShift = (values, shiftPriority, graph) => {
         }
       });
     } else {
-      // add "empty to the graph if nobody gave dyspo for shift"
+      // add "empty to the graph if nobody gave dispo for shift"
       graph[dayName][workpalceID][shiftID].push('empty');
     }
     shiftPriorityDay.shift();

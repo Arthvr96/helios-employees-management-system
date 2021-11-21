@@ -30,7 +30,7 @@ const Table = styled.table`
 const TableEmployess = () => {
   const { employeesDispo } = useContext(AdminStateContext);
   React.useEffect(() => {
-    const table = document.querySelector('.tableEmployeeDyspo');
+    const table = document.querySelector('.tableEmployeeDispo');
 
     const handleClick = (e) => {
       e.target.style.background = 'red';
@@ -44,7 +44,7 @@ const TableEmployess = () => {
   }, []);
 
   return (
-    <Table className="tableEmployeeDyspo">
+    <Table className="tableEmployeeDispo">
       <thead>
         <tr>
           <th>Name</th>

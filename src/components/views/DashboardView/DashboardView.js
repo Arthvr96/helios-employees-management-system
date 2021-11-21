@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import DropList from 'components/organisms/DropList/DropList';
-import { useDataForDashboard } from 'generatorGraph/helpers';
+import { getDataForDashboard } from 'generatorGraph/helpers';
+import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import { Wrapper } from './DashboardView.style';
 
 const DashBoard = () => {
-  const { arr, arr2, count, count2 } = useDataForDashboard();
+  const { employeesDispo } = useContext(AdminStateContext);
+  const { arr, arr2, count, count2 } = getDataForDashboard(employeesDispo);
 
   return (
     <Wrapper>

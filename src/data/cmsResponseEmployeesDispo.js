@@ -1,7 +1,7 @@
 export const cmsResponseEmployeesDispo = [
   {
     name: 'Bał Dan',
-    dyspo: {
+    dispo: {
       friday: { from: '16', to: '24', shortRest: false, wholeDay: false },
       saturday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       sunday: { from: '8', to: '16', shortRest: false, wholeDay: false },
@@ -20,14 +20,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 3,
+    numberOfDispo: 3,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Boc Kat',
-    dyspo: {
+    dispo: {
       friday: { from: '', to: '', shortRest: false, wholeDay: false },
       saturday: { from: '', to: '', shortRest: false, wholeDay: false },
       sunday: { from: '', to: '', shortRest: false, wholeDay: false },
@@ -46,14 +46,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 1,
+    numberOfDispo: 1,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: -1,
   },
   {
     name: 'Chm Art',
-    dyspo: {
+    dispo: {
       friday: { from: '', to: '', shortRest: false, wholeDay: false },
       saturday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       sunday: { from: '', to: '', shortRest: false, wholeDay: false },
@@ -72,14 +72,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 4,
+    numberOfDispo: 4,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Chm Kac',
-    dyspo: {
+    dispo: {
       friday: { from: '13', to: '21', shortRest: false, wholeDay: false },
       saturday: { from: '', to: '', shortRest: false, wholeDay: false },
       sunday: { from: '', to: '', shortRest: false, wholeDay: false },
@@ -98,14 +98,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 5,
+    numberOfDispo: 5,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Czo Bar',
-    dyspo: {
+    dispo: {
       friday: { from: '8', to: '16', shortRest: false, wholeDay: false },
       saturday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       sunday: { from: '', to: '', shortRest: false, wholeDay: false },
@@ -124,14 +124,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 4,
+    numberOfDispo: 4,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Dec Paw',
-    dyspo: {
+    dispo: {
       friday: { from: '8', to: '22', shortRest: false, wholeDay: false },
       saturday: { from: '16', to: '24', shortRest: false, wholeDay: false },
       sunday: { from: '8', to: '16', shortRest: true, wholeDay: false },
@@ -150,14 +150,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 3,
+    numberOfDispo: 3,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: -5,
   },
   {
     name: 'Dud Ada',
-    dyspo: {
+    dispo: {
       friday: { from: '', to: '', shortRest: false, wholeDay: false },
       saturday: { from: '', to: '', shortRest: false, wholeDay: false },
       sunday: { from: '15', to: '24', shortRest: false, wholeDay: false },
@@ -176,14 +176,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 3,
+    numberOfDispo: 3,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Fed Pat',
-    dyspo: {
+    dispo: {
       friday: { from: '13', to: '24', shortRest: false, wholeDay: false },
       saturday: { from: '8', to: '21', shortRest: false, wholeDay: false },
       sunday: { from: '', to: '', shortRest: false, wholeDay: false },
@@ -202,14 +202,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 6,
+    numberOfDispo: 6,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Gał Wer',
-    dyspo: {
+    dispo: {
       friday: { from: '12', to: '24', shortRest: false, wholeDay: false },
       saturday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       sunday: { from: '', to: '', shortRest: false, wholeDay: false },
@@ -228,14 +228,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 5,
+    numberOfDispo: 5,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Gaz Bar',
-    dyspo: {
+    dispo: {
       friday: { from: '', to: '', shortRest: false, wholeDay: false },
       saturday: { from: '', to: '', shortRest: false, wholeDay: false },
       sunday: { from: '8', to: '22', shortRest: false, wholeDay: false },
@@ -254,14 +254,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 3,
+    numberOfDispo: 3,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Gom Rok',
-    dyspo: {
+    dispo: {
       friday: { from: '8', to: '16', shortRest: false, wholeDay: false },
       saturday: { from: '8', to: '16', shortRest: false, wholeDay: false },
       sunday: { from: '8', to: '16', shortRest: false, wholeDay: false },
@@ -280,14 +280,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 7,
+    numberOfDispo: 7,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Gra Ale',
-    dyspo: {
+    dispo: {
       friday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       saturday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       sunday: { from: '8', to: '16', shortRest: false, wholeDay: false },
@@ -306,14 +306,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 3,
+    numberOfDispo: 3,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Jar Nat',
-    dyspo: {
+    dispo: {
       friday: { from: '8', to: '15', shortRest: false, wholeDay: false },
       saturday: { from: '8', to: '16', shortRest: false, wholeDay: false },
       sunday: { from: '', to: '', shortRest: false, wholeDay: false },
@@ -332,14 +332,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 2,
+    numberOfDispo: 2,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: -1,
   },
   {
     name: 'Jęd Ale',
-    dyspo: {
+    dispo: {
       friday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       saturday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       sunday: { from: '8', to: '16', shortRest: false, wholeDay: false },
@@ -358,14 +358,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 3,
+    numberOfDispo: 3,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Kle Kar',
-    dyspo: {
+    dispo: {
       friday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       saturday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       sunday: { from: '', to: '', shortRest: false, wholeDay: false },
@@ -384,14 +384,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 3,
+    numberOfDispo: 3,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Klo Bar',
-    dyspo: {
+    dispo: {
       friday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       saturday: { from: '', to: '', shortRest: false, wholeDay: false },
       sunday: { from: '16', to: '24', shortRest: false, wholeDay: false },
@@ -410,14 +410,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 5,
+    numberOfDispo: 5,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Kon Pio',
-    dyspo: {
+    dispo: {
       friday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       saturday: { from: '', to: '', shortRest: false, wholeDay: false },
       sunday: { from: '8', to: '24', shortRest: false, wholeDay: false },
@@ -436,14 +436,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 3,
+    numberOfDispo: 3,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Koł Kla',
-    dyspo: {
+    dispo: {
       friday: { from: '', to: '', shortRest: false, wholeDay: false },
       saturday: { from: '15', to: '24', shortRest: false, wholeDay: false },
       sunday: { from: '8', to: '24', shortRest: false, wholeDay: false },
@@ -462,14 +462,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 5,
+    numberOfDispo: 5,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Kuj Mac',
-    dyspo: {
+    dispo: {
       friday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       saturday: { from: '', to: '', shortRest: false, wholeDay: false },
       sunday: { from: '8', to: '24', shortRest: false, wholeDay: false },
@@ -488,14 +488,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 5,
+    numberOfDispo: 5,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Kul Mat',
-    dyspo: {
+    dispo: {
       friday: { from: '', to: '', shortRest: false, wholeDay: false },
       saturday: { from: '', to: '', shortRest: false, wholeDay: false },
       sunday: { from: '', to: '', shortRest: false, wholeDay: false },
@@ -514,14 +514,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 0,
+    numberOfDispo: 0,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Kur Nat',
-    dyspo: {
+    dispo: {
       friday: { from: '8', to: '24', shortRest: false, wholeDay: true },
       saturday: { from: '16.5', to: '24', shortRest: false, wholeDay: false },
       sunday: { from: '15', to: '24', shortRest: false, wholeDay: false },
@@ -540,14 +540,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 7,
+    numberOfDispo: 7,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Maj Olg',
-    dyspo: {
+    dispo: {
       friday: { from: '8', to: '18', shortRest: false, wholeDay: false },
       saturday: { from: '', to: '', shortRest: false, wholeDay: false },
       sunday: { from: '', to: '', shortRest: false, wholeDay: false },
@@ -566,14 +566,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 5,
+    numberOfDispo: 5,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Mat Jak',
-    dyspo: {
+    dispo: {
       friday: { from: '', to: '', shortRest: false, wholeDay: false },
       saturday: { from: '8', to: '18', shortRest: false, wholeDay: false },
       sunday: { from: '', to: '', shortRest: false, wholeDay: false },
@@ -592,14 +592,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 2,
+    numberOfDispo: 2,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: -1,
   },
   {
     name: 'Mil Pio',
-    dyspo: {
+    dispo: {
       friday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       saturday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       sunday: { from: '8', to: '24', shortRest: false, wholeDay: false },
@@ -618,14 +618,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 4,
+    numberOfDispo: 4,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Nag Aga',
-    dyspo: {
+    dispo: {
       friday: { from: '8', to: '20', shortRest: false, wholeDay: false },
       saturday: { from: '', to: '', shortRest: false, wholeDay: false },
       sunday: { from: '', to: '', shortRest: false, wholeDay: false },
@@ -644,14 +644,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 4,
+    numberOfDispo: 4,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Pow Seb',
-    dyspo: {
+    dispo: {
       friday: { from: '', to: '', shortRest: false, wholeDay: false },
       saturday: { from: '', to: '', shortRest: false, wholeDay: false },
       sunday: { from: '8', to: '24', shortRest: false, wholeDay: false },
@@ -670,14 +670,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 3,
+    numberOfDispo: 3,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Rud Ale',
-    dyspo: {
+    dispo: {
       friday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       saturday: { from: '8', to: '16', shortRest: false, wholeDay: false },
       sunday: { from: '8', to: '24', shortRest: false, wholeDay: false },
@@ -696,14 +696,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 6,
+    numberOfDispo: 6,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Rut Jul',
-    dyspo: {
+    dispo: {
       friday: { from: '', to: '', shortRest: false, wholeDay: false },
       saturday: { from: '', to: '', shortRest: false, wholeDay: false },
       sunday: { from: '', to: '', shortRest: false, wholeDay: false },
@@ -722,14 +722,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 0,
+    numberOfDispo: 0,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Rut Zof',
-    dyspo: {
+    dispo: {
       friday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       saturday: { from: '', to: '', shortRest: false, wholeDay: false },
       sunday: { from: '8', to: '24', shortRest: false, wholeDay: false },
@@ -748,14 +748,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 2,
+    numberOfDispo: 2,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: -1,
   },
   {
     name: 'Sak Wik',
-    dyspo: {
+    dispo: {
       friday: { from: '8', to: '20', shortRest: false, wholeDay: false },
       saturday: { from: '8', to: '24', shortRest: false, wholeDay: true },
       sunday: { from: '', to: '', shortRest: false, wholeDay: false },
@@ -774,14 +774,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 5,
+    numberOfDispo: 5,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Skr Ann',
-    dyspo: {
+    dispo: {
       friday: { from: '', to: '', shortRest: false, wholeDay: false },
       saturday: { from: '', to: '', shortRest: false, wholeDay: false },
       sunday: { from: '', to: '', shortRest: false, wholeDay: false },
@@ -800,14 +800,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 0,
+    numberOfDispo: 0,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Sów Zuz',
-    dyspo: {
+    dispo: {
       friday: { from: '', to: '', shortRest: false, wholeDay: false },
       saturday: { from: '', to: '', shortRest: false, wholeDay: false },
       sunday: { from: '', to: '', shortRest: false, wholeDay: false },
@@ -826,14 +826,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 1,
+    numberOfDispo: 1,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: -1,
   },
   {
     name: 'Sta Jul',
-    dyspo: {
+    dispo: {
       friday: { from: '', to: '', shortRest: false, wholeDay: false },
       saturday: { from: '13', to: '24', shortRest: false, wholeDay: false },
       sunday: { from: '17', to: '24', shortRest: false, wholeDay: false },
@@ -852,14 +852,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 2,
+    numberOfDispo: 2,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: -1,
   },
   {
     name: 'Sus Mic',
-    dyspo: {
+    dispo: {
       friday: { from: '', to: '', shortRest: false, wholeDay: false },
       saturday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       sunday: { from: '8', to: '18', shortRest: false, wholeDay: false },
@@ -878,14 +878,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 3,
+    numberOfDispo: 3,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Wol Bea',
-    dyspo: {
+    dispo: {
       friday: { from: '', to: '', shortRest: false, wholeDay: false },
       saturday: { from: '', to: '', shortRest: false, wholeDay: false },
       sunday: { from: '', to: '', shortRest: false, wholeDay: false },
@@ -904,14 +904,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 0,
+    numberOfDispo: 0,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Zag Ada',
-    dyspo: {
+    dispo: {
       friday: { from: '8', to: '20', shortRest: false, wholeDay: false },
       saturday: { from: '', to: '', shortRest: false, wholeDay: false },
       sunday: { from: '', to: '', shortRest: false, wholeDay: false },
@@ -930,14 +930,14 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 5,
+    numberOfDispo: 5,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
   {
     name: 'Zie Oli',
-    dyspo: {
+    dispo: {
       friday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       saturday: { from: '8', to: '24', shortRest: false, wholeDay: false },
       sunday: { from: '8', to: '24', shortRest: false, wholeDay: true },
@@ -956,9 +956,9 @@ export const cmsResponseEmployeesDispo = [
       wednesday: [],
       thursday: [],
     },
-    numberOfDyspo: 4,
+    numberOfDispo: 4,
     numberOfShifts: 0,
-    isSkipShift: false,
+    lastDispoSkipped: false,
     additionalPriority: 0,
   },
 ];

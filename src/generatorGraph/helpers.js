@@ -1,6 +1,3 @@
-import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
-import { useContext } from 'react';
-
 export const getEmployeeInfo = (name, employeesInfo) => {
   let result;
   employeesInfo.forEach((employee) => {
@@ -10,9 +7,9 @@ export const getEmployeeInfo = (name, employeesInfo) => {
   });
   return result;
 };
-export const getEmployeeDyspo = (name, employesDyspo) => {
+export const getEmployeeDispo = (name, employesDispo) => {
   let result;
-  employesDyspo.forEach((employee) => {
+  employesDispo.forEach((employee) => {
     if (employee.name === name) {
       result = employee;
     }
@@ -47,14 +44,13 @@ export const getNameShift = (idexOfShift) => {
   return nameOfShift;
 };
 
-export const useDataForDashboard = () => {
-  const { employeesDispo } = useContext(AdminStateContext);
+export const getDataForDashboard = (employeesDispo) => {
   const arr = [];
   let count = 0;
   const arr2 = [];
   let count2 = 0;
   employeesDispo.forEach((employee) => {
-    if (employee.numberOfDyspo === 0) {
+    if (employee.numberOfDispo === 0) {
       arr.push(employee.name);
       count += 1;
     } else {
