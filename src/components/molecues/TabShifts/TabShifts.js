@@ -5,14 +5,17 @@ import { Table, Shifts } from './TabShifts.style';
 
 const TabShifts = ({ shiftId, maxShifts, dayNumber }) => {
   const arr2 = [];
-  arr2.length = maxShifts + 1;
-  arr2.fill('cell');
+  if (maxShifts > -1) {
+    arr2.length = maxShifts + 1;
+    arr2.fill('cell');
+  }
+
   return (
     <td>
       <Table>
         <tbody>
           {arr2.map((item, i) => (
-            <Shifts key={uniqid()}>
+            <Shifts className={`row${i}`} key={uniqid()}>
               <td className={`shiftCell ${item}-${dayNumber}-${shiftId}-${i}-0`}>.</td>
               <td className={`shiftCell ${item}-${dayNumber}-${shiftId}-${i}-1`}>.</td>
               <td className={`shiftCell ${item}-${dayNumber}-${shiftId}-${i}-2`}>.</td>

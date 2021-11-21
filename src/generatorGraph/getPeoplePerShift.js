@@ -1,40 +1,56 @@
-import { shiftsSchema } from 'data/shiftsSchema';
-import { useContext } from 'react';
-import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import { getEmployeeInfo } from './helpers';
 
-const validateEmployee = (nameEmployee, shiftType, shiftEndHour) => {
-  const employee = getEmployeeInfo(nameEmployee);
+const validateEmployee = (nameEmployee, workplaceID, shiftEnd, employeesInfo) => {
+  const { bar1, bar2, obs1, obs2, coffee, tickets, sex } = getEmployeeInfo(
+    nameEmployee,
+    employeesInfo,
+  );
+  let respone;
 
-  if (shiftType === 0 || shiftType === 1) {
-    if (employee.bar1 || employee.bar2) {
-      return true;
-    }
-    return false;
-  }
-  if (shiftType === 4) {
-    if (employee.coffee) {
-      return true;
-    }
-    return false;
-  }
-  if (shiftType === 2 || shiftType === 3) {
-    if (employee.obs1 || employee.obs2) {
-      if (shiftEndHour > 23 || shiftEndHour > 23) {
-        if (employee.sex === 'male') {
-          return true;
+  switch (workplaceID) {
+    case 0:
+      respone = bar1;
+      break;
+    case 1:
+      respone = bar2;
+      break;
+    case 2:
+      if (obs1) {
+        if (shiftEnd > 23) {
+          respone = sex === 'male';
+          break;
         }
-        return false;
+        respone = true;
+        break;
       }
-      return true;
-    }
-    return false;
+      respone = false;
+      break;
+    case 3:
+      if (obs2) {
+        if (shiftEnd > 23) {
+          respone = sex === 'male';
+          break;
+        }
+        respone = true;
+        break;
+      }
+      respone = false;
+      break;
+    case 4:
+      respone = coffee;
+      break;
+    case 5:
+      respone = tickets;
+      break;
+    default:
+      break;
   }
-  return true;
+  return respone;
 };
 
-export const usePeoplePerShift = () => {
-  const { employesDyspo } = useContext(AdminStateContext);
+// Returns an object with people who can take a shift at work. Object is splited on days. Each day is an array. Day keeps next arrays. This arrays represent the type of workplace. Workplace is array too, which holds other arrays that represent separate shifts. Shift array holds short names of employees who gave disposition in line with this shift.
+export const getPeoplePerShift = (employeesDispo, shiftsSchema, employeesInfo) => {
+  const days = Object.keys(shiftsSchema);
   const peoplePerShift = {
     friday: [],
     saturday: [],
@@ -45,57 +61,41 @@ export const usePeoplePerShift = () => {
     thursday: [],
   };
 
-  const days = Object.keys(shiftsSchema);
-
+  // Iterating through all the days of the week
   days.forEach((dayName) => {
-    const typesOfShifts = shiftsSchema[dayName];
-    const shiftsTypes = Object.keys(shiftsSchema[dayName]);
-    const dayShifts = [];
-    const employesShiftWholeDay = [];
-    shiftsTypes.forEach((shiftTypeName) => {
-      const arr = [];
+    const workplaces = shiftsSchema[dayName];
+    const daySchemaShifts = Object.values(workplaces);
+    const employeesPerShiftWholeDay = [];
 
-      if (typesOfShifts[shiftTypeName]) {
-        typesOfShifts[shiftTypeName].forEach((shift) => {
-          arr.push(shift);
-        });
-        dayShifts.push(arr);
-      } else {
-        dayShifts.push(false);
-      }
-    });
+    daySchemaShifts.forEach((workplaceType, workplaceID) => {
+      const workplaceShifts = [];
 
-    dayShifts.forEach((shiftType, indexShiftType) => {
-      const employesTypeShift = [];
-      if (shiftType) {
-        shiftType.forEach((shift) => {
+      if (workplaceType) {
+        workplaceType.forEach((shift) => {
           const shiftStart = shift[0];
           const shiftEnd = shift[1];
-          const employesShift = [];
+          const employeesPerShift = [];
 
-          employesDyspo.forEach((employee) => {
-            const employeeShiftStart = parseFloat(employee.dyspo[dayName].from) - 0.5;
-            const employeeShiftsEnd = parseFloat(employee.dyspo[dayName].to) + 0.5;
-            const fulidShiftStart = employeeShiftStart > 11 ? -0.5 : 0;
-            if (
-              employeeShiftStart + fulidShiftStart <= shiftStart &&
-              employeeShiftsEnd >= shiftEnd
-            ) {
-              const passValidation = validateEmployee(employee.name, indexShiftType, shiftEnd);
-              if (passValidation) {
-                employesShift.push(employee.name);
+          employeesDispo.forEach(({ dispo, name }) => {
+            const employeeDispoStart = parseFloat(dispo[dayName].from) - 0.75;
+            const employeeDispoEnd = parseFloat(dispo[dayName].to) + 0.75;
+            if (employeeDispoStart <= shiftStart && employeeDispoEnd >= shiftEnd) {
+              if (validateEmployee(name, workplaceID, shiftEnd, employeesInfo)) {
+                employeesPerShift.push(name);
               }
             }
           });
-          employesTypeShift.push(employesShift);
+
+          workplaceShifts.push(employeesPerShift);
         });
-        employesShiftWholeDay.push(employesTypeShift);
+
+        employeesPerShiftWholeDay.push(workplaceShifts);
       } else {
-        employesShiftWholeDay.push(false);
+        employeesPerShiftWholeDay.push(false);
       }
     });
 
-    peoplePerShift[dayName].push(...employesShiftWholeDay);
+    peoplePerShift[dayName].push(...employeesPerShiftWholeDay);
   });
 
   return peoplePerShift;

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const Wrapper = styled.div`
   display: flex;
+  width: 100vw;
   flex-direction: column;
 `;
 
@@ -13,8 +14,7 @@ export const WrapperButtons = styled.div`
 export const WrapperTabs = styled.div`
   position: relative;
   display: flex;
-  width: 2300px;
-  overflow-x: scroll;
+  width: 2000px;
 `;
 
 export const Button = styled.button`
