@@ -29,7 +29,6 @@ const Table = styled.table`
 
 const TableEmployess = () => {
   const { employeesDispo } = useContext(AdminStateContext);
-
   React.useEffect(() => {
     const table = document.querySelector('.tableEmployeeDyspo');
 

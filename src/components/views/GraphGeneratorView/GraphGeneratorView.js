@@ -1,18 +1,16 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import TableGraph from 'components/organisms/TableGraph/TableGraph';
 import TableEmployess from 'components/organisms/TableEmployees/TableEmployess';
-import { useGraph } from 'generatorGraph/useGraph';
 import { getNameShift, getHourFormat } from 'generatorGraph/helpers';
 import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import { csvGenerator } from 'generatorGraph/csvGenerator';
 import { Wrapper, WrapperButtons, Button, WrapperTabs } from './GraphGeneratorView.style';
 
 const GraphGeneratorView = () => {
-  const { employeesDispo, getDataUpdate, shiftsSchema } = useContext(AdminStateContext);
-  const graph = useGraph();
+  const { employeesDispo, shiftsSchema, graph, handleGenerateGraph, handleClearState } =
+    useContext(AdminStateContext);
 
-  const handleGetGraph = () => {
-    getDataUpdate();
+  useEffect(() => {
     const days = Object.keys(graph);
     const cells = [...document.querySelectorAll('.shiftCell')];
     const cells2 = [];
@@ -43,7 +41,6 @@ const GraphGeneratorView = () => {
         }
       });
     });
-
     employeesDispo.forEach((employee) => {
       days.forEach((day, i) => {
         if (employee.shift[day].length) {
@@ -52,8 +49,10 @@ const GraphGeneratorView = () => {
         }
       });
     });
+  }, [graph]);
 
-    console.log(graph.saturday);
+  const handleGetGraph = () => {
+    handleGenerateGraph();
   };
 
   const handleClearGraph = () => {
@@ -63,6 +62,7 @@ const GraphGeneratorView = () => {
       cell.innerHTML = ' . ';
       cell.style.background = '#fff';
     });
+    handleClearState();
   };
 
   return (

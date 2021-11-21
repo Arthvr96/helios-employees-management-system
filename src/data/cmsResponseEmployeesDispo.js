@@ -49,7 +49,7 @@ export const cmsResponseEmployeesDispo = [
     numberOfDyspo: 1,
     numberOfShifts: 0,
     isSkipShift: false,
-    additionalPriority: 0,
+    additionalPriority: -1,
   },
   {
     name: 'Chm Art',
@@ -335,7 +335,7 @@ export const cmsResponseEmployeesDispo = [
     numberOfDyspo: 2,
     numberOfShifts: 0,
     isSkipShift: false,
-    additionalPriority: 0,
+    additionalPriority: -1,
   },
   {
     name: 'Jęd Ale',
@@ -595,7 +595,7 @@ export const cmsResponseEmployeesDispo = [
     numberOfDyspo: 2,
     numberOfShifts: 0,
     isSkipShift: false,
-    additionalPriority: 0,
+    additionalPriority: -1,
   },
   {
     name: 'Mil Pio',
@@ -751,7 +751,7 @@ export const cmsResponseEmployeesDispo = [
     numberOfDyspo: 2,
     numberOfShifts: 0,
     isSkipShift: false,
-    additionalPriority: 0,
+    additionalPriority: -1,
   },
   {
     name: 'Sak Wik',
@@ -829,7 +829,7 @@ export const cmsResponseEmployeesDispo = [
     numberOfDyspo: 1,
     numberOfShifts: 0,
     isSkipShift: false,
-    additionalPriority: 0,
+    additionalPriority: -1,
   },
   {
     name: 'Sta Jul',
@@ -855,7 +855,7 @@ export const cmsResponseEmployeesDispo = [
     numberOfDyspo: 2,
     numberOfShifts: 0,
     isSkipShift: false,
-    additionalPriority: 0,
+    additionalPriority: -1,
   },
   {
     name: 'Sus Mic',
