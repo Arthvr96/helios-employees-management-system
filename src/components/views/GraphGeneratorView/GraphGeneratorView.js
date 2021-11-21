@@ -1,18 +1,16 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import TableGraph from 'components/organisms/TableGraph/TableGraph';
 import TableEmployess from 'components/organisms/TableEmployees/TableEmployess';
-import { useGraph } from 'generatorGraph/useGraph';
 import { getNameShift, getHourFormat } from 'generatorGraph/helpers';
-import { shiftsSchema } from 'data/shiftsSchema';
 import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
+import { csvGenerator } from 'generatorGraph/csvGenerator';
 import { Wrapper, WrapperButtons, Button, WrapperTabs } from './GraphGeneratorView.style';
 
 const GraphGeneratorView = () => {
-  const graph = useGraph();
-  const { employesDyspo, getEmployesDyspo, resetEmployesDyspo } = useContext(AdminStateContext);
+  const { employeesDispo, shiftsSchema, graph, handleGenerateGraph, handleClearState } =
+    useContext(AdminStateContext);
 
-  const handleGetGraph = () => {
-    getEmployesDyspo();
+  useEffect(() => {
     const days = Object.keys(graph);
     const cells = [...document.querySelectorAll('.shiftCell')];
     const cells2 = [];
@@ -43,8 +41,7 @@ const GraphGeneratorView = () => {
         }
       });
     });
-
-    employesDyspo.forEach((employee) => {
+    employeesDispo.forEach((employee) => {
       days.forEach((day, i) => {
         if (employee.shift[day].length) {
           const cell = document.querySelector(`.${employee.name.replace(' ', '')}${i}`);
@@ -52,41 +49,30 @@ const GraphGeneratorView = () => {
         }
       });
     });
+  }, [graph]);
+
+  const handleGetGraph = () => {
+    handleGenerateGraph();
   };
 
   const handleClearGraph = () => {
-    resetEmployesDyspo();
     const cells = [...document.querySelectorAll('.shiftCell')];
 
     cells.forEach((cell) => {
-      cell.innerHTML = '';
+      cell.innerHTML = ' . ';
+      cell.style.background = '#fff';
     });
+    handleClearState();
   };
-
-  useEffect(() => {
-    const graphWrapper = document.querySelector('.graph');
-
-    const handleClick = (e) => {
-      if (e.target.classList.contains('shiftCell')) {
-        // const el = e.target;
-      }
-    };
-
-    graphWrapper.addEventListener('click', handleClick);
-
-    return () => {
-      graphWrapper.removeEventListener('click', handleClick);
-    };
-  }, []);
 
   return (
     <Wrapper>
       <WrapperButtons>
-        <Button onClick={handleGetGraph}>
-          {employesDyspo.length > 0 ? 'generuj grafik' : 'pobierz dyspozycje'}
-        </Button>
+        <Button onClick={handleGetGraph}>Generuj grafik</Button>
         <Button disabled>Spróbuj uzupełnic luki</Button>
         <Button onClick={handleClearGraph}>Wyczyśc grafik</Button>
+        <Button onClick={csvGenerator}>Pobierz csv</Button>
+        <div className="placeholder" />
       </WrapperButtons>
       <WrapperTabs>
         <TableGraph />

@@ -1,4 +1,4 @@
-export const shiftsSchema = {
+export const cmsResponseShiftsSchema = {
   friday: {
     bar1: [
       ['9', '15'],

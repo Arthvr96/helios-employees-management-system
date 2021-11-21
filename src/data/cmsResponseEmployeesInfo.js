@@ -1,4 +1,4 @@
-export const heliosEmployes = [
+export const cmsResponseEmployeesInfo = [
   {
     name: 'Bał Dan',
     fullName: 'Bałucińsi Daniel',
