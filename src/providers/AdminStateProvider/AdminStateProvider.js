@@ -14,9 +14,18 @@ const AdminStateProvider = ({ children }) => {
   const [graph, setGraph] = useState({});
 
   const getDataUpdate = () => {
-    setEmployeesDispo(cmsResponseEmployeesDispo);
-    setshiftsSchema(cmsResponseShiftsSchema);
-    setEmployeesInfo(cmsResponseEmployeesInfo);
+    const copyOfCmsResponseEmployeesDispo = [];
+
+    cmsResponseEmployeesDispo.forEach((employee) => {
+      copyOfCmsResponseEmployeesDispo.push({ ...employee });
+    });
+    setEmployeesDispo([...copyOfCmsResponseEmployeesDispo]);
+    setshiftsSchema({ ...cmsResponseShiftsSchema });
+    setEmployeesInfo([...cmsResponseEmployeesInfo]);
+
+    if (employeesDispo[0]) {
+      console.log(employeesDispo[5]);
+    }
   };
 
   const handleGenerateGraph = () => {
