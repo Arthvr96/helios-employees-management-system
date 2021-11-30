@@ -1,17 +1,23 @@
 import React, { useState } from 'react';
-import DaysListNav from 'components/molecues/DaysListNav/DaysListNav';
-import SchemaGraphDayContent from 'components/organisms/SchemaGraphDayContent/SchemaGraphDayContent';
-import { Wrapper, SchemaGraphFormWrapper } from './SchemaView.style';
+import SchemaGraphForm from 'components/organisms/SchemaGraphForm/SchemaGraphForm';
+import SchemaGraphMenu from 'components/organisms/SchemaGrahpMenu/SchemaGraphMenu';
+import { Wrapper } from './SchemaView.style';
 
 const SchemaView = () => {
-  const [selectedDay, setSelectedDay] = useState('');
+  const [createSchema, setCreateSchema] = useState(false);
+
+  const handleCreateSchema = (option) => {
+    console.log(option);
+    setCreateSchema(true);
+  };
 
   return (
     <Wrapper>
-      <SchemaGraphFormWrapper>
-        <DaysListNav selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
-        <SchemaGraphDayContent selectedDay={selectedDay} />
-      </SchemaGraphFormWrapper>
+      {!createSchema ? (
+        <SchemaGraphMenu handleCreateSchema={handleCreateSchema} />
+      ) : (
+        <SchemaGraphForm />
+      )}
     </Wrapper>
   );
 };

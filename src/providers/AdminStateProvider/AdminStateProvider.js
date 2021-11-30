@@ -22,10 +22,6 @@ const AdminStateProvider = ({ children }) => {
     setEmployeesDispo([...copyOfCmsResponseEmployeesDispo]);
     setshiftsSchema({ ...cmsResponseShiftsSchema });
     setEmployeesInfo([...cmsResponseEmployeesInfo]);
-
-    if (employeesDispo[0]) {
-      console.log(employeesDispo[5]);
-    }
   };
 
   const handleGenerateGraph = () => {

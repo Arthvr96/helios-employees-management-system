@@ -11,21 +11,9 @@ export const Title = styled.h3`
   }
 `;
 
-export const ActiveWorkplaceWrapper = styled.div`
-  display: flex;
-  align-items: center;
-
-  h4 {
-    font-size: ${({ theme }) => theme.fontSize.s};
-    font-weight: ${({ theme }) => theme.fontWeight.regular};
-    color: ${({ theme }) => theme.colors.textSecondary};
-    margin-right: 1rem;
-  }
-`;
-
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-top: 2rem;
+  margin: 2rem 3rem 0 4.5rem;
 `;
