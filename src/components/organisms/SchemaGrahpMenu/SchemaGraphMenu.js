@@ -10,7 +10,7 @@ const SchemaGraphMenuWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   width: 30rem;
-  height: 21rem;
+  height: fit-content;
   background-color: ${({ theme }) => theme.colors.white};
   border: 1px solid ${({ theme }) => theme.darkGrey};
   border-radius: 15px;
@@ -63,6 +63,7 @@ const SchemaGraphMenu = ({ handleCreateSchema }) => {
       {!createMode ? (
         <>
           <Title>Wybór szablonu</Title>
+          <SubTitle>Wybrany tydzień : 12-18 Nov</SubTitle>
           <ActiveSchema>
             <SubTitle>Aktywny szablon : </SubTitle>
             <SelectedSchema>empty</SelectedSchema>

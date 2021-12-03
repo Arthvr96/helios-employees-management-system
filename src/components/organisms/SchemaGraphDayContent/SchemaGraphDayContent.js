@@ -12,13 +12,18 @@ import {
   StyledButton,
 } from './SchemaGraphDayContent.style';
 
-const SchemaGraphDayContent = ({ selectedDay }) => {
+const SchemaGraphDayContent = ({ selectedDay, setCreateSchema }) => {
   const [selectedWorkplace, setWorkplace] = useState('');
   const [schema, setSchema] = useState(initialSchema);
 
   useEffect(() => {
     setWorkplace('');
   }, [selectedDay]);
+
+  const handleSave = () => {
+    setCreateSchema(false);
+    console.log(schema);
+  };
 
   return (
     <SchemaGraphDayContentWrapper isVisible={!(selectedDay === '')}>
@@ -38,7 +43,7 @@ const SchemaGraphDayContent = ({ selectedDay }) => {
       </Wrapper>
       {selectedDay !== '' ? (
         <WrapperButtons>
-          <StyledButton>Zapisz szablon</StyledButton>
+          <StyledButton onClick={handleSave}>Zapisz szablon</StyledButton>
           <StyledButton isCancel>Anuluj</StyledButton>
         </WrapperButtons>
       ) : null}
@@ -50,4 +55,5 @@ export default SchemaGraphDayContent;
 
 SchemaGraphDayContent.propTypes = {
   selectedDay: PropTypes.string,
+  setCreateSchema: PropTypes.func,
 };
