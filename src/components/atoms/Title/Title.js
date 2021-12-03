@@ -11,4 +11,5 @@ export const Title = styled.h3`
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
   padding: 0.5rem;
+  margin-bottom: 1.5rem;
 `;

@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import DaysListNav from 'components/molecues/DaysListNav/DaysListNav';
 import SchemaGraphDayContent from 'components/organisms/SchemaGraphDayContent/SchemaGraphDayContent';
 import { SchemaGraphFormWrapper } from './SchemaGraphForm.style';
 
-const SchemaGraphForm = () => {
+const SchemaGraphForm = ({ setCreateSchema }) => {
   const [selectedDay, setSelectedDay] = useState('');
   return (
     <SchemaGraphFormWrapper>
       <DaysListNav selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
-      <SchemaGraphDayContent selectedDay={selectedDay} />
+      <SchemaGraphDayContent setCreateSchema={setCreateSchema} selectedDay={selectedDay} />
     </SchemaGraphFormWrapper>
   );
 };
 
 export default SchemaGraphForm;
+
+SchemaGraphForm.propTypes = {
+  setCreateSchema: PropTypes.func,
+};

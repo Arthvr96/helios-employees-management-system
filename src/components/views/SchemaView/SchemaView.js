@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SchemaGraphForm from 'components/organisms/SchemaGraphForm/SchemaGraphForm';
 import SchemaGraphMenu from 'components/organisms/SchemaGrahpMenu/SchemaGraphMenu';
+import { schema } from 'data/schema1';
 import { Wrapper } from './SchemaView.style';
 
 const SchemaView = () => {
@@ -16,7 +17,7 @@ const SchemaView = () => {
       {!createSchema ? (
         <SchemaGraphMenu handleCreateSchema={handleCreateSchema} />
       ) : (
-        <SchemaGraphForm />
+        <SchemaGraphForm setCreateSchema={setCreateSchema} />
       )}
     </Wrapper>
   );
