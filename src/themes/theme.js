@@ -2,7 +2,6 @@ export const theme = {
   colors: {
     white: '#FFFFFF',
     black: '#000000',
-    error: '#FF0000',
     lightGrey: '#BEBEBE',
     grey: '#565656',
     darkGrey: '#3D3D3D',
@@ -14,6 +13,9 @@ export const theme = {
     textSecondary: '#000000',
     textTertiary: '#F40000',
 
+    active: '#005EEB',
+    error: '#C70000',
+    success: '#00B227',
     bg: {
       primary: '#002047',
       secondary: '#ffffff',
@@ -25,9 +27,6 @@ export const theme = {
       black: '#000000',
       grey: 'ACACAC',
       darkGrey: '#4A4A4A',
-      active: '#005EEB',
-      error: '#C70000',
-      success: '#00B227',
     },
     text: {
       white: '#ffffff',

@@ -5,7 +5,8 @@ import { InputForm } from 'components/atoms/InputForm/InputForm';
 import { InterfaceWindowTemplate } from 'components/templates/InterfaceWindowTemplate/InterfaceWindowTemplate';
 import { InterfaceWindowTitle } from 'components/atoms/InterfaceWindowTitle/InterfaceWindowTitle';
 import { InterfaceWindowSubTitle } from 'components/atoms/InterfaceWindowSubTitle/InterfaceWindowSubTitle';
-import { StyledForm, ErrorMessages, StyledSubmitButton } from './NewCycleWindow.style';
+import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
+import { StyledForm, ErrorMessages } from './NewCycleWindow.style';
 
 const initialValues = {
   date1: '',
@@ -79,9 +80,9 @@ const NewCycleForm = () => {
                 : null}
             </ErrorMessages>
           </label>
-          <StyledSubmitButton type="submit" disabled={isSubmitting}>
+          <SubmitButton customMargin="2.4rem" type="submit" disabled={isSubmitting}>
             Zapisz
-          </StyledSubmitButton>
+          </SubmitButton>
         </StyledForm>
       )}
     </Formik>
