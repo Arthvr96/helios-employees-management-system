@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 import logo from 'assets/logo.svg';
 
-export const LogoWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 23rem;
-  height: 6.5rem;
-  border-right: 1px solid ${({ theme }) => theme.colors.white};
+export const LogoWrapper = styled.button`
+  width: 18rem;
+  height: 6rem;
+  border: 0;
+  border-right: 1px solid ${({ theme }) => theme.colors.decors.white};
+  background-color: transparent;
+  cursor: pointer;
 `;
 
-export const Title = styled.h1`
+export const LogoIcone = styled.h1`
   display: block;
   width: 13rem;
   height: 2.5rem;

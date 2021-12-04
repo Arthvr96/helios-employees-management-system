@@ -1,11 +1,14 @@
 import React from 'react';
-import { LogoWrapper, Title } from './Logo.style';
+import { NavLink } from 'react-router-dom';
+import { LogoWrapper, LogoIcone } from './Logo.style';
 
 const Logo = () => {
   return (
-    <LogoWrapper>
-      <Title>Helios</Title>
-    </LogoWrapper>
+    <NavLink to="/">
+      <LogoWrapper>
+        <LogoIcone>Helios</LogoIcone>
+      </LogoWrapper>
+    </NavLink>
   );
 };
 
