@@ -27,6 +27,8 @@ export const theme = {
       black: '#000000',
       grey: 'ACACAC',
       darkGrey: '#4A4A4A',
+      hoverError: '#F13535',
+      hoverSuccess: '#44C317',
     },
     text: {
       white: '#ffffff',

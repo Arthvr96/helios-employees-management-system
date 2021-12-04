@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { InputForm } from 'components/atoms/InputForm/InputForm';
@@ -6,6 +7,7 @@ import { InterfaceWindowTemplate } from 'components/templates/InterfaceWindowTem
 import { InterfaceWindowTitle } from 'components/atoms/InterfaceWindowTitle/InterfaceWindowTitle';
 import { InterfaceWindowSubTitle } from 'components/atoms/InterfaceWindowSubTitle/InterfaceWindowSubTitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
+import PopupComfirm from 'components/molecues/PopupComfirm/PopupComfirm';
 import { StyledForm, ErrorMessages } from './NewCycleWindow.style';
 
 const initialValues = {
@@ -13,10 +15,10 @@ const initialValues = {
   date2: '',
 };
 
-const NewCycleForm = () => {
+const NewCycleForm = ({ toggleVisible }) => {
   // TODO: add calendar picker
   const onSubmit = (values, method) => {
-    alert(JSON.stringify(values, null, 2));
+    toggleVisible();
     method.resetForm();
   };
 
@@ -89,16 +91,36 @@ const NewCycleForm = () => {
   );
 };
 
+NewCycleForm.propTypes = {
+  toggleVisible: PropTypes.func,
+};
+
 const TITLE = 'Rozpocznij nowy okres grafiku !';
 const SUBTITLE = 'Wybierz nowy okres dla grafiku i odblokuj wysyłanie dyspozycji';
+const TITLEPOPUP = 'Czy napewno chcesz zacząć nowy okres dla grafiku?';
+const SUBTITLEPOPUP = 'Wybrany okres to : dd-mm-rrrr - dd-mm-rrrr';
 
 const NewCycleWindow = () => {
+  const [isVisible, setVisible] = useState(false);
+
+  const toggleVisible = () => {
+    setVisible(!isVisible);
+  };
   return (
-    <InterfaceWindowTemplate>
-      <InterfaceWindowTitle>{TITLE}</InterfaceWindowTitle>
-      <InterfaceWindowSubTitle>{SUBTITLE}</InterfaceWindowSubTitle>
-      <NewCycleForm />
-    </InterfaceWindowTemplate>
+    <>
+      <PopupComfirm
+        title={TITLEPOPUP}
+        subtitle={SUBTITLEPOPUP}
+        isVisible={isVisible}
+        handleComfirm={toggleVisible}
+        handleCancel={toggleVisible}
+      />
+      <InterfaceWindowTemplate>
+        <InterfaceWindowTitle>{TITLE}</InterfaceWindowTitle>
+        <InterfaceWindowSubTitle>{SUBTITLE}</InterfaceWindowSubTitle>
+        <NewCycleForm toggleVisible={toggleVisible} />
+      </InterfaceWindowTemplate>
+    </>
   );
 };
 
