@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const SubmitButton = styled.button`
   width: fit-content;
-  margin-top: 4rem;
+  margin-top: ${({ customMargin }) => customMargin || '4rem'};
   padding: 0.5rem 4rem;
   background-color: ${({ theme }) => theme.colors.bg.secondary};
   border: 1px solid ${({ theme }) => theme.colors.decors.darkGrey};
@@ -11,10 +11,15 @@ export const SubmitButton = styled.button`
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   color: ${({ theme }) => theme.colors.text.darkGrey};
   cursor: pointer;
-  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out,
+    border-color 0.3s ease-in-out;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.bg.darkGrey};
+    background-color: ${({ theme, isDangerous }) =>
+      isDangerous ? theme.colors.error : theme.colors.bg.darkGrey};
+    border: 1px solid
+      ${({ theme, isDangerous }) =>
+        isDangerous ? theme.colors.error : theme.colors.decors.darkGrey};
     color: ${({ theme }) => theme.colors.text.white};
   }
   &:active {

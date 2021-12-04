@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArrowIcone } from 'components/atoms/ArowIcone/ArowIcone';
 import {
   UserNavWrapper,
   User,
@@ -6,7 +7,6 @@ import {
   UserName,
   UserRoleName,
   UserAvatar,
-  StyledArrow,
 } from './SignedUpUser.style';
 
 const SignedUpUser = () => {
@@ -20,7 +20,7 @@ const SignedUpUser = () => {
           <UserRoleName>Admin</UserRoleName>
         </UserInfoWrapper>
         <UserAvatar />
-        <StyledArrow />
+        <ArrowIcone isReversed />
       </User>
     </UserNavWrapper>
   );

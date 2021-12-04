@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-import { ReactComponent as Arrow } from 'assets/arrow.svg';
-
 export const UserNavWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -43,14 +41,4 @@ export const UserAvatar = styled.div`
   margin: 0 1rem 0 0.5rem;
   border-radius: 100%;
   background: plum;
-`;
-
-export const StyledArrow = styled(Arrow)`
-  width: 1.5rem;
-  height: 1.5rem;
-  transform: rotate(180deg);
-
-  path {
-    stroke: ${({ theme }) => theme.colors.decors.white};
-  }
 `;
