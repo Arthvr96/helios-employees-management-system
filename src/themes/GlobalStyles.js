@@ -20,6 +20,7 @@ body {
     font-family: 'Roboto', sans-serif;
     font-size: 1.6rem;
     margin: 0;
+    ${({ theme }) => theme.colors.bg.primary}
 }
 
 a, button{
