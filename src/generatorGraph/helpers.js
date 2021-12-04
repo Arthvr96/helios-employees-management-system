@@ -45,6 +45,7 @@ export const getNameShift = (idexOfShift) => {
 };
 
 export const getDataForDashboard = (employeesDispo) => {
+  // info : probably to delete or to refactor.
   const arr = [];
   let count = 0;
   const arr2 = [];
