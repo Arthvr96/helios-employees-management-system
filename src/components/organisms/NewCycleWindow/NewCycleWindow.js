@@ -13,14 +13,38 @@ const initialValues = {
 };
 
 const NewCycleForm = () => {
+  // TODO: add calendar picker
   const onSubmit = (values, method) => {
     alert(JSON.stringify(values, null, 2));
     method.resetForm();
   };
 
   const handleValidation = Yup.object().shape({
-    date1: Yup.date().required('Required'),
-    date2: Yup.date().required('Required'),
+    date1: Yup.date().required('Podaj date początkową'),
+    date2: Yup.date()
+      .required('Podaj date końcową')
+      .test(
+        'is-bigger',
+        'Koniec okresu nie moze zaczynac szybciej niz poczatek okresu!',
+        (value, context) => {
+          if (value && context.parent.date1) {
+            const date1 = new Date(context.parent.date1).getTime();
+            const date2 = new Date(value).getTime();
+            return date2 > date1;
+          }
+          return null;
+        },
+      )
+      .test('is-7days', 'Okres to 7 dni', (value, context) => {
+        if (value && context.parent.date1) {
+          const dayMiliseconds = 1000 * 60 * 60 * 24;
+          const date1 = new Date(context.parent.date1).getTime();
+          const date2 = new Date(value).getTime();
+          const numberOfDays = (date2 - date1) / dayMiliseconds + 1;
+          return numberOfDays === 7;
+        }
+        return null;
+      }),
   });
 
   return (
@@ -49,7 +73,9 @@ const NewCycleForm = () => {
             />
             <ErrorMessages>
               {(errors.date1 && touched.date1) || (errors.date2 && touched.date2)
-                ? 'Podaj obie daty*'
+                ? `${errors.date1 ? errors.date1 : ''} ${errors.date1 && errors.date2 ? '|' : ''} ${
+                    errors.date2 ? errors.date2 : ''
+                  }`
                 : null}
             </ErrorMessages>
           </label>
