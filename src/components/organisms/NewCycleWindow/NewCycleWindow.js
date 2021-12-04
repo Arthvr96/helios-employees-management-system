@@ -80,7 +80,7 @@ const NewCycleForm = () => {
                 : null}
             </ErrorMessages>
           </label>
-          <SubmitButton customMargin="2.4rem" type="submit" disabled={isSubmitting}>
+          <SubmitButton type="submit" disabled={isSubmitting}>
             Zapisz
           </SubmitButton>
         </StyledForm>

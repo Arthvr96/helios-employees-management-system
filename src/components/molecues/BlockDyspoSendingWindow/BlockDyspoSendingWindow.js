@@ -9,9 +9,7 @@ const BlockDyspoSendingWindow = () => {
     <InterfaceWindowTemplate>
       <InterfaceWindowTitle>Wysyłanie dyspozycji aktywne !</InterfaceWindowTitle>
       <InterfaceWindowSubTitle>Wybrany okres to : dd-mm-rrrr - dd-mm-rrrr</InterfaceWindowSubTitle>
-      <SubmitButton customMargin="1.8rem" isDangerous>
-        Zablokuj wysyłanie dyspo
-      </SubmitButton>
+      <SubmitButton isDangerous>Zablokuj wysyłanie dyspo</SubmitButton>
     </InterfaceWindowTemplate>
   );
 };
