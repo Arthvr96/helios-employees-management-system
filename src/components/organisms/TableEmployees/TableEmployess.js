@@ -1,4 +1,4 @@
-import TableEmployee from 'components/molecues/TableEmployee/TableEmployee';
+import TableEmployee from 'components/molecules/TableEmployee/TableEmployee';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';

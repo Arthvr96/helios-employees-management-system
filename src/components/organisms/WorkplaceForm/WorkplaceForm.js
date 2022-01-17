@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { getPolishDayName } from 'helpers/helpers';
 import ListAddedShifts from 'components/organisms/ListAddedShifts/ListAddedShifts';
-import NewShiftButton from 'components/molecues/NewShiftButton/NewShiftButton';
+import NewShiftButton from 'components/molecules/NewShiftButton/NewShiftButton';
 import ShiftFormPopUp from 'components/organisms/ShiftFormPopUp/ShiftFormPopUp';
-import ActiveWorkplace from 'components/molecues/ActiveWorkplace/ActiveWorkplace';
+import ActiveWorkplace from 'components/molecules/ActiveWorkplace/ActiveWorkplace';
 import { Title, Content } from './WorkplaceForm.style';
 
 const WorkplaceForm = ({ selectedDay, selectedWorkplace, schema, workplacespl }) => {
