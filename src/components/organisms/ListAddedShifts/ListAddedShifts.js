@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
-import ShiftElement from 'components/molecues/ShiftElement/ShiftElement';
+import ShiftElement from 'components/molecules/ShiftElement/ShiftElement';
 import uniqid from 'uniqid';
 import {
   Wrapper,

@@ -1,18 +1,24 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Title } from 'components/atoms/Title/Title';
-import { CreateModeWrapper, Label, StyledButton } from './CreateMode.style';
+import { InterfaceWindowTitle } from 'components/atoms/InterfaceWindowTitle/InterfaceWindowTitle';
+import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
+import { StyledWindow, Label, ButtonsWrapper } from './CreateMode.style';
 
 const CreateMode = ({ setCreateMode, handleCreateSchema }) => {
   const [value, setValue] = useState('Pusty szablon');
 
-  const onClick = () => {
+  const handleComfirm = () => {
     handleCreateSchema(value);
     setCreateMode(false);
   };
+
+  const handleCancel = () => {
+    setCreateMode(false);
+  };
+
   return (
-    <CreateModeWrapper>
-      <Title>Tworzenie nowego szablonu</Title>
+    <StyledWindow>
+      <InterfaceWindowTitle>Tworzenie nowego szablonu</InterfaceWindowTitle>
       <Label htmlFor="selectSchema">
         Stwórz na podstawie:
         <select
@@ -28,11 +34,11 @@ const CreateMode = ({ setCreateMode, handleCreateSchema }) => {
           <option value="Wzór szablonu nr 1">Wzór szablonu nr 1</option>
         </select>
       </Label>
-      <StyledButton isFirst onClick={() => setCreateMode(false)}>
-        Anuluj
-      </StyledButton>
-      <StyledButton onClick={onClick}>{`Dalej ->`}</StyledButton>
-    </CreateModeWrapper>
+      <ButtonsWrapper>
+        <SubmitButton onClick={handleCancel}>Anuluj</SubmitButton>
+        <SubmitButton onClick={handleComfirm}>{`Dalej ->`}</SubmitButton>
+      </ButtonsWrapper>
+    </StyledWindow>
   );
 };
 

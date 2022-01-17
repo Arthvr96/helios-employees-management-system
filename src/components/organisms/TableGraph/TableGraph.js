@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import TableShifts from 'components/molecues/TableShifts/TableShifts';
+import TableShifts from 'components/molecules/TableShifts/TableShifts';
 import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import { Table } from './TableGraph.style';
 

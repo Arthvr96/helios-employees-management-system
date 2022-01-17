@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -7,7 +7,8 @@ import { InterfaceWindowTemplate } from 'components/templates/InterfaceWindowTem
 import { InterfaceWindowTitle } from 'components/atoms/InterfaceWindowTitle/InterfaceWindowTitle';
 import { InterfaceWindowSubTitle } from 'components/atoms/InterfaceWindowSubTitle/InterfaceWindowSubTitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
-import PopupComfirm from 'components/molecues/PopupComfirm/PopupComfirm';
+import PopupComfirm from 'components/molecules/PopupComfirm/PopupComfirm';
+import { GlobalStateContext } from 'providers/GlobalStateProvider/GlobalStateProvider';
 import { StyledForm, ErrorMessages } from './NewCycleWindow.style';
 
 const initialValues = {
@@ -101,7 +102,13 @@ const TITLEPOPUP = 'Czy napewno chcesz zacząć nowy okres dla grafiku?';
 const SUBTITLEPOPUP = 'Wybrany okres to : dd-mm-rrrr - dd-mm-rrrr';
 
 const NewCycleWindow = () => {
+  const { changeCycle } = useContext(GlobalStateContext);
   const [isVisible, setVisible] = useState(false);
+
+  const handleComfirm = () => {
+    toggleVisible();
+    changeCycle('active');
+  };
 
   const toggleVisible = () => {
     setVisible(!isVisible);
@@ -112,7 +119,7 @@ const NewCycleWindow = () => {
         title={TITLEPOPUP}
         subtitle={SUBTITLEPOPUP}
         isVisible={isVisible}
-        handleComfirm={toggleVisible}
+        handleComfirm={handleComfirm}
         handleCancel={toggleVisible}
       />
       <InterfaceWindowTemplate>

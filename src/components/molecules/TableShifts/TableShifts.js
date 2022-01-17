@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import uniqid from 'uniqid';
-import TabShifts from 'components/molecues/TabShifts/TabShifts';
+import TabShifts from 'components/molecules/TabShifts/TabShifts';
 import { ShiftType } from './TableShifts.style';
 
 const TableShifts = ({ shiftName, shiftId, maxShifts }) => {
