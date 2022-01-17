@@ -1,5 +1,5 @@
 import React from 'react';
-import BlockDyspoSendingWindow from 'components/molecues/BlockDyspoSendingWindow/BlockDyspoSendingWindow';
+import BlockDyspoSendingWindow from 'components/molecules/BlockDyspoSendingWindow/BlockDyspoSendingWindow';
 import DropDownListWindow from '../DropDownListWindow/DropDownListWindow';
 import { WrapperWindows, WrapperDropDownWindows } from './ActiveCycleWindows.style';
 

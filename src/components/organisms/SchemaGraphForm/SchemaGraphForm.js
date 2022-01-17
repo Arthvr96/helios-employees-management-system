@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import DaysListNav from 'components/molecues/DaysListNav/DaysListNav';
+import DaysListNav from 'components/molecules/DaysListNav/DaysListNav';
 import SchemaGraphDayContent from 'components/organisms/SchemaGraphDayContent/SchemaGraphDayContent';
 import { SchemaGraphFormWrapper } from './SchemaGraphForm.style';
 

@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
-import PopupComfirm from 'components/molecues/PopupComfirm/PopupComfirm';
+import React, { useContext, useState } from 'react';
+import PopupComfirm from 'components/molecules/PopupComfirm/PopupComfirm';
 import { InterfaceWindowTemplate } from 'components/templates/InterfaceWindowTemplate/InterfaceWindowTemplate';
 import { InterfaceWindowTitle } from 'components/atoms/InterfaceWindowTitle/InterfaceWindowTitle';
 import { InterfaceWindowSubTitle } from 'components/atoms/InterfaceWindowSubTitle/InterfaceWindowSubTitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
+import { GlobalStateContext } from 'providers/GlobalStateProvider/GlobalStateProvider';
 
 const TITLEPOPUP = 'Czy napewno chcesz zablokować wysyłanie dyspozycji?';
 
 const BlockDyspoSendingWindow = () => {
+  const { changeCycle } = useContext(GlobalStateContext);
   const [isVisible, setVisible] = useState(false);
+
+  const handleComfirm = () => {
+    toggleVisible();
+    changeCycle('blocked');
+  };
 
   const toggleVisible = () => {
     setVisible(!isVisible);
@@ -18,7 +25,7 @@ const BlockDyspoSendingWindow = () => {
       <PopupComfirm
         title={TITLEPOPUP}
         isVisible={isVisible}
-        handleComfirm={toggleVisible}
+        handleComfirm={handleComfirm}
         handleCancel={toggleVisible}
       />
       <InterfaceWindowTemplate>

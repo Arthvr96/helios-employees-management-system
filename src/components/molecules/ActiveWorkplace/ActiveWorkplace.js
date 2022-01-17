@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ToggleButton from 'components/molecues/ToggleButton/ToggleButton';
+import ToggleButton from 'components/molecules/ToggleButton/ToggleButton';
 import { ActiveWorkplaceWrapper } from './ActiveWorkplace.style';
 
 const ActiveWorkplace = ({ buttonState, setButtonState }) => {
