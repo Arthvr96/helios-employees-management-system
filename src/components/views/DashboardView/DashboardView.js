@@ -1,28 +1,18 @@
 import React, { useContext } from 'react';
-import DropList from 'components/organisms/DropList/DropList';
-import { getDataForDashboard } from 'generatorGraph/helpers';
-import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
-import { Wrapper } from './DashboardView.style';
+import { ViewTemplate } from 'components/templates/ViewTemplate/ViewTemplate';
+import NewCycleWindow from 'components/organisms/NewCycleWindow/NewCycleWindow';
+import ActiveCycleWindows from 'components/organisms/ActiveCycleWindows/ActiveCycleWindows';
+import DyspoSendBlockedWindow from 'components/organisms/DyspoSendBlockedWindow/DyspoSendBlockedWindow';
+import { GlobalStateContext } from 'providers/GlobalStateProvider/GlobalStateProvider';
 
 const DashBoard = () => {
-  const { employeesDispo } = useContext(AdminStateContext);
-  const { arr, arr2, count, count2 } = getDataForDashboard(employeesDispo);
-
+  const { cycleState } = useContext(GlobalStateContext);
   return (
-    <Wrapper>
-      <DropList
-        className="dropList1"
-        name="Pracownicy, którzy nie wysłali dyspo"
-        listEmployees={arr}
-        numberOfEmployees={count}
-      />
-      <DropList
-        className="dropList2"
-        name="Pracownicy, którzy wysłali dyspo"
-        listEmployees={arr2}
-        numberOfEmployees={count2}
-      />
-    </Wrapper>
+    <ViewTemplate>
+      {cycleState === 'new' ? <NewCycleWindow /> : null}
+      {cycleState === 'active' ? <ActiveCycleWindows /> : null}
+      {cycleState === 'blocked' ? <DyspoSendBlockedWindow /> : null}
+    </ViewTemplate>
   );
 };
 

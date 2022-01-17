@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import WorkplacesList from 'components/molecues/WorkplacesList/WorkplacesList';
+import WorkplacesList from 'components/molecules/WorkplacesList/WorkplacesList';
 import WorkplacesTarget from 'components/organisms/WorkplacesTarget/WorkplacesTarget';
 
 import { initialSchema } from 'data/cmsResponseInitialSchema';
