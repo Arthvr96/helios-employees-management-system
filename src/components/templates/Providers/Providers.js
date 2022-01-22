@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter as Router } from 'react-router-dom';
-import GlobalStateProvider from 'providers/GlobalStateProvider/GlobalStateProvider';
 import SEO from 'components/templates/SEO/SEO';
 import { ThemeProvider } from 'styled-components';
 import { theme } from 'themes/theme';
@@ -14,9 +13,7 @@ const Providers = ({ children }) => {
       <Router>
         <ThemeProvider theme={theme}>
           <GlobalStyle />
-          <GlobalStateProvider>
-            <AdminStateProvider>{children}</AdminStateProvider>
-          </GlobalStateProvider>
+          <AdminStateProvider>{children}</AdminStateProvider>
         </ThemeProvider>
       </Router>
     </SEO>

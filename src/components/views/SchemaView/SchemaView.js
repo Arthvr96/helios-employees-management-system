@@ -1,13 +1,13 @@
 import React, { useContext, useState } from 'react';
 import SchemaGraphForm from 'components/organisms/SchemaGraphForm/SchemaGraphForm';
 import SchemaGraphMenu from 'components/organisms/SchemaGrahpMenu/SchemaGraphMenu';
-import { GlobalStateContext } from 'providers/GlobalStateProvider/GlobalStateProvider';
 import SchemaCreatorDisabled from 'components/molecules/SchemaCreatorDisabled/SchemaCreatorDisabled';
-import { schema } from 'data/schema1';
+// import { schema } from 'data/schema1';
+import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import { Wrapper } from './SchemaView.style';
 
 const SchemaView = () => {
-  const { cycleState } = useContext(GlobalStateContext);
+  const { cycleState } = useContext(AdminStateContext);
   const [createSchema, setCreateSchema] = useState(false);
 
   const handleCreateSchema = (option) => {

@@ -4,12 +4,12 @@ import { InterfaceWindowTemplate } from 'components/templates/InterfaceWindowTem
 import { InterfaceWindowTitle } from 'components/atoms/InterfaceWindowTitle/InterfaceWindowTitle';
 import { InterfaceWindowSubTitle } from 'components/atoms/InterfaceWindowSubTitle/InterfaceWindowSubTitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
-import { GlobalStateContext } from 'providers/GlobalStateProvider/GlobalStateProvider';
+import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 
 const TITLEPOPUP = 'Czy napewno chcesz zablokować wysyłanie dyspozycji?';
 
 const BlockDyspoSendingWindow = () => {
-  const { changeCycle } = useContext(GlobalStateContext);
+  const { changeCycle } = useContext(AdminStateContext);
   const [isVisible, setVisible] = useState(false);
 
   const handleComfirm = () => {

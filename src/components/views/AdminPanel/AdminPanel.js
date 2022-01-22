@@ -10,9 +10,7 @@ const AdminPanel = () => {
   return (
     <MainTemplate>
       <Switch>
-        <Route path="/dashboard">
-          <DashboardView />
-        </Route>
+        <Route path="/dashboard" component={DashboardView} />
         <Route path="/schemaView">
           <SchemaView />
         </Route>

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import { ArrowIcone } from 'components/atoms/ArowIcone/ArowIcone';
 import {
   UserNavWrapper,
@@ -7,21 +8,32 @@ import {
   UserName,
   UserRoleName,
   UserAvatar,
+  UserMenu,
+  LinkButton,
 } from './SignedUpUser.style';
 
 const SignedUpUser = () => {
-  // TODO : add hover popup window with options for user
+  const [isOpen, setOpen] = useState(false);
+  const { currentUser, logOut } = useAuth();
 
   return (
     <UserNavWrapper>
-      <User>
+      <User onClick={() => setOpen(!isOpen)}>
         <UserInfoWrapper>
-          <UserName>Łukasz Katyszeewski</UserName>
-          <UserRoleName>Admin</UserRoleName>
+          <UserName>{currentUser && currentUser.displayName}</UserName>
+          <UserRoleName>admin</UserRoleName>
         </UserInfoWrapper>
         <UserAvatar />
-        <ArrowIcone isReversed />
+        <ArrowIcone isRotate={isOpen} isReversed />
       </User>
+      <UserMenu isOpen={isOpen}>
+        <div>
+          <LinkButton type="button">Ustawienia</LinkButton>
+          <LinkButton type="button" onClick={logOut}>
+            Wyloguj
+          </LinkButton>
+        </div>
+      </UserMenu>
     </UserNavWrapper>
   );
 };

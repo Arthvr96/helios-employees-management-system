@@ -3,10 +3,10 @@ import { ViewTemplate } from 'components/templates/ViewTemplate/ViewTemplate';
 import NewCycleWindow from 'components/organisms/NewCycleWindow/NewCycleWindow';
 import ActiveCycleWindows from 'components/organisms/ActiveCycleWindows/ActiveCycleWindows';
 import DyspoSendBlockedWindow from 'components/organisms/DyspoSendBlockedWindow/DyspoSendBlockedWindow';
-import { GlobalStateContext } from 'providers/GlobalStateProvider/GlobalStateProvider';
+import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 
 const DashBoard = () => {
-  const { cycleState } = useContext(GlobalStateContext);
+  const { cycleState } = useContext(AdminStateContext);
   return (
     <ViewTemplate>
       {cycleState === 'new' ? <NewCycleWindow /> : null}

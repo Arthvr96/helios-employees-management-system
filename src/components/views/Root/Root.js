@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Providers from 'components/templates/Providers/Providers';
 import AdminPanel from 'components/views/AdminPanel/AdminPanel';
 import UserPanel from 'components/views/UserPanel/UserPanel';
 import LoginPanel from 'components/views/LoginPanel/LoginPanel';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { useAuth } from 'providers/AuthProvider/AuthProvider';
 
 const Root = () => {
-  const [authAdmin, setAuthAdmin] = useState(false);
-  const [authUser, setAuthUser] = useState(false);
+  const { authUser, authAdmin } = useAuth();
 
   return (
     <Providers>
-      {!authAdmin && !authUser ? <LoginPanel /> : null}
+      {!authAdmin && !authUser ? (
+        <Switch>
+          <Route exact path="/" component={LoginPanel} />
+          <Route path="*">
+            <Redirect to="/" />
+          </Route>
+        </Switch>
+      ) : null}
       {authAdmin ? <AdminPanel /> : null}
       {authUser ? <UserPanel /> : null}
     </Providers>
