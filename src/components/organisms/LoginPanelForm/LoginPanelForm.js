@@ -1,15 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
 import { Form, StyledInputForm, ErrorMsg } from './LoginPanelForm.style';
 
 const LoginPanelForm = () => {
-  const onSubmit = async (values) => {
-    await new Promise((resolve) => {
-      setTimeout(resolve, 500);
-      alert(JSON.stringify(values, null, 2));
-    });
+  const { logIn } = useAuth();
+  const [errorSignin, setError] = useState(null);
+
+  const handleClearError = () => {
+    if (errorSignin) {
+      setError(null);
+    }
+  };
+
+  const onSubmit = async ({ email, password }, { resetForm, setSubmitting }) => {
+    setSubmitting(true);
+    await logIn(email, password)
+      .then(() => {
+        if (errorSignin) {
+          setError(null);
+          setSubmitting(false);
+        }
+      })
+      .catch((error) => {
+        setError('Zły login lub/i hasło');
+        resetForm();
+        setSubmitting(false);
+      });
   };
 
   const validationSchema = Yup.object().shape({
@@ -23,7 +42,10 @@ const LoginPanelForm = () => {
     <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
       {({ values, touched, errors, isSubmitting, handleChange, handleBlur, handleSubmit }) => {
         return (
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} onClick={handleClearError}>
+            {errorSignin && !touched.email && !touched.password && (
+              <ErrorMsg>{errorSignin}</ErrorMsg>
+            )}
             <label htmlFor="email" style={{ display: 'block' }}>
               Email :
               <StyledInputForm
@@ -47,9 +69,9 @@ const LoginPanelForm = () => {
                 onBlur={handleBlur}
                 isError={errors.password && touched.password}
               />
-              {errors.password && touched.password ? <ErrorMsg>{errors.password}</ErrorMsg> : null}
+              {errors.password && touched.password ? <ErrorMsg> {errors.password}</ErrorMsg> : null}
             </label>
-            <SubmitButton type="submit" disabled={isSubmitting}>
+            <SubmitButton disabled={isSubmitting} customMargin="1rem" type="submit">
               Zaloguj
             </SubmitButton>
           </Form>

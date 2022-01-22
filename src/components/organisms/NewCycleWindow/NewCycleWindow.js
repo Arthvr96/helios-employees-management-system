@@ -8,7 +8,7 @@ import { InterfaceWindowTitle } from 'components/atoms/InterfaceWindowTitle/Inte
 import { InterfaceWindowSubTitle } from 'components/atoms/InterfaceWindowSubTitle/InterfaceWindowSubTitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
 import PopupComfirm from 'components/molecules/PopupComfirm/PopupComfirm';
-import { GlobalStateContext } from 'providers/GlobalStateProvider/GlobalStateProvider';
+import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import { StyledForm, ErrorMessages } from './NewCycleWindow.style';
 
 const initialValues = {
@@ -102,7 +102,7 @@ const TITLEPOPUP = 'Czy napewno chcesz zacząć nowy okres dla grafiku?';
 const SUBTITLEPOPUP = 'Wybrany okres to : dd-mm-rrrr - dd-mm-rrrr';
 
 const NewCycleWindow = () => {
-  const { changeCycle } = useContext(GlobalStateContext);
+  const { changeCycle } = useContext(AdminStateContext);
   const [isVisible, setVisible] = useState(false);
 
   const handleComfirm = () => {

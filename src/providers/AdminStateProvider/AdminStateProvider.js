@@ -5,13 +5,14 @@ import { cmsResponseShiftsSchema } from 'data/cmsResponseShiftsSchema';
 import { cmsResponseEmployeesInfo } from 'data/cmsResponseEmployeesInfo';
 import { getGraph } from 'generatorGraph/getGraph';
 
-export const AdminStateContext = createContext({});
+export const AdminStateContext = createContext({ cycleState: '', changeCycle: () => {} });
 
 const AdminStateProvider = ({ children }) => {
   const [employeesDispo, setEmployeesDispo] = useState([]);
   const [shiftsSchema, setshiftsSchema] = useState([]);
   const [employeesInfo, setEmployeesInfo] = useState([]);
   const [graph, setGraph] = useState({});
+  const [cycleState, setCycle] = useState('active');
 
   const getDataUpdate = () => {
     const copyOfCmsResponseEmployeesDispo = [];
@@ -35,6 +36,12 @@ const AdminStateProvider = ({ children }) => {
     setGraph({});
   };
 
+  const changeCycle = (option) => {
+    if (option === 'new' || option === 'active' || option === 'blocked') {
+      setCycle(option);
+    }
+  };
+
   return (
     <AdminStateContext.Provider
       value={{
@@ -45,6 +52,8 @@ const AdminStateProvider = ({ children }) => {
         getDataUpdate,
         handleGenerateGraph,
         handleClearState,
+        cycleState,
+        changeCycle,
       }}
     >
       {children}

@@ -13,6 +13,7 @@
     "react/require-default-props": 0,
     "no-param-reassign": 0,
     "no-alert": 0,
+    "no-return-await": "error",
     "react/jsx-props-no-spreading": [
       2,
       {

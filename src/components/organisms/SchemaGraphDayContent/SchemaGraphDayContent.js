@@ -22,7 +22,7 @@ const SchemaGraphDayContent = ({ selectedDay, setCreateSchema }) => {
 
   const handleSave = () => {
     setCreateSchema(false);
-    console.log(schema);
+    // console.log(schema);
   };
 
   return (
