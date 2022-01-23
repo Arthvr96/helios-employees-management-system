@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { InterfaceWindowSubTitle } from 'components/atoms/InterfaceWindowSubTitle/InterfaceWindowSubTitle';
+import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 
-export const StyledSubTitle = styled(InterfaceWindowSubTitle)`
+export const StyledSubTitle = styled(CardSubtitle)`
   line-height: 18px;
   width: 70%;
 `;

@@ -1,22 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { InterfaceWindowTemplate } from 'components/templates/InterfaceWindowTemplate/InterfaceWindowTemplate';
-import { InterfaceWindowSubTitle } from 'components/atoms/InterfaceWindowSubTitle/InterfaceWindowSubTitle';
+import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
+import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import { Wrapper, StyledTitle, WrapperButtons, StyledSubmitButton } from './PopupComfirm.styles';
 
 const PopupComfirm = ({ title, subtitle, handleComfirm, handleCancel, isVisible }) => {
   return (
     <Wrapper isVisible={isVisible}>
-      <InterfaceWindowTemplate>
+      <CardTemplate>
         <StyledTitle fontSize="m">{title}</StyledTitle>
-        {subtitle ? <InterfaceWindowSubTitle>{subtitle}</InterfaceWindowSubTitle> : null}
+        {subtitle ? <CardSubtitle>{subtitle}</CardSubtitle> : null}
         <WrapperButtons>
           <StyledSubmitButton isAccept onClick={handleComfirm}>
             Potwierdz
           </StyledSubmitButton>
           <StyledSubmitButton onClick={handleCancel}>Anuluj</StyledSubmitButton>
         </WrapperButtons>
-      </InterfaceWindowTemplate>
+      </CardTemplate>
     </Wrapper>
   );
 };

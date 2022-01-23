@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-import { InterfaceWindowTemplate } from 'components/templates/InterfaceWindowTemplate/InterfaceWindowTemplate';
-import { InterfaceWindowSubTitle } from 'components/atoms/InterfaceWindowSubTitle/InterfaceWindowSubTitle';
+import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
+import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 
-export const StyledWindow = styled(InterfaceWindowTemplate)`
+export const StyledWindow = styled(CardTemplate)`
   margin-top: 2.5rem;
 `;
 
-export const StyledSubTitle = styled(InterfaceWindowSubTitle)`
+export const StyledSubTitle = styled(CardSubtitle)`
   width: 60%;
   text-align: center;
 `;

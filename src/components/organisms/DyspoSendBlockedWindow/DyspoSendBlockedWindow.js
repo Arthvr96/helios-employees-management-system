@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import PopupComfirm from 'components/molecules/PopupComfirm/PopupComfirm';
-import { InterfaceWindowTemplate } from 'components/templates/InterfaceWindowTemplate/InterfaceWindowTemplate';
-import { InterfaceWindowTitle } from 'components/atoms/InterfaceWindowTitle/InterfaceWindowTitle';
+import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
+import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
 import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import { StyledSubTitle } from './DyspoSendBlockedWindow.style';
@@ -28,15 +28,15 @@ const DyspoSendBlockedWindow = () => {
         handleComfirm={handleComfirm}
         handleCancel={toggleVisible}
       />
-      <InterfaceWindowTemplate>
-        <InterfaceWindowTitle>Wysyłanie dyspozycji zablokowane !</InterfaceWindowTitle>
+      <CardTemplate>
+        <CardTitle>Wysyłanie dyspozycji zablokowane !</CardTitle>
         <StyledSubTitle>
           Wysyłanie dyspozycji zostało zablokowane, dodaj szablon grafiku aby móc wygenerować grafik
         </StyledSubTitle>
         <SubmitButton isDangerous onClick={toggleVisible}>
           Zakończ okres
         </SubmitButton>
-      </InterfaceWindowTemplate>
+      </CardTemplate>
     </>
   );
 };

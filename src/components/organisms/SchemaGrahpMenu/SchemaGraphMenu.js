@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import CreateMode from 'components/molecules/CreateMode/CreateMode';
-import { InterfaceWindowTitle } from 'components/atoms/InterfaceWindowTitle/InterfaceWindowTitle';
+import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
 import {
   StyledWindow,
@@ -19,7 +19,7 @@ const SchemaGraphMenu = ({ handleCreateSchema }) => {
     <>
       {!createMode ? (
         <StyledWindow>
-          <InterfaceWindowTitle>Wybór szablonu</InterfaceWindowTitle>
+          <CardTitle>Wybór szablonu</CardTitle>
           <StyledSubTitle>
             Wybrany tydzień : <span>12-18 Nov</span>
           </StyledSubTitle>
