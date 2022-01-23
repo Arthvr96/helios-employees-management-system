@@ -1,11 +1,11 @@
 import React from 'react';
-import { InterfaceWindowTitle } from 'components/atoms/InterfaceWindowTitle/InterfaceWindowTitle';
+import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { StyledWindow, StyledSubTitle } from './SchemaCreatorDisabled.style';
 
 const SchemaCreatorDisabled = () => {
   return (
     <StyledWindow>
-      <InterfaceWindowTitle>Wybor szablonu</InterfaceWindowTitle>
+      <CardTitle>Wybor szablonu</CardTitle>
       <StyledSubTitle>Rozpocznij nowy okres aby odblokowac opcje</StyledSubTitle>
     </StyledWindow>
   );
