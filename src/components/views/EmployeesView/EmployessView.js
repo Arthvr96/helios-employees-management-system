@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import { ViewTemplate } from 'components/templates/ViewTemplate/ViewTemplate';
-import EmployeesManagmentMenu from 'components/molecules/EmployeesManagementMenu/EmployeesManagementMenu';
+import EmployeesManagementMenu from 'components/molecules/EmployeesManagementMenu/EmployeesManagementMenu';
 import NewUserForm from 'components/organisms/NewUserForm/NewUserForm';
 import ListUsers from 'components/organisms/ListUsers/ListUsers';
 
@@ -19,7 +19,7 @@ const EmployeesView = () => {
   return (
     <ViewTemplate>
       <CardTemplate>
-        <EmployeesManagmentMenu handleClick={handleClick} state={state} />
+        <EmployeesManagementMenu handleClick={handleClick} state={state} />
         {state === 'new' ? <NewUserForm /> : null}
         {state === 'list' ? <ListUsers /> : null}
       </CardTemplate>
