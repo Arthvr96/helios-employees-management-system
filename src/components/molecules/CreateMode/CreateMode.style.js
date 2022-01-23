@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { InterfaceWindowTemplate } from 'components/templates/InterfaceWindowTemplate/InterfaceWindowTemplate';
+import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 
-export const StyledWindow = styled(InterfaceWindowTemplate)`
+export const StyledWindow = styled(CardTemplate)`
   margin-top: 2.5rem;
 `;
 

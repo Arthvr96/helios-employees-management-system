@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
 import PopupComfirm from 'components/molecules/PopupComfirm/PopupComfirm';
-import { InterfaceWindowTemplate } from 'components/templates/InterfaceWindowTemplate/InterfaceWindowTemplate';
-import { InterfaceWindowTitle } from 'components/atoms/InterfaceWindowTitle/InterfaceWindowTitle';
-import { InterfaceWindowSubTitle } from 'components/atoms/InterfaceWindowSubTitle/InterfaceWindowSubTitle';
+import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
+import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
+import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
 import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 
@@ -28,15 +28,13 @@ const BlockDyspoSendingWindow = () => {
         handleComfirm={handleComfirm}
         handleCancel={toggleVisible}
       />
-      <InterfaceWindowTemplate>
-        <InterfaceWindowTitle>Wysyłanie dyspozycji aktywne !</InterfaceWindowTitle>
-        <InterfaceWindowSubTitle>
-          Wybrany okres to : dd-mm-rrrr - dd-mm-rrrr
-        </InterfaceWindowSubTitle>
+      <CardTemplate>
+        <CardTitle>Wysyłanie dyspozycji aktywne !</CardTitle>
+        <CardSubtitle>Wybrany okres to : dd-mm-rrrr - dd-mm-rrrr</CardSubtitle>
         <SubmitButton isDangerous onClick={toggleVisible}>
           Zablokuj wysyłanie dyspo
         </SubmitButton>
-      </InterfaceWindowTemplate>
+      </CardTemplate>
     </>
   );
 };

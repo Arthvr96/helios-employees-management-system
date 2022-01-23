@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { InterfaceWindowTemplate } from 'components/templates/InterfaceWindowTemplate/InterfaceWindowTemplate';
-import { InterfaceWindowTitle } from 'components/atoms/InterfaceWindowTitle/InterfaceWindowTitle';
+import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
+import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 
 export const DropDownList = styled.div`
   width: 40rem;
@@ -20,7 +20,7 @@ export const WrappingButton = styled.div`
   background-color: transparent;
   cursor: pointer;
 `;
-export const StyledInterfaceWindowTemplate = styled(InterfaceWindowTemplate)`
+export const StyledInterfaceWindowTemplate = styled(CardTemplate)`
   justify-content: center;
   flex-direction: row;
   width: 100%;
@@ -32,7 +32,7 @@ export const StyledInterfaceWindowTemplate = styled(InterfaceWindowTemplate)`
   border-bottom-left-radius: ${({ isOpen }) => (isOpen ? '0px' : '15px')};
   border-bottom-right-radius: ${({ isOpen }) => (isOpen ? '0px' : '15px')};
 `;
-export const StyledInterfaceWindowTitle = styled(InterfaceWindowTitle)`
+export const StyledInterfaceWindowTitle = styled(CardTitle)`
   margin-right: 1rem;
 `;
 
@@ -90,7 +90,7 @@ export const EmployeeMail = styled.p`
 
 // ContentDropDownList components
 
-export const ContentDropDownListWrapper = styled(InterfaceWindowTemplate)`
+export const ContentDropDownListWrapper = styled(CardTemplate)`
   position: relative;
   z-index: 3;
   display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};

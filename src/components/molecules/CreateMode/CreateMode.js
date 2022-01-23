@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { InterfaceWindowTitle } from 'components/atoms/InterfaceWindowTitle/InterfaceWindowTitle';
+import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
 import { StyledWindow, Label, ButtonsWrapper } from './CreateMode.style';
 
@@ -18,7 +18,7 @@ const CreateMode = ({ setCreateMode, handleCreateSchema }) => {
 
   return (
     <StyledWindow>
-      <InterfaceWindowTitle>Tworzenie nowego szablonu</InterfaceWindowTitle>
+      <CardTitle>Tworzenie nowego szablonu</CardTitle>
       <Label htmlFor="selectSchema">
         Stwórz na podstawie:
         <select

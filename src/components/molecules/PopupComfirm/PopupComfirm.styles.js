@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { InterfaceWindowTitle } from 'components/atoms/InterfaceWindowTitle/InterfaceWindowTitle';
+import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
 
 export const Wrapper = styled.div`
@@ -18,7 +18,7 @@ export const Wrapper = styled.div`
   transition: opacity 0.3s ease-in-out;
 `;
 
-export const StyledTitle = styled(InterfaceWindowTitle)`
+export const StyledTitle = styled(CardTitle)`
   width: 25.6rem;
 `;
 

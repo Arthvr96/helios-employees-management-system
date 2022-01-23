@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { InputForm } from 'components/atoms/InputForm/InputForm';
-import { InterfaceWindowTemplate } from 'components/templates/InterfaceWindowTemplate/InterfaceWindowTemplate';
-import { InterfaceWindowTitle } from 'components/atoms/InterfaceWindowTitle/InterfaceWindowTitle';
-import { InterfaceWindowSubTitle } from 'components/atoms/InterfaceWindowSubTitle/InterfaceWindowSubTitle';
+import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
+import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
+import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
 import PopupComfirm from 'components/molecules/PopupComfirm/PopupComfirm';
 import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
@@ -122,11 +122,11 @@ const NewCycleWindow = () => {
         handleComfirm={handleComfirm}
         handleCancel={toggleVisible}
       />
-      <InterfaceWindowTemplate>
-        <InterfaceWindowTitle>{TITLE}</InterfaceWindowTitle>
-        <InterfaceWindowSubTitle>{SUBTITLE}</InterfaceWindowSubTitle>
+      <CardTemplate>
+        <CardTitle>{TITLE}</CardTitle>
+        <CardSubtitle>{SUBTITLE}</CardSubtitle>
         <NewCycleForm toggleVisible={toggleVisible} />
-      </InterfaceWindowTemplate>
+      </CardTemplate>
     </>
   );
 };

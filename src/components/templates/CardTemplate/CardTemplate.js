@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const InterfaceWindowTemplate = styled.div`
+export const CardTemplate = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
