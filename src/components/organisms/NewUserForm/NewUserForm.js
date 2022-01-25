@@ -5,40 +5,13 @@ import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import styled from 'styled-components';
 import { ErrorMsg } from 'components/atoms/ErrorMsg/ErrorMsg';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
+import { InputForm } from 'components/atoms/InputForm/InputForm';
+import { Form } from 'components/atoms/Form/Form';
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 3rem;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  margin-top: 2rem;
-
-  label {
-    display: flex;
-    flex-direction: column;
-    font-size: ${({ theme }) => theme.fontSize.xs};
-    font-weight: ${({ theme }) => theme.fontWeight.bold};
-    color: ${({ theme }) => theme.colors.text.black};
-    div input.first {
-      margin-right: 1rem;
-    }
-  }
-`;
-
-const InputForm = styled.input`
-  padding: 0.5rem;
-  margin: 1rem 0 2rem 0;
-  border-radius: 2px;
-  text-align: left;
-  font-size: ${({ theme }) => theme.fontSize.xs};
-  font-weight: ${({ theme }) => theme.fontWeight.light};
-  background-color: ${({ theme }) => theme.colors.bg.secondary};
-  border: ${({ isError, theme }) =>
-    isError ? `1px solid ${theme.colors.error}` : `1px solid ${theme.colors.decors.grey}`};
 `;
 
 const StyledSubmitButton = styled(SubmitButton)`

@@ -12,6 +12,10 @@ const PanelsWrapper = () => {
   return (
     <>
       {!authAdmin && !authUser ? <LoginPanel /> : null}
+      {/* comment to line 19 */}
+      {/* While the user is not logged out and re-authorization is taking place e.g. f5 browser */}
+      {/* (currentUser.exists = authorization) authAdmin or AuthUser will be true (see local storage). If re-authentication */}
+      {/* fails localstorage.clear() (see authProvider()). */}
       {(authUser || authAdmin) && !currentUser ? (
         <ViewTemplate navMarginDisabled alignItems="center">
           <LoaderRing />

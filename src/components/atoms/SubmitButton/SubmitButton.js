@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const SubmitButton = styled.button`
-  width: fit-content;
-  margin-top: ${({ customMargin }) => customMargin || '2rem'};
+  width: 100%;
+  margin-top: 1.5rem;
   padding: 0.5rem 4rem;
   background-color: ${({ theme }) => theme.colors.bg.secondary};
   border: 1px solid ${({ theme }) => theme.colors.decors.darkGrey};
