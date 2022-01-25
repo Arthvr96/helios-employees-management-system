@@ -29,6 +29,7 @@ const AuthProvider = ({ children }) => {
       .then(() => {
         setAuthAdmin(false);
         setAuthUser(false);
+        window.localStorage.clear();
       })
       .catch((error) => {
         console.log(error);
@@ -46,6 +47,15 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    const { authType } = window.localStorage;
+    if (authType === 'admin') {
+      setAuthAdmin(true);
+    } else if (authType === 'user') {
+      setAuthUser(true);
+    }
+  }, []);
+
+  useEffect(() => {
     const unsubscriber = onAuthStateChanged(auth, (user) => {
       if (user) {
         setCurrentUser(user);
@@ -53,8 +63,10 @@ const AuthProvider = ({ children }) => {
           .then((respond) => {
             if (respond.data().role === 'admin') {
               setAuthAdmin(true);
+              window.localStorage.setItem('authType', 'admin');
             } else if (respond.data().role === 'user') {
               setAuthUser(true);
+              window.localStorage.setItem('authType', 'user');
             } else {
               throw 'Nie znana rola';
             }

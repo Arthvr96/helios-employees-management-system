@@ -1,5 +1,5 @@
 import React from 'react';
-import { ViewTemplate } from 'components/templates/ViewTemplate/ViewTemplate';
+import ViewTemplate from 'components/templates/ViewTemplate/ViewTemplate';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';

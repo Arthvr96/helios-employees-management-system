@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import { ArrowIcone } from 'components/atoms/ArowIcone/ArowIcone';
 import {
@@ -17,7 +17,7 @@ const SignedUpUser = () => {
   const { currentUser, logOut } = useAuth();
 
   return (
-    <UserNavWrapper>
+    <UserNavWrapper className="signedUpUser">
       <User onClick={() => setOpen(!isOpen)}>
         <UserInfoWrapper>
           <UserName>{currentUser && currentUser.displayName}</UserName>

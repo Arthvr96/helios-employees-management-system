@@ -54,6 +54,7 @@ export const UserAvatar = styled.div`
 export const UserMenu = styled.div`
   display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
   position: absolute;
+  z-index: 1000;
   top: 5.9rem;
   width: 17rem;
   border: 1px solid ${({ theme }) => theme.colors.decors.white};
