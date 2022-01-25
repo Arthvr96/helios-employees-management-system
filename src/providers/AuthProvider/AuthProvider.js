@@ -19,9 +19,18 @@ const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [authAdmin, setAuthAdmin] = useState(false);
   const [authUser, setAuthUser] = useState(false);
+  const [inProgress, setInProgress] = useState(false);
 
-  const logIn = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
+  const logIn = async (email, password) => {
+    setInProgress(true);
+    await signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        return true;
+      })
+      .catch((error) => {
+        setInProgress(false);
+        throw error;
+      });
   };
 
   const logOut = () => {
@@ -29,10 +38,11 @@ const AuthProvider = ({ children }) => {
       .then(() => {
         setAuthAdmin(false);
         setAuthUser(false);
-        window.localStorage.clear();
+        localStorage.clear();
       })
       .catch((error) => {
-        console.log(error);
+        window.alert(`Wylogowanie nie powiodło sie: ${error}`);
+        localStorage.clear();
       });
   };
 
@@ -47,7 +57,7 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const { authType } = window.localStorage;
+    const { authType } = localStorage;
     if (authType === 'admin') {
       setAuthAdmin(true);
     } else if (authType === 'user') {
@@ -61,6 +71,7 @@ const AuthProvider = ({ children }) => {
         setCurrentUser(user);
         getUserRole(user.uid)
           .then((respond) => {
+            setInProgress(false);
             if (respond.data().role === 'admin') {
               setAuthAdmin(true);
               window.localStorage.setItem('authType', 'admin');
@@ -72,10 +83,14 @@ const AuthProvider = ({ children }) => {
             }
           })
           .catch((error) => {
-            console.log(error);
+            window.alert(`critical error : ${error}`);
+            setInProgress(false);
+            localStorage.clear();
           });
       } else {
         setCurrentUser(null);
+        setInProgress(false);
+        localStorage.clear();
       }
     });
 
@@ -84,7 +99,7 @@ const AuthProvider = ({ children }) => {
     };
   }, []);
 
-  const values = { currentUser, authUser, authAdmin, logIn, logOut, updateUserProfile };
+  const values = { currentUser, authUser, authAdmin, inProgress, logIn, logOut, updateUserProfile };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 };

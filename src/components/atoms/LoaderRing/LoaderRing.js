@@ -1,23 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const Loader = styled.div`
   display: inline-block;
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 38px;
+  height: 38px;
 
   div {
     box-sizing: border-box;
     display: block;
     position: absolute;
-    width: 64px;
-    height: 64px;
-    margin: 8px;
-    border: 8px solid #fff;
+    width: 38px;
+    height: 38px;
+    border: 5px solid;
     border-radius: 50%;
     animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: #fff transparent transparent transparent;
+    border-color: ${({ theme, colorVariant2 }) =>
+        colorVariant2 ? theme.colors.bg.primary : theme.colors.decors.white}
+      transparent transparent transparent;
   }
   div:nth-child(1) {
     animation-delay: -0.45s;
@@ -38,9 +40,9 @@ const Loader = styled.div`
   }
 `;
 
-const LoaderRing = () => {
+const LoaderRing = ({ colorVariant2 }) => {
   return (
-    <Loader>
+    <Loader colorVariant2={colorVariant2}>
       <div />
       <div />
       <div />
@@ -50,3 +52,7 @@ const LoaderRing = () => {
 };
 
 export default LoaderRing;
+
+LoaderRing.propTypes = {
+  colorVariant2: PropTypes.bool,
+};
