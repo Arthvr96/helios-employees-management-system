@@ -1,18 +1,25 @@
 import React from 'react';
-import { useWindowSize } from 'hooks/useWindowSize';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import ViewTemplate from 'components/templates/ViewTemplate/ViewTemplate';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import LoginPanelForm from 'components/organisms/LoginPanelForm/LoginPanelForm';
-import { StyledViewTemplate } from './LoginPanel.style';
 
 const LoginPanel = () => {
   return (
-    <StyledViewTemplate heightSize={useWindowSize().height}>
-      <CardTemplate>
-        <CardTitle>Logowanie</CardTitle>
-        <LoginPanelForm />
-      </CardTemplate>
-    </StyledViewTemplate>
+    <Switch>
+      <Route exact path="/signin">
+        <ViewTemplate navMarginDisabled alignItems="center">
+          <CardTemplate>
+            <CardTitle>Logowanie</CardTitle>
+            <LoginPanelForm />
+          </CardTemplate>
+        </ViewTemplate>
+      </Route>
+      <Route path="*">
+        <Redirect to="/signin" />
+      </Route>
+    </Switch>
   );
 };
 

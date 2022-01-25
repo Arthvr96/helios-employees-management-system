@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
-import { ViewTemplate } from 'components/templates/ViewTemplate/ViewTemplate';
+import ViewTemplate from 'components/templates/ViewTemplate/ViewTemplate';
 import EmployeesManagementMenu from 'components/molecules/EmployeesManagementMenu/EmployeesManagementMenu';
 import NewUserForm from 'components/organisms/NewUserForm/NewUserForm';
 import ListUsers from 'components/organisms/ListUsers/ListUsers';

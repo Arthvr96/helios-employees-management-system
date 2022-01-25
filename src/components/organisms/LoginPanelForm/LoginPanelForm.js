@@ -3,7 +3,8 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
-import { Form, StyledInputForm, ErrorMsg } from './LoginPanelForm.style';
+import { ErrorMsg } from 'components/atoms/ErrorMsg/ErrorMsg';
+import { Form, StyledInputForm } from './LoginPanelForm.style';
 
 const LoginPanelForm = () => {
   const { logIn } = useAuth();

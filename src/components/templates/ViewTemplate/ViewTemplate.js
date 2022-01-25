@@ -1,9 +1,35 @@
-import styled from 'styled-components';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { useWindowSize } from 'hooks/useWindowSize';
+import { Wrapper } from './ViewTemplate.style';
 
-export const ViewTemplate = styled.section`
-  display: flex;
-  justify-content: center;
-  width: 100vw;
-  height: ${100 % -65}px;
-  padding: 2.5rem 5rem;
-`;
+const ViewTemplate = ({
+  children,
+  flexDirection,
+  justifyContent,
+  alignItems,
+  navMarginDisabled,
+}) => {
+  const { height } = useWindowSize();
+  return (
+    <Wrapper
+      flexDirection={flexDirection}
+      justifyContent={justifyContent}
+      alignItems={alignItems}
+      heightSize={height}
+      navMarginDisabled={navMarginDisabled}
+    >
+      {children}
+    </Wrapper>
+  );
+};
+
+export default ViewTemplate;
+
+ViewTemplate.propTypes = {
+  children: PropTypes.node,
+  flexDirection: PropTypes.string,
+  justifyContent: PropTypes.string,
+  alignItems: PropTypes.string,
+  navMarginDisabled: PropTypes.bool,
+};

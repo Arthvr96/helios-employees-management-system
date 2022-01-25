@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import MainTemplate from 'components/templates/MainTemplate/MainTemplate';
 import DashboardView from 'components/views/DashboardView/DashboardView';
 import SchemaView from 'components/views/SchemaView/SchemaView';
@@ -11,14 +11,11 @@ const AdminPanel = () => {
     <MainTemplate>
       <Switch>
         <Route path="/dashboard" component={DashboardView} />
-        <Route path="/schemaView">
-          <SchemaView />
-        </Route>
-        <Route path="/graphGeneratorView">
-          <GraphGeneratorView />
-        </Route>
-        <Route path="/employeesView">
-          <EmployeesView />
+        <Route path="/schemaView" component={SchemaView} />
+        <Route path="/graphGeneratorView" component={GraphGeneratorView} />
+        <Route path="/employeesView" component={EmployeesView} />
+        <Route path="*">
+          <Redirect to="/dashboard" />
         </Route>
       </Switch>
     </MainTemplate>
