@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BrowserRouter as Router } from 'react-router-dom';
 import SEO from 'components/templates/SEO/SEO';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { theme } from 'themes/theme';
 import { GlobalStyle } from 'themes/GlobalStyles';
-import AdminStateProvider from 'providers/AdminStateProvider/AdminStateProvider';
+import AuthProvider from 'providers/AuthProvider/AuthProvider';
 
 const Providers = ({ children }) => {
   return (
@@ -13,7 +13,7 @@ const Providers = ({ children }) => {
       <Router>
         <ThemeProvider theme={theme}>
           <GlobalStyle />
-          <AdminStateProvider>{children}</AdminStateProvider>
+          <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
       </Router>
     </SEO>
