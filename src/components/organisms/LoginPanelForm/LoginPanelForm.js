@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from 'providers/AuthProvider/AuthProvider';
-import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
 import { ErrorMsg } from 'components/atoms/ErrorMsg/ErrorMsg';
-import { Form, StyledInputForm } from './LoginPanelForm.style';
+import { InputForm } from 'components/atoms/InputForm/InputForm';
+import LoaderRing from 'components/atoms/LoaderRing/LoaderRing';
+import { SignInButton, StyledForm, WrapperLoader, InputHeader } from './LoginPanelForm.style';
 
 const LoginPanelForm = () => {
-  const { logIn } = useAuth();
+  const { logIn, inProgress } = useAuth();
   const [errorSignin, setError] = useState(null);
 
   const handleClearError = () => {
@@ -17,19 +18,17 @@ const LoginPanelForm = () => {
   };
 
   const onSubmit = async ({ email, password }, { resetForm, setSubmitting }) => {
-    setSubmitting(true);
-    await logIn(email, password)
+    logIn(email, password)
       .then(() => {
-        if (errorSignin) {
-          setError(null);
-          setSubmitting(false);
-        }
+        setError(null);
       })
-      .catch((error) => {
-        setError('Zły login lub/i hasło');
-        resetForm();
-        setSubmitting(false);
+      .catch(() => {
+        setError('Login lub/i hasło jest/są błędne');
       });
+  };
+
+  const onFocus = () => {
+    handleClearError();
   };
 
   const validationSchema = Yup.object().shape({
@@ -43,13 +42,14 @@ const LoginPanelForm = () => {
     <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
       {({ values, touched, errors, isSubmitting, handleChange, handleBlur, handleSubmit }) => {
         return (
-          <Form onSubmit={handleSubmit} onClick={handleClearError}>
-            {errorSignin && !touched.email && !touched.password && (
-              <ErrorMsg>{errorSignin}</ErrorMsg>
-            )}
-            <label htmlFor="email" style={{ display: 'block' }}>
-              Email :
-              <StyledInputForm
+          <StyledForm onSubmit={handleSubmit} onClick={handleClearError}>
+            {errorSignin && <ErrorMsg>{errorSignin}</ErrorMsg>}
+            <label htmlFor="email">
+              <InputHeader>
+                Email{errors.email && touched.email ? <ErrorMsg>{errors.email}</ErrorMsg> : null}
+              </InputHeader>
+
+              <InputForm
                 id="email"
                 placeholder="Enter your email"
                 type="text"
@@ -57,25 +57,34 @@ const LoginPanelForm = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 isError={errors.email && touched.email}
+                onFocus={onFocus}
               />
-              {errors.email && touched.email ? <ErrorMsg>{errors.email}</ErrorMsg> : null}
             </label>
-            <label htmlFor="password" style={{ display: 'block' }}>
-              Haslo :
-              <StyledInputForm
+            <label htmlFor="password">
+              <InputHeader>
+                Haslo
+                {errors.password && touched.password ? (
+                  <ErrorMsg> {errors.password}</ErrorMsg>
+                ) : null}
+              </InputHeader>
+              <InputForm
                 id="password"
                 type="password"
                 value={values.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 isError={errors.password && touched.password}
+                onFocus={onFocus}
               />
-              {errors.password && touched.password ? <ErrorMsg> {errors.password}</ErrorMsg> : null}
             </label>
-            <SubmitButton disabled={isSubmitting} customMargin="1rem" type="submit">
-              Zaloguj
-            </SubmitButton>
-          </Form>
+            {inProgress ? (
+              <WrapperLoader>
+                <LoaderRing colorVariant2 />
+              </WrapperLoader>
+            ) : (
+              <SignInButton type="submit">Zaloguj</SignInButton>
+            )}
+          </StyledForm>
         );
       }}
     </Formik>
