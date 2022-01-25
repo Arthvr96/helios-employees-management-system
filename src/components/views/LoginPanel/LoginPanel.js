@@ -2,8 +2,8 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import ViewTemplate from 'components/templates/ViewTemplate/ViewTemplate';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
-import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import LoginPanelForm from 'components/organisms/LoginPanelForm/LoginPanelForm';
+import { StyledTitle } from './LoginPanel.style';
 
 const LoginPanel = () => {
   return (
@@ -11,7 +11,7 @@ const LoginPanel = () => {
       <Route exact path="/signin">
         <ViewTemplate navMarginDisabled alignItems="center">
           <CardTemplate>
-            <CardTitle>Logowanie</CardTitle>
+            <StyledTitle>Logowanie</StyledTitle>
             <LoginPanelForm />
           </CardTemplate>
         </ViewTemplate>
