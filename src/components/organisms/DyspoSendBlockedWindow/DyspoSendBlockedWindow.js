@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import PopupComfirm from 'components/molecules/PopupComfirm/PopupComfirm';
+import PopupConfirm from 'components/molecules/PopupConfirm/PopupConfirm';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
@@ -22,7 +22,7 @@ const DyspoSendBlockedWindow = () => {
   };
   return (
     <>
-      <PopupComfirm
+      <PopupConfirm
         title={TITLEPOPUP}
         isVisible={isVisible}
         handleComfirm={handleComfirm}

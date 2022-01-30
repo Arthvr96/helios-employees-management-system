@@ -14,6 +14,8 @@
     "no-param-reassign": 0,
     "no-alert": 0,
     "no-return-await": "error",
+    "no-underscore-dangle": "off",
+    "no-throw-literal": "off",
     "react/jsx-props-no-spreading": [
       2,
       {

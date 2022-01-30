@@ -1,29 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
-import styled from 'styled-components';
 import { ErrorMsg } from 'components/atoms/ErrorMsg/ErrorMsg';
-import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
 import { InputForm } from 'components/atoms/InputForm/InputForm';
 import { Form } from 'components/atoms/Form/Form';
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 3rem;
-`;
-
-const StyledSubmitButton = styled(SubmitButton)`
-  width: 100%;
-`;
+import WorkplacesSwitchersList from 'components/molecules/WorkplacesSwitchersList/WorkplacesSwitchersList';
+import { useAuth } from 'providers/AuthProvider/AuthProvider';
+import PopupInfo from 'components/molecules/PopupInfo/PopupInfo';
+import { WrapperLabel, Wrapper, StyledSubmitButton, WrapperInputs } from './NewUserForm.style';
 
 const NewUserForm = () => {
-  const onSubmit = (values, actions) => {
-    setTimeout(() => {
-      actions.resetForm();
-      console.log(values);
-    }, 500);
+  const [rolesValues, setRolesValues] = useState({});
+  const [popup, setPopup] = useState(false);
+  const { createUser } = useAuth();
+
+  const onSubmit = async (values, actions) => {
+    await createUser(values, rolesValues)
+      .then(() => {
+        setPopup(true);
+      })
+      .catch((error) => {
+        if (error === 'internalError/alias-already-in-use') {
+          window.alert(`Ten alias (${values.alias}) jest już w użyciu`);
+        } else {
+          window.alert(error.code);
+        }
+      });
+    actions.resetForm();
   };
 
   const initialValues = {
@@ -35,76 +39,118 @@ const NewUserForm = () => {
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().email('Nie poprawny email').required('Podanie emaila jest wymagane'),
+    firstName: Yup.string().required('Imie i nazwisko jest wymagane'),
+    lastName: Yup.string().required('Imie i nazwisko jest wymagane'),
+    alias: Yup.string().required('Alias jest wymagany'),
   });
 
+  const getValues = (values) => {
+    setRolesValues({ ...values });
+  };
+
   return (
-    <Wrapper>
-      <CardTitle>Dodaj uzytkownika</CardTitle>
-      <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
-        {({ values, touched, errors, isSubmitting, handleChange, handleBlur, handleSubmit }) => {
-          return (
-            <Form onSubmit={handleSubmit}>
-              <label htmlFor="name">
-                Imie i nazwisko :
-                <div>
+    <>
+      <PopupInfo
+        isVisible={popup}
+        handleConfirm={() => setPopup(false)}
+        title="Utworzono użytkownika"
+        subtitle="Haslo wygenerowane automatycznie, użytkownik aby zalogować sie na konto będzie musiał zresetować hasło"
+      />
+      <Wrapper>
+        <CardTitle>Dodaj uzytkownika</CardTitle>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          validationSchema={validationSchema}
+        >
+          {({ values, touched, errors, isSubmitting, handleChange, handleBlur, handleSubmit }) => {
+            return (
+              <Form onSubmit={handleSubmit}>
+                <label htmlFor="name">
+                  <WrapperLabel>
+                    Imie i nazwisko :
+                    {(errors.firstName && touched.firstName) ||
+                    (errors.lastName && touched.lastName) ? (
+                      <ErrorMsg>{errors.firstName || errors.lastName}</ErrorMsg>
+                    ) : null}
+                  </WrapperLabel>
+                  <WrapperInputs>
+                    <InputForm
+                      id="firstName"
+                      type="text"
+                      placeholder="Podaj Imie"
+                      value={values.firstName}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      isError={errors.firstName && touched.firstName}
+                      className="first"
+                    />
+                    <InputForm
+                      id="lastName"
+                      type="text"
+                      placeholder="Podaj Nazwisko"
+                      value={values.lastName}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      isError={errors.lastName && touched.lastName}
+                    />
+                  </WrapperInputs>
+                </label>
+                <label htmlFor="alias">
+                  <WrapperLabel>
+                    Rodo alias :
+                    {errors.alias && touched.alias && errors.alias ? (
+                      <ErrorMsg>{errors.alias}</ErrorMsg>
+                    ) : null}
+                  </WrapperLabel>
                   <InputForm
-                    id="firstName"
+                    id="alias"
+                    placeholder={
+                      values.firstName || values.lastName
+                        ? `${values.lastName.slice(0, 3)} ${values.firstName.slice(0, 3)}`
+                        : 'Podaj alias'
+                    }
                     type="text"
-                    placeholder="Podaj Imie"
-                    value={values.firstName}
+                    value={values.alias}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    isError={errors.firstName && touched.firstName}
-                    className="first"
+                    isError={errors.alias && touched.alias}
+                    onFocus={(e) => {
+                      if (e.target.value === '' || e.target.value === e.target.placeholder) {
+                        e.target.value = e.target.placeholder;
+                        values.alias = e.target.placeholder;
+                      }
+                    }}
                   />
+                </label>
+                <label htmlFor="email">
+                  <WrapperLabel>
+                    Email :
+                    {errors.email && touched.email && errors.email ? (
+                      <ErrorMsg>{errors.email}</ErrorMsg>
+                    ) : null}
+                  </WrapperLabel>
                   <InputForm
-                    id="lastName"
+                    id="email"
+                    placeholder="Podaj maila"
                     type="text"
-                    placeholder="Podaj Nazwisko"
-                    value={values.lastName}
+                    value={values.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    isError={errors.lastName && touched.lastName}
+                    isError={errors.email && touched.email}
                   />
-                </div>
-                {errors.firstName && touched.firstName ? (
-                  <ErrorMsg>{errors.firstName}</ErrorMsg>
-                ) : null}
-              </label>
-              <label htmlFor="alias">
-                Rodo alias :
-                <InputForm
-                  id="alias"
-                  placeholder={`${values.firstName.slice(0, 3)}${values.lastName.slice(0, 3)}`}
-                  type="text"
-                  value={values.alias}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  isError={errors.alias && touched.alias}
-                />
-                {errors.alias && touched.alias ? <ErrorMsg>{errors.alias}</ErrorMsg> : null}
-              </label>
-              <label htmlFor="email">
-                Email :
-                <InputForm
-                  id="email"
-                  placeholder="Enter your email"
-                  type="text"
-                  value={values.email}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  isError={errors.email && touched.email}
-                />
-                {errors.email && touched.email ? <ErrorMsg>{errors.email}</ErrorMsg> : null}
-              </label>
-              <StyledSubmitButton disabled={isSubmitting} customMargin="1rem" type="submit">
-                Stwórz konto
-              </StyledSubmitButton>
-            </Form>
-          );
-        }}
-      </Formik>
-    </Wrapper>
+                </label>
+                <WrapperLabel>Uprawnienia :</WrapperLabel>
+                <WorkplacesSwitchersList getValues={getValues} />
+                <StyledSubmitButton disabled={isSubmitting} customMargin="1rem" type="submit">
+                  Stwórz konto
+                </StyledSubmitButton>
+              </Form>
+            );
+          }}
+        </Formik>
+      </Wrapper>
+    </>
   );
 };
 

@@ -14,6 +14,8 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth();
+const secondaryApp = initializeApp(firebaseConfig, 'secondary');
+export const auth = getAuth(app);
+export const auth2 = getAuth(secondaryApp);
 export const db = getFirestore();
 export default app;

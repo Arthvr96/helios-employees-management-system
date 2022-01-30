@@ -7,7 +7,7 @@ import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
-import PopupComfirm from 'components/molecules/PopupComfirm/PopupComfirm';
+import PopupConfirm from 'components/molecules/PopupConfirm/PopupConfirm';
 import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import { StyledForm, ErrorMessages } from './NewCycleWindow.style';
 
@@ -115,7 +115,7 @@ const NewCycleWindow = () => {
   };
   return (
     <>
-      <PopupComfirm
+      <PopupConfirm
         title={TITLEPOPUP}
         subtitle={SUBTITLEPOPUP}
         isVisible={isVisible}

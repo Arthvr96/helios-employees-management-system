@@ -2,6 +2,11 @@ import styled from 'styled-components';
 import { Form } from 'components/atoms/Form/Form';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
 
+export const SignInWrapper = styled.div`
+  width: fit-content;
+  height: fit-content;
+`;
+
 export const StyledForm = styled(Form)`
   min-width: 30rem;
   padding: 0 2rem;
@@ -15,7 +20,7 @@ export const StyledForm = styled(Form)`
   }
 `;
 
-export const InputHeader = styled.div`
+export const Wrapper = styled.div`
   display: flex;
 
   div {
@@ -30,6 +35,20 @@ export const SignInButton = styled(SubmitButton)`
   color: ${({ theme }) => theme.colors.text.white};
   background-color: ${({ theme }) => theme.colors.bg.darkGrey};
 
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.bg.primary};
+  }
+  &:active {
+    background-color: ${({ theme }) => theme.colors.bg.grey};
+  }
+`;
+export const ResetPasswordButton = styled(SubmitButton)`
+  margin-top: 1rem;
+  padding: 1rem 0;
+  border-radius: 10px;
+  color: ${({ theme }) => theme.colors.text.darkGrey};
+  background-color: ${({ theme }) => theme.colors.bg.white};
+  border-color: ${({ theme }) => theme.colors.decors.darkGrey};
   &:hover {
     background-color: ${({ theme }) => theme.colors.bg.primary};
   }

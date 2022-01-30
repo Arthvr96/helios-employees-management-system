@@ -1,13 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { auth, db } from 'api/firebase/firebase.config';
+import uniqid from 'uniqid';
+import { auth, db, auth2 } from 'api/firebase/firebase.config';
 import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
-  updateProfile,
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
 } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, query, collection, getDocs, where } from 'firebase/firestore';
 
 const AuthContext = React.createContext({});
 
@@ -21,10 +23,54 @@ const AuthProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState(false);
   const [inProgress, setInProgress] = useState(false);
 
+  const _alertError = (error, msg) => window.alert(`${msg || ''} | Error code: ${error.code}`);
+
+  const _getUserRole = async (id) => {
+    const docRef = doc(db, 'users', id);
+    const docSnap = await getDoc(docRef).catch((error) => {
+      throw error;
+    });
+    return docSnap;
+  };
+
+  const _addUser = async ({ firstName, lastName, email }, id) => {
+    await setDoc(doc(db, 'users', id), {
+      firstName: firstName.toLowerCase(),
+      lastName: lastName.toLowerCase(),
+      email: email.toLowerCase(),
+      role: 'user',
+    }).catch((error) => {
+      throw error;
+    });
+  };
+
+  const _addEmployee = async (alias, rolesValues, id) => {
+    await setDoc(doc(db, 'employees', id), {
+      alias,
+      rolesValues,
+    }).catch((error) => {
+      throw error;
+    });
+  };
+
+  const _handleCreateUser = (email) => {
+    return createUserWithEmailAndPassword(auth2, email, uniqid())
+      .then((respond) => {
+        signOut(auth2).catch((error) => {
+          throw error;
+        });
+        return respond.user.uid;
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+
   const logIn = async (email, password) => {
     setInProgress(true);
     await signInWithEmailAndPassword(auth, email, password)
       .then(() => {
+        setInProgress(false);
         return true;
       })
       .catch((error) => {
@@ -41,19 +87,62 @@ const AuthProvider = ({ children }) => {
         localStorage.clear();
       })
       .catch((error) => {
-        window.alert(`Wylogowanie nie powiodło sie: ${error}`);
+        _alertError(error, 'Wylogowanie nie powiodło się');
+        window.location.reload();
         localStorage.clear();
       });
   };
 
-  const updateUserProfile = (values) => {
-    return updateProfile(auth.currentUser, values);
+  const resetPassword = async (email) => {
+    setInProgress(true);
+    const respond = await sendPasswordResetEmail(auth, email)
+      .then(() => {
+        setInProgress(false);
+        return true;
+      })
+      .catch((error) => {
+        setInProgress(false);
+        throw error;
+      });
+
+    return respond;
   };
 
-  const getUserRole = async (id) => {
-    const docRef = doc(db, 'users', id);
-    const docSnap = await getDoc(docRef);
-    return docSnap;
+  const createUser = async (values, rolesValues) => {
+    const q = query(
+      collection(db, 'employees'),
+      where('alias', '==', `${values.alias.toLowerCase()}`),
+    );
+    const querySnapshot = await getDocs(q)
+      .then((docSnap) => {
+        let aliasExist = false;
+        docSnap.forEach((item) => {
+          aliasExist = item.data().alias === values.alias.toLowerCase();
+        });
+        if (!aliasExist) {
+          _handleCreateUser(values.email.toLowerCase())
+            .then((uid) => {
+              _addUser(values, uid);
+              _addEmployee(values.alias.toLowerCase(), rolesValues, uid);
+            })
+            .catch((error) => {
+              if (error.code === 'auth/email-already-in-use') {
+                _alertError(error, 'Podany mail jest już w użyciu');
+              } else if (error.code === 'auth/invalid-email') {
+                _alertError(error, 'Podany mail jest nie poprawny');
+              } else {
+                _alertError(error);
+              }
+            });
+        } else {
+          throw 'internalError/alias-already-in-use';
+        }
+      })
+      .catch((error) => {
+        throw error;
+      });
+
+    return querySnapshot;
   };
 
   useEffect(() => {
@@ -69,7 +158,7 @@ const AuthProvider = ({ children }) => {
     const unsubscriber = onAuthStateChanged(auth, (user) => {
       if (user) {
         setCurrentUser(user);
-        getUserRole(user.uid)
+        _getUserRole(user.uid)
           .then((respond) => {
             setInProgress(false);
             if (respond.data().role === 'admin') {
@@ -83,9 +172,9 @@ const AuthProvider = ({ children }) => {
             }
           })
           .catch((error) => {
+            logOut();
             window.alert(`critical error : ${error}`);
             setInProgress(false);
-            localStorage.clear();
           });
       } else {
         setCurrentUser(null);
@@ -99,7 +188,16 @@ const AuthProvider = ({ children }) => {
     };
   }, []);
 
-  const values = { currentUser, authUser, authAdmin, inProgress, logIn, logOut, updateUserProfile };
+  const values = {
+    currentUser,
+    authUser,
+    authAdmin,
+    inProgress,
+    logIn,
+    logOut,
+    createUser,
+    resetPassword,
+  };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 };
