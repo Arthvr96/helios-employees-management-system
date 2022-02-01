@@ -1,23 +1,20 @@
 import React from 'react';
-import ViewTemplate from 'components/templates/ViewTemplate/ViewTemplate';
-import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
-import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
-import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
-import { useAuth } from 'providers/AuthProvider/AuthProvider';
-import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
+import UserTemplateNavigation from 'components/templates/UserTemplateNavigation/UserTemplateNavigation';
+import { Redirect, Route } from 'react-router-dom';
+import DispositionUserView from 'components/views/DispositionUserView/DispositionUserView';
+import ScheduleUserView from 'components/views/ScheduleUserView/ScheduleUserView';
+import HoursUserView from 'components/views/HoursUserView/HoursUserView';
 
 const UserPanel = () => {
-  const { logOut } = useAuth();
   return (
-    <ViewTemplate>
-      <CardTemplate>
-        <CardTitle>User Panel</CardTitle>
-        <CardSubtitle>hi user</CardSubtitle>
-        <SubmitButton type="button" onClick={logOut}>
-          Logout
-        </SubmitButton>
-      </CardTemplate>
-    </ViewTemplate>
+    <UserTemplateNavigation>
+      <Route path="/disposition" component={DispositionUserView} />
+      <Route path="/schedule" component={ScheduleUserView} />
+      <Route path="/hours" component={HoursUserView} />
+      <Route path="*">
+        <Redirect to="/disposition" />
+      </Route>
+    </UserTemplateNavigation>
   );
 };
 

@@ -7,7 +7,7 @@ import { StyledWindow, Label, ButtonsWrapper } from './CreateMode.style';
 const CreateMode = ({ setCreateMode, handleCreateSchema }) => {
   const [value, setValue] = useState('Pusty szablon');
 
-  const handleComfirm = () => {
+  const handleConfirm = () => {
     handleCreateSchema(value);
     setCreateMode(false);
   };
@@ -36,7 +36,7 @@ const CreateMode = ({ setCreateMode, handleCreateSchema }) => {
       </Label>
       <ButtonsWrapper>
         <SubmitButton onClick={handleCancel}>Anuluj</SubmitButton>
-        <SubmitButton onClick={handleComfirm}>{`Dalej ->`}</SubmitButton>
+        <SubmitButton onClick={handleConfirm}>{`Dalej ->`}</SubmitButton>
       </ButtonsWrapper>
     </StyledWindow>
   );

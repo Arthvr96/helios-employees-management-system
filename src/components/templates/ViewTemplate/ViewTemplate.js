@@ -3,21 +3,16 @@ import PropTypes from 'prop-types';
 import { useWindowSize } from 'hooks/useWindowSize';
 import { Wrapper } from './ViewTemplate.style';
 
-const ViewTemplate = ({
-  children,
-  flexDirection,
-  justifyContent,
-  alignItems,
-  navMarginDisabled,
-}) => {
-  const { height } = useWindowSize();
+const ViewTemplate = ({ children, flexDirection, justifyContent, alignItems, navMargin }) => {
+  const { width, height } = useWindowSize();
   return (
     <Wrapper
       flexDirection={flexDirection}
       justifyContent={justifyContent}
       alignItems={alignItems}
+      widthSize={width}
       heightSize={height}
-      navMarginDisabled={navMarginDisabled}
+      navMargin={navMargin}
     >
       {children}
     </Wrapper>
@@ -31,5 +26,5 @@ ViewTemplate.propTypes = {
   flexDirection: PropTypes.string,
   justifyContent: PropTypes.string,
   alignItems: PropTypes.string,
-  navMarginDisabled: PropTypes.bool,
+  navMargin: PropTypes.string,
 };

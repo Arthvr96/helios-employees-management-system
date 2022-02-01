@@ -1,20 +1,19 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
+import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import PopupConfirm from 'components/molecules/PopupConfirm/PopupConfirm';
-import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
-import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
-import { StyledSubTitle } from './DyspoSendBlockedWindow.style';
+import { StyledSubTitle, StyledCardTemplate } from './DyspoSendBlockedWindow.style';
 
 const TITLEPOPUP = 'Czy napewno chcesz zakończy boecny okres dla grafiku?';
 
-const DyspoSendBlockedWindow = () => {
-  const { changeCycle } = useContext(AdminStateContext);
+const DispoSendBlockedWindow = () => {
+  const { handleSetAppState } = useAuth();
   const [isVisible, setVisible] = useState(false);
 
-  const handleComfirm = () => {
+  const handleConfirm = () => {
     toggleVisible();
-    changeCycle('new');
+    handleSetAppState('endCycle');
   };
 
   const toggleVisible = () => {
@@ -25,10 +24,10 @@ const DyspoSendBlockedWindow = () => {
       <PopupConfirm
         title={TITLEPOPUP}
         isVisible={isVisible}
-        handleComfirm={handleComfirm}
+        handleConfirm={handleConfirm}
         handleCancel={toggleVisible}
       />
-      <CardTemplate>
+      <StyledCardTemplate>
         <CardTitle>Wysyłanie dyspozycji zablokowane !</CardTitle>
         <StyledSubTitle>
           Wysyłanie dyspozycji zostało zablokowane, dodaj szablon grafiku aby móc wygenerować grafik
@@ -36,9 +35,9 @@ const DyspoSendBlockedWindow = () => {
         <SubmitButton isDangerous onClick={toggleVisible}>
           Zakończ okres
         </SubmitButton>
-      </CardTemplate>
+      </StyledCardTemplate>
     </>
   );
 };
 
-export default DyspoSendBlockedWindow;
+export default DispoSendBlockedWindow;

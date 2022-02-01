@@ -17,7 +17,7 @@ const PanelsWrapper = () => {
       {/* (currentUser.exists = authorization) authAdmin or AuthUser will be true (see local storage). If re-authentication */}
       {/* fails localstorage.clear() (see authProvider()). */}
       {(authUser || authAdmin) && !currentUser ? (
-        <ViewTemplate navMarginDisabled alignItems="center">
+        <ViewTemplate navMargin="0rem" alignItems="center">
           <LoaderRing />
         </ViewTemplate>
       ) : null}

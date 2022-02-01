@@ -3,10 +3,10 @@ import styled from 'styled-components';
 export const SubmitButton = styled.button`
   width: 100%;
   margin-top: 1.5rem;
-  padding: 0.5rem 4rem;
+  padding: 0.7rem 3rem;
   background-color: ${({ theme }) => theme.colors.bg.secondary};
   border: 1px solid ${({ theme }) => theme.colors.decors.darkGrey};
-  border-radius: 15px;
+  border-radius: 10px;
   font-size: ${({ theme }) => theme.fontSize.xs};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   color: ${({ theme }) => theme.colors.text.darkGrey};

@@ -1,5 +1,5 @@
 import React from 'react';
-import BlockDyspoSendingWindow from 'components/molecules/BlockDyspoSendingWindow/BlockDyspoSendingWindow';
+import BlockDispoSendingWindow from 'components/molecules/BlockDispoSendingWindow/BlockDispoSendingWindow';
 import DropDownListWindow from '../DropDownListWindow/DropDownListWindow';
 import { WrapperWindows, WrapperDropDownWindows } from './ActiveCycleWindows.style';
 
@@ -13,7 +13,7 @@ EMPLOYEES2.fill('x');
 const ActiveCycleWindows = () => {
   return (
     <WrapperWindows>
-      <BlockDyspoSendingWindow />
+      <BlockDispoSendingWindow />
       <WrapperDropDownWindows>
         <DropDownListWindow title={TITLEDROPDOWN1} data={EMPLOYEES1} />
         <DropDownListWindow title={TITLEDROPDOWN2} data={EMPLOYEES2} />

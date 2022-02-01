@@ -9,14 +9,14 @@ import {
   StyledSubmitButton,
 } from 'components/molecules/PopupConfirm/PopupConfirm.styles';
 
-const PopupConfirm = ({ title, subtitle, handleComfirm, handleCancel, isVisible }) => {
+const PopupConfirm = ({ title, subtitle, handleConfirm, handleCancel, isVisible }) => {
   return (
     <Wrapper isVisible={isVisible}>
       <CardTemplate>
         <StyledTitle fontSize="m">{title}</StyledTitle>
         {subtitle ? <CardSubtitle>{subtitle}</CardSubtitle> : null}
         <WrapperButtons>
-          <StyledSubmitButton isAccept onClick={handleComfirm}>
+          <StyledSubmitButton isAccept onClick={handleConfirm}>
             Potwierdz
           </StyledSubmitButton>
           <StyledSubmitButton onClick={handleCancel}>Anuluj</StyledSubmitButton>
@@ -31,7 +31,7 @@ export default PopupConfirm;
 PopupConfirm.propTypes = {
   title: PropTypes.string,
   subtitle: PropTypes.string,
-  isVisible: PropTypes.bool,
+  isVisible: PropTypes.bool.isRequired,
   handleCancel: PropTypes.func,
-  handleComfirm: PropTypes.func,
+  handleConfirm: PropTypes.func,
 };

@@ -1,20 +1,20 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
+import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import PopupConfirm from 'components/molecules/PopupConfirm/PopupConfirm';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
-import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 
 const TITLEPOPUP = 'Czy napewno chcesz zablokować wysyłanie dyspozycji?';
 
-const BlockDyspoSendingWindow = () => {
-  const { changeCycle } = useContext(AdminStateContext);
+const BlockDispoSendingWindow = () => {
+  const { appState, handleSetAppState } = useAuth();
   const [isVisible, setVisible] = useState(false);
 
-  const handleComfirm = () => {
+  const handleConfirm = () => {
     toggleVisible();
-    changeCycle('blocked');
+    handleSetAppState('blockCycle');
   };
 
   const toggleVisible = () => {
@@ -25,12 +25,12 @@ const BlockDyspoSendingWindow = () => {
       <PopupConfirm
         title={TITLEPOPUP}
         isVisible={isVisible}
-        handleComfirm={handleComfirm}
+        handleConfirm={handleConfirm}
         handleCancel={toggleVisible}
       />
       <CardTemplate>
         <CardTitle>Wysyłanie dyspozycji aktywne !</CardTitle>
-        <CardSubtitle>Wybrany okres to : dd-mm-rrrr - dd-mm-rrrr</CardSubtitle>
+        <CardSubtitle>{`Wybrany okres to : ${appState.date1} - ${appState.date2}`}</CardSubtitle>
         <SubmitButton isDangerous onClick={toggleVisible}>
           Zablokuj wysyłanie dyspo
         </SubmitButton>
@@ -39,4 +39,4 @@ const BlockDyspoSendingWindow = () => {
   );
 };
 
-export default BlockDyspoSendingWindow;
+export default BlockDispoSendingWindow;

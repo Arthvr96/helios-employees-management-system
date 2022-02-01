@@ -8,7 +8,7 @@ import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
 import PopupConfirm from 'components/molecules/PopupConfirm/PopupConfirm';
-import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
+import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import { StyledForm, ErrorMessages } from './NewCycleWindow.style';
 
 const initialValues = {
@@ -16,12 +16,8 @@ const initialValues = {
   date2: '',
 };
 
-const NewCycleForm = ({ toggleVisible }) => {
+const NewCycleForm = ({ onSubmit }) => {
   // TODO: add calendar picker
-  const onSubmit = (values, method) => {
-    toggleVisible();
-    method.resetForm();
-  };
 
   const handleValidation = Yup.object().shape({
     date1: Yup.date().required('Podaj date początkową'),
@@ -57,24 +53,26 @@ const NewCycleForm = ({ toggleVisible }) => {
         <StyledForm onSubmit={handleSubmit}>
           <label htmlFor="date1">
             Początek / koniec grafiku :
-            <InputForm
-              id="date1"
-              name="date1"
-              type="date"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.date1}
-              isError={errors.date1}
-            />
-            <InputForm
-              id="date2"
-              name="date2"
-              type="date"
-              value={values.date2}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              isError={errors.date2}
-            />
+            <div>
+              <InputForm
+                id="date1"
+                name="date1"
+                type="date"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.date1}
+                isError={errors.date1}
+              />
+              <InputForm
+                id="date2"
+                name="date2"
+                type="date"
+                value={values.date2}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isError={errors.date2}
+              />
+            </div>
             <ErrorMessages>
               {(errors.date1 && touched.date1) || (errors.date2 && touched.date2)
                 ? `${errors.date1 ? errors.date1 : ''} ${errors.date1 && errors.date2 ? '|' : ''} ${
@@ -93,39 +91,47 @@ const NewCycleForm = ({ toggleVisible }) => {
 };
 
 NewCycleForm.propTypes = {
-  toggleVisible: PropTypes.func,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 const TITLE = 'Rozpocznij nowy okres grafiku !';
 const SUBTITLE = 'Wybierz nowy okres dla grafiku i odblokuj wysyłanie dyspozycji';
 const TITLEPOPUP = 'Czy napewno chcesz zacząć nowy okres dla grafiku?';
-const SUBTITLEPOPUP = 'Wybrany okres to : dd-mm-rrrr - dd-mm-rrrr';
+const SUBTITLEPOPUP = 'Wybrany okres to : ';
 
 const NewCycleWindow = () => {
-  const { changeCycle } = useContext(AdminStateContext);
+  const { handleSetAppState } = useAuth();
   const [isVisible, setVisible] = useState(false);
-
-  const handleComfirm = () => {
-    toggleVisible();
-    changeCycle('active');
-  };
+  const [valuesForm, setValuesForm] = useState({ date1: '', date2: '' });
 
   const toggleVisible = () => {
     setVisible(!isVisible);
   };
+
+  const handleSubmit = (values, method) => {
+    toggleVisible();
+    method.resetForm();
+    setValuesForm({ ...values });
+  };
+
+  const handleConfirm = () => {
+    toggleVisible();
+    handleSetAppState('newCycle', valuesForm);
+  };
+
   return (
     <>
       <PopupConfirm
         title={TITLEPOPUP}
-        subtitle={SUBTITLEPOPUP}
+        subtitle={`${SUBTITLEPOPUP}${valuesForm.date1} : ${valuesForm.date2}`}
         isVisible={isVisible}
-        handleComfirm={handleComfirm}
+        handleConfirm={handleConfirm}
         handleCancel={toggleVisible}
       />
       <CardTemplate>
         <CardTitle>{TITLE}</CardTitle>
         <CardSubtitle>{SUBTITLE}</CardSubtitle>
-        <NewCycleForm toggleVisible={toggleVisible} />
+        <NewCycleForm toggleVisible={toggleVisible} onSubmit={handleSubmit} />
       </CardTemplate>
     </>
   );

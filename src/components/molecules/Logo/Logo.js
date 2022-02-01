@@ -1,12 +1,13 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LogoWrapper, LogoIcone } from './Logo.style';
+import { LogoImg } from 'components/atoms/LogoImg/LogoImg';
+import { LogoWrapper } from './Logo.style';
 
 const Logo = () => {
   return (
     <NavLink to="/">
       <LogoWrapper>
-        <LogoIcone>Helios</LogoIcone>
+        <LogoImg>Helios</LogoImg>
       </LogoWrapper>
     </NavLink>
   );

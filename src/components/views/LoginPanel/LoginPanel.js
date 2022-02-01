@@ -14,8 +14,8 @@ const LoginPanel = () => {
 
   return (
     <Switch>
-      <Route exact path="/signin">
-        <ViewTemplate navMarginDisabled alignItems="center">
+      <Route exact path="/">
+        <ViewTemplate navMargin="0" alignItems="center">
           <CardTemplate>
             <StyledTitle>{isResetPassword ? 'Zresetuj hasło' : 'Logowanie'}</StyledTitle>
             <LoginPanelForm isResetPassword={isResetPassword} handleChangePage={handleChangePage} />
@@ -23,7 +23,7 @@ const LoginPanel = () => {
         </ViewTemplate>
       </Route>
       <Route path="*">
-        <Redirect to="/signin" />
+        <Redirect to="/" />
       </Route>
     </Switch>
   );

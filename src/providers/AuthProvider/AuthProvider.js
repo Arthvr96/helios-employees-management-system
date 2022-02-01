@@ -9,7 +9,16 @@ import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
 } from 'firebase/auth';
-import { doc, getDoc, setDoc, query, collection, getDocs, where } from 'firebase/firestore';
+import {
+  doc,
+  getDoc,
+  setDoc,
+  query,
+  collection,
+  getDocs,
+  where,
+  onSnapshot,
+} from 'firebase/firestore';
 
 const AuthContext = React.createContext({});
 
@@ -22,6 +31,7 @@ const AuthProvider = ({ children }) => {
   const [authAdmin, setAuthAdmin] = useState(false);
   const [authUser, setAuthUser] = useState(false);
   const [inProgress, setInProgress] = useState(false);
+  const [appState, setAppState] = useState({ state: 'nonActive', date1: '', date2: '' });
 
   const _alertError = (error, msg) => window.alert(`${msg || ''} | Error code: ${error.code}`);
 
@@ -145,6 +155,38 @@ const AuthProvider = ({ children }) => {
     return querySnapshot;
   };
 
+  const _updateAppState = (id, data) => {
+    return setDoc(doc(db, 'statesApp', id), data);
+  };
+
+  const handleSetAppState = async (switcher, week) => {
+    if (switcher === 'newCycle') {
+      await _updateAppState('cycleState', {
+        state: 'active',
+        date1: week.date1,
+        date2: week.date2,
+      }).catch((error) => {
+        throw error;
+      });
+    }
+    if (switcher === 'blockCycle') {
+      await _updateAppState('cycleState', {
+        ...appState,
+        state: 'blocked',
+      }).catch((error) => {
+        throw error;
+      });
+    }
+    if (switcher === 'endCycle') {
+      await _updateAppState('cycleState', {
+        ...appState,
+        state: 'nonActive',
+      }).catch((error) => {
+        throw error;
+      });
+    }
+  };
+
   useEffect(() => {
     const { authType } = localStorage;
     if (authType === 'admin') {
@@ -152,6 +194,16 @@ const AuthProvider = ({ children }) => {
     } else if (authType === 'user') {
       setAuthUser(true);
     }
+  }, []);
+
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, 'statesApp', 'cycleState'), (item) => {
+      setAppState({ ...item.data() });
+    });
+
+    return () => {
+      unsub();
+    };
   }, []);
 
   useEffect(() => {
@@ -193,10 +245,12 @@ const AuthProvider = ({ children }) => {
     authUser,
     authAdmin,
     inProgress,
+    appState,
     logIn,
     logOut,
     createUser,
     resetPassword,
+    handleSetAppState,
   };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
