@@ -6,7 +6,7 @@ const SEO = ({ children }) => (
   <HelmetProvider>
     <Helmet>
       <meta name="robots" content="noindex" />
-      <title>Helios - graph system</title>
+      <title>Helios - employees management app</title>
       <link rel="preconnect" href="https://fonts.gstatic.com" />
       <link
         href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap"
