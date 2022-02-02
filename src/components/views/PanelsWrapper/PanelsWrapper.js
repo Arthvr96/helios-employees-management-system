@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import LoginPanel from 'components/views/LoginPanel/LoginPanel';
 import ViewTemplate from 'components/templates/ViewTemplate/ViewTemplate';

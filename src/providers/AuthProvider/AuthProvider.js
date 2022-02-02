@@ -94,12 +94,10 @@ const AuthProvider = ({ children }) => {
       .then(() => {
         setAuthAdmin(false);
         setAuthUser(false);
-        localStorage.clear();
       })
       .catch((error) => {
         _alertError(error, 'Wylogowanie nie powiodło się');
         window.location.reload();
-        localStorage.clear();
       });
   };
 
@@ -188,26 +186,30 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const { authType } = localStorage;
-    if (authType === 'admin') {
-      setAuthAdmin(true);
-    } else if (authType === 'user') {
-      setAuthUser(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    const unsub = onSnapshot(doc(db, 'statesApp', 'cycleState'), (item) => {
-      setAppState({ ...item.data() });
-    });
-
+    const handleEndSession = () => {
+      signOut(auth).catch((error) => console.log(error));
+    };
+    window.addEventListener('beforeunload', handleEndSession);
     return () => {
-      unsub();
+      window.removeEventListener('beforeunload', handleEndSession);
     };
   }, []);
 
   useEffect(() => {
-    const unsubscriber = onAuthStateChanged(auth, (user) => {
+    let unsub = () => {};
+    if (authAdmin || authUser) {
+      unsub = onSnapshot(doc(db, 'statesApp', 'cycleState'), (item) => {
+        setAppState({ ...item.data() });
+      });
+    }
+
+    return () => {
+      unsub();
+    };
+  }, [authAdmin, authUser]);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
         setCurrentUser(user);
         _getUserRole(user.uid)
@@ -215,28 +217,25 @@ const AuthProvider = ({ children }) => {
             setInProgress(false);
             if (respond.data().role === 'admin') {
               setAuthAdmin(true);
-              window.localStorage.setItem('authType', 'admin');
             } else if (respond.data().role === 'user') {
               setAuthUser(true);
-              window.localStorage.setItem('authType', 'user');
             } else {
               throw 'Nie znana rola';
             }
           })
           .catch((error) => {
-            logOut();
+            logOut(auth);
             window.alert(`critical error : ${error}`);
             setInProgress(false);
           });
       } else {
         setCurrentUser(null);
         setInProgress(false);
-        localStorage.clear();
       }
     });
 
     return () => {
-      unsubscriber();
+      unsub();
     };
   }, []);
 
