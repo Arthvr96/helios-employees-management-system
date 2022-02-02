@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
 import ViewTemplate from 'components/templates/ViewTemplate/ViewTemplate';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import LoginPanelForm from 'components/organisms/LoginPanelForm/LoginPanelForm';
-import { StyledTitle } from './LoginPanel.style';
+import { StyledTitle, Version, Copyrights } from './LoginPanel.style';
 
 const LoginPanel = () => {
   const [isResetPassword, setResetPassword] = useState(false);
@@ -17,7 +16,11 @@ const LoginPanel = () => {
       <CardTemplate>
         <StyledTitle>{isResetPassword ? 'Zresetuj hasło' : 'Logowanie'}</StyledTitle>
         <LoginPanelForm isResetPassword={isResetPassword} handleChangePage={handleChangePage} />
+        <Version>v0.3</Version>
       </CardTemplate>
+      <Copyrights>
+        © All rights reserved | <span>Created by Artur Chmielewski</span>
+      </Copyrights>
     </ViewTemplate>
   );
 };
