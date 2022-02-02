@@ -39,10 +39,10 @@ const PanelsWrapper = () => {
         <Route exact path="/">
           <Redirect to="/login" />
         </Route>
-        <Route exact path="404" />
+        <Route exact path="/404" />
         <Site404 reDirect={() => goToRoute('/login')} />
         <Route path="*">
-          <Redirect to="404" />
+          <Redirect to="/404" />
         </Route>
       </Switch>
     </Suspense>
