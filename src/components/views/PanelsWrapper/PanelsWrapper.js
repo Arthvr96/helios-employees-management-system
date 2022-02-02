@@ -1,33 +1,49 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import { useAuth } from 'providers/AuthProvider/AuthProvider';
-import LoginPanel from 'components/views/LoginPanel/LoginPanel';
-import ViewTemplate from 'components/templates/ViewTemplate/ViewTemplate';
 import LoaderRing from 'components/atoms/LoaderRing/LoaderRing';
-import AdminStateProvider from 'providers/AdminStateProvider/AdminStateProvider';
-import AdminPanel from 'components/views/AdminPanel/AdminPanel';
-import UserPanel from 'components/views/UserPanel/UserPanel';
+
+const LoginPanel = lazy(() => import('components/views/LoginPanel/LoginPanel'));
+const Site404 = lazy(() => import('components/templates/Site404/Site404'));
+const AdminPanel = lazy(() => import('components/views/AdminPanel/AdminPanel'));
+const UserPanel = lazy(() => import('components/views/UserPanel/UserPanel'));
 
 const PanelsWrapper = () => {
   const { authUser, authAdmin, currentUser } = useAuth();
+  const history = useHistory();
+
+  const goToRoute = (routeName) => {
+    history.push(routeName);
+  };
+
+  useEffect(() => {
+    if (authAdmin && currentUser) {
+      goToRoute('/admin/dashboard');
+    }
+    if (authUser && currentUser) {
+      goToRoute('/user/disposition');
+    }
+    if (!authUser && !authAdmin && !currentUser) {
+      goToRoute('/login');
+    }
+  }, [authUser, authAdmin, currentUser]);
+
   return (
-    <>
-      {!authAdmin && !authUser ? <LoginPanel /> : null}
-      {/* comment to line 19 */}
-      {/* While the user is not logged out and re-authorization is taking place e.g. f5 browser */}
-      {/* (currentUser.exists = authorization) authAdmin or AuthUser will be true (see local storage). If re-authentication */}
-      {/* fails localstorage.clear() (see authProvider()). */}
-      {(authUser || authAdmin) && !currentUser ? (
-        <ViewTemplate navMargin="0rem" alignItems="center">
-          <LoaderRing />
-        </ViewTemplate>
-      ) : null}
-      {authAdmin && currentUser ? (
-        <AdminStateProvider>
-          <AdminPanel />
-        </AdminStateProvider>
-      ) : null}
-      {authUser && currentUser ? <UserPanel /> : null}
-    </>
+    <Suspense fallback={<LoaderRing />}>
+      <Switch>
+        <Route exact path="/login">
+          <LoginPanel />
+        </Route>
+        {authAdmin && currentUser ? <AdminPanel /> : null}
+        {authUser && currentUser ? <UserPanel /> : null}
+        <Route exact path="/">
+          <Redirect to="/login" />
+        </Route>
+        <Route path="*">
+          <Site404 reDirect={() => goToRoute('/login')} />
+        </Route>
+      </Switch>
+    </Suspense>
   );
 };
 

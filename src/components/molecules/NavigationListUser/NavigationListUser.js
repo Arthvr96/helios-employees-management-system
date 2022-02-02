@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { NavLinks, StyledLink } from './NavigationListUser.style';
 
 const LINKS = [
-  ['Dyspozycja', '/disposition'],
-  ['Grafik', '/schedule'],
-  ['Moje godziny', '/hours'],
+  ['Dyspozycja', '/user/disposition'],
+  ['Grafik', '/user/schedule'],
+  ['Moje godziny', '/user/hours'],
 ];
 
 const NavigationListUser = ({ handleCloseHamburger }) => {

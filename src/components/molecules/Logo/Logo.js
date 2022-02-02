@@ -5,7 +5,7 @@ import { LogoWrapper } from './Logo.style';
 
 const Logo = () => {
   return (
-    <NavLink to="/">
+    <NavLink to="/admin/dashboard">
       <LogoWrapper>
         <LogoImg>Helios</LogoImg>
       </LogoWrapper>

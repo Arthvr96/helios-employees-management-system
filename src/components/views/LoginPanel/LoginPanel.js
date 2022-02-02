@@ -13,19 +13,12 @@ const LoginPanel = () => {
   };
 
   return (
-    <Switch>
-      <Route exact path="/">
-        <ViewTemplate navMargin="0" alignItems="center">
-          <CardTemplate>
-            <StyledTitle>{isResetPassword ? 'Zresetuj hasło' : 'Logowanie'}</StyledTitle>
-            <LoginPanelForm isResetPassword={isResetPassword} handleChangePage={handleChangePage} />
-          </CardTemplate>
-        </ViewTemplate>
-      </Route>
-      <Route path="*">
-        <Redirect to="/" />
-      </Route>
-    </Switch>
+    <ViewTemplate navMargin="0" alignItems="center">
+      <CardTemplate>
+        <StyledTitle>{isResetPassword ? 'Zresetuj hasło' : 'Logowanie'}</StyledTitle>
+        <LoginPanelForm isResetPassword={isResetPassword} handleChangePage={handleChangePage} />
+      </CardTemplate>
+    </ViewTemplate>
   );
 };
 

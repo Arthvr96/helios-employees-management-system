@@ -11,7 +11,7 @@ const UserTemplateNavigation = ({ children }) => {
   return (
     <Wrapper>
       <NavigationWrapper>
-        <NavLink to="/disposition">
+        <NavLink onClick={() => setOpen(false)} to="/user/disposition">
           <StyledLogoImg />
         </NavLink>
         <HamburgerButton isOpen={isOpen} onClick={() => setOpen(!isOpen)} />

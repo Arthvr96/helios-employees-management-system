@@ -2,10 +2,10 @@ import React from 'react';
 import { NavigationListWrapper, NavigationItem, StyledLink } from './NavigationList.style';
 
 const LINKS = [
-  ['dashboard', '/dashboard'],
-  ['szablon grafiku', '/schemaView'],
-  ['generator grafiku', '/graphGeneratorView'],
-  ['pracownicy', '/employeesView'],
+  ['dashboard', '/admin/dashboard'],
+  ['szablon grafiku', '/admin/schemaView'],
+  ['generator grafiku', '/admin/graphGeneratorView'],
+  ['pracownicy', '/admin/employeesView'],
 ];
 
 const NavigationList = () => {
