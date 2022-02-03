@@ -10,7 +10,7 @@ import {
   StyledCardTemplate,
 } from './PopupInfo.style';
 
-const PopupConfirm = ({ title, subtitle, handleConfirm, isVisible }) => {
+const PopupInfo = ({ title, subtitle, handleConfirm, isVisible }) => {
   return (
     <Wrapper isVisible={isVisible}>
       <StyledCardTemplate>
@@ -26,9 +26,9 @@ const PopupConfirm = ({ title, subtitle, handleConfirm, isVisible }) => {
   );
 };
 
-export default PopupConfirm;
+export default PopupInfo;
 
-PopupConfirm.propTypes = {
+PopupInfo.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string.isRequired,
   isVisible: PropTypes.bool.isRequired,

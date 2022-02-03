@@ -2,6 +2,7 @@ import React, { useEffect, Suspense, lazy } from 'react';
 import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import LoaderRing from 'components/atoms/LoaderRing/LoaderRing';
+import ViewTemplate from 'components/templates/ViewTemplate/ViewTemplate';
 
 const LoginPanel = lazy(() => import('components/views/LoginPanel/LoginPanel'));
 const Site404 = lazy(() => import('components/templates/Site404/Site404'));
@@ -29,7 +30,13 @@ const PanelsWrapper = () => {
   }, [authUser, authAdmin, currentUser]);
 
   return (
-    <Suspense fallback={<LoaderRing />}>
+    <Suspense
+      fallback={
+        <ViewTemplate alignItems="center" justifyContent="center">
+          <LoaderRing />
+        </ViewTemplate>
+      }
+    >
       <Switch>
         <Route exact path="/login">
           <LoginPanel />
