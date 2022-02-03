@@ -12,8 +12,8 @@ export const Wrapper = styled.div`
   opacity: ${({ isVisible }) => (isVisible ? '1' : '0')};
   justify-content: center;
   align-items: center;
-  width: 100vw;
-  height: 100vh;
+  width: ${({ widthSize }) => widthSize}px;
+  height: ${({ heightSize }) => heightSize}px;
   background: rgb(0, 0, 0);
   background: radial-gradient(circle, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.7) 100%);
   transition: opacity 0.3s ease-in-out;

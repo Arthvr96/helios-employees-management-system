@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 
+import { useWindowSize } from 'hooks/useWindowSize';
 import {
   Wrapper,
   StyledTitle,
@@ -11,8 +12,9 @@ import {
 } from './PopupInfo.style';
 
 const PopupInfo = ({ title, subtitle, handleConfirm, isVisible }) => {
+  const { width, height } = useWindowSize();
   return (
-    <Wrapper isVisible={isVisible}>
+    <Wrapper isVisible={isVisible} widthSize={width} heightSize={height}>
       <StyledCardTemplate>
         <StyledTitle fontSize="m">{title}</StyledTitle>
         {subtitle ? <CardSubtitle>{subtitle}</CardSubtitle> : null}
