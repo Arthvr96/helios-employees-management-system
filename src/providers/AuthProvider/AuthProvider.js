@@ -186,10 +186,10 @@ const AuthProvider = ({ children }) => {
   };
 
   const addBasicInfo = async ({ firstName, lastName, email }) => {
-    const respond = await setDoc(doc(db, 'basicInfo', email.toLowerCase()), {
-      firstName: firstName.toLowerCase(),
-      lastName: lastName.toLowerCase(),
-      email: email.toLowerCase(),
+    const respond = await setDoc(doc(db, 'basicInfo', email.toLowerCase().trim()), {
+      firstName: firstName.toLowerCase().trim(),
+      lastName: lastName.toLowerCase().trim(),
+      email: email.toLowerCase().trim(),
     })
       .then(() => {
         return true;

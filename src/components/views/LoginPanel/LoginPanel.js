@@ -5,7 +5,7 @@ import LoginPanelForm from 'components/organisms/LoginPanelForm/LoginPanelForm';
 import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import BasicForm from 'components/organisms/BasicForm/BasicForm';
 import PopupInfo from 'components/molecules/PopupInfo/PopupInfo';
-import { StyledTitle, Version, Copyrights } from './LoginPanel.style';
+import { StyledTitle, Version, Copyrights, StyledSubTitle } from './LoginPanel.style';
 
 const LoginPanel = () => {
   const [isVisibile, setIsVisible] = useState(false);
@@ -37,10 +37,10 @@ const LoginPanel = () => {
       {basicForm ? (
         <CardTemplate>
           <StyledTitle>Zgłoś swój email i dane</StyledTitle>
-          <CardSubtitle>
+          <StyledSubTitle>
             Na podstawie tych danych bedą tworzone konta, Prosze o poprawne wypełnienie formularza
             bez śmieszków 💩
-          </CardSubtitle>
+          </StyledSubTitle>
           <BasicForm
             handleBasicForm={setBasicForm}
             setIsVisible={setIsVisible}
