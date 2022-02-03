@@ -185,9 +185,24 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  const addBasicInfo = async ({ firstName, lastName, email }) => {
+    const respond = await setDoc(doc(db, 'basicInfo', email.toLowerCase()), {
+      firstName: firstName.toLowerCase(),
+      lastName: lastName.toLowerCase(),
+      email: email.toLowerCase(),
+    })
+      .then(() => {
+        return true;
+      })
+      .catch((error) => {
+        throw error;
+      });
+    return respond;
+  };
+
   useEffect(() => {
     const handleEndSession = () => {
-      signOut(auth).catch((error) => console.log(error));
+      signOut(auth).catch((error) => window.alert(error));
     };
     window.addEventListener('beforeunload', handleEndSession);
     return () => {
@@ -250,6 +265,7 @@ const AuthProvider = ({ children }) => {
     createUser,
     resetPassword,
     handleSetAppState,
+    addBasicInfo,
   };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
