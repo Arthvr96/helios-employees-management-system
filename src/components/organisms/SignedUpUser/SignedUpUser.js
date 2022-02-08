@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import { ArrowIcone } from 'components/atoms/ArowIcone/ArowIcone';
+import { UserAvatar } from 'components/atoms/UserAvatar/UserAvatar';
 import {
   UserNavWrapper,
   User,
   UserInfoWrapper,
   UserName,
   UserRoleName,
-  UserAvatar,
   UserMenu,
   LinkButton,
 } from './SignedUpUser.style';
@@ -15,15 +15,19 @@ import {
 const SignedUpUser = () => {
   const [isOpen, setOpen] = useState(false);
   const { currentUser, logOut } = useAuth();
+  const { email, firstName, lastName } = currentUser;
 
   return (
     <UserNavWrapper className="signedUpUser">
       <User onClick={() => setOpen(!isOpen)}>
         <UserInfoWrapper>
-          <UserName>{currentUser && currentUser.displayName}</UserName>
+          <UserName>{email && email}</UserName>
           <UserRoleName>admin</UserRoleName>
         </UserInfoWrapper>
-        <UserAvatar />
+        <UserAvatar>
+          <span>{firstName && firstName.slice(0, 3)}</span>
+          <span>{lastName && lastName.slice(0, 3)}</span>
+        </UserAvatar>
         <ArrowIcone isRotate={isOpen} isReversed />
       </User>
       <UserMenu isOpen={isOpen}>

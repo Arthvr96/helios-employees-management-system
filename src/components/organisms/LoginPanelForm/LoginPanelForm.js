@@ -16,7 +16,7 @@ import {
   SignInWrapper,
 } from './LoginPanelForm.style';
 
-const LoginPanelFormPage1 = ({ handleChangePage, handleBasicForm }) => {
+const SignInForm = ({ handleChangePage, handleBasicForm }) => {
   const { logIn, inProgress } = useAuth();
   const [errorSignin, setError] = useState(null);
 
@@ -105,12 +105,12 @@ const LoginPanelFormPage1 = ({ handleChangePage, handleBasicForm }) => {
   );
 };
 
-LoginPanelFormPage1.propTypes = {
+SignInForm.propTypes = {
   handleChangePage: PropTypes.func.isRequired,
   handleBasicForm: PropTypes.func.isRequired,
 };
 
-const LoginPanelFormPage2 = ({ handleChangePage }) => {
+const ResetPasswordForm = ({ handleChangePage }) => {
   const { inProgress, resetPassword } = useAuth();
   const [errorSignin, setError] = useState(null);
   const [popup, setPopup] = useState(false);
@@ -197,7 +197,7 @@ const LoginPanelFormPage2 = ({ handleChangePage }) => {
   );
 };
 
-LoginPanelFormPage2.propTypes = {
+ResetPasswordForm.propTypes = {
   handleChangePage: PropTypes.func.isRequired,
 };
 
@@ -205,12 +205,9 @@ const LoginPanelForm = ({ isResetPassword, handleChangePage, handleBasicForm }) 
   return (
     <SignInWrapper>
       {!isResetPassword && (
-        <LoginPanelFormPage1
-          handleChangePage={handleChangePage}
-          handleBasicForm={handleBasicForm}
-        />
+        <SignInForm handleChangePage={handleChangePage} handleBasicForm={handleBasicForm} />
       )}
-      {isResetPassword && <LoginPanelFormPage2 handleChangePage={handleChangePage} />}
+      {isResetPassword && <ResetPasswordForm handleChangePage={handleChangePage} />}
     </SignInWrapper>
   );
 };

@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
-
-import { useWindowSize } from 'hooks/useWindowSize';
+import PopupWrapper from 'components/atoms/PopupWrapper/PopupWrapper';
 import {
-  Wrapper,
   StyledTitle,
   WrapperButtons,
   StyledSubmitButton,
@@ -12,9 +10,8 @@ import {
 } from './PopupInfo.style';
 
 const PopupInfo = ({ title, subtitle, handleConfirm, isVisible }) => {
-  const { width, height } = useWindowSize();
   return (
-    <Wrapper isVisible={isVisible} widthSize={width} heightSize={height}>
+    <PopupWrapper isVisible={isVisible}>
       <StyledCardTemplate>
         <StyledTitle fontSize="m">{title}</StyledTitle>
         {subtitle ? <CardSubtitle>{subtitle}</CardSubtitle> : null}
@@ -24,7 +21,7 @@ const PopupInfo = ({ title, subtitle, handleConfirm, isVisible }) => {
           </StyledSubmitButton>
         </WrapperButtons>
       </StyledCardTemplate>
-    </Wrapper>
+    </PopupWrapper>
   );
 };
 

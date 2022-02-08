@@ -43,14 +43,6 @@ export const UserRoleName = styled.h3`
   color: ${({ theme }) => theme.colors.text.white};
 `;
 
-export const UserAvatar = styled.div`
-  width: 3rem;
-  height: 3rem;
-  margin: 0 1rem 0 0.5rem;
-  border-radius: 100%;
-  background: plum;
-`;
-
 export const UserMenu = styled.div`
   display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
   position: absolute;

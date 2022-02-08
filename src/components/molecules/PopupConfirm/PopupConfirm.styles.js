@@ -2,22 +2,6 @@ import styled from 'styled-components';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
 
-export const Wrapper = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: ${({ isVisible }) => (isVisible ? '500' : '-500')};
-  display: flex;
-  opacity: ${({ isVisible }) => (isVisible ? '1' : '0')};
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  background: rgb(0, 0, 0);
-  background: radial-gradient(circle, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.7) 100%);
-  transition: opacity 0.3s ease-in-out;
-`;
-
 export const StyledTitle = styled(CardTitle)`
   width: 25.6rem;
 `;

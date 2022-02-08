@@ -6,6 +6,12 @@ export const StyledTitle = styled(CardTitle)`
   color: ${({ theme }) => theme.colors.text.grey};
 `;
 
+export const Wrapper = styled.div`
+  width: fit-content;
+  height: fit-content;
+  position: relative;
+`;
+
 export const Copyrights = styled.div`
   position: absolute;
   bottom: 0.5rem;
@@ -21,7 +27,9 @@ export const Copyrights = styled.div`
 
 export const Version = styled.div`
   position: absolute;
-  bottom: 0.5rem;
+  bottom: -0.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
   font-size: ${({ theme }) => theme.fontSize.xxs};
   font-weight: ${({ theme }) => theme.fontWeight.light};
   color: ${({ theme }) => theme.colors.text.grey};

@@ -1,33 +1,65 @@
 import React, { useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { managementUsers } from 'functions/managementUsers';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { ErrorMsg } from 'components/atoms/ErrorMsg/ErrorMsg';
 import { InputForm } from 'components/atoms/InputForm/InputForm';
-import { Form } from 'components/atoms/Form/Form';
-import WorkplacesSwitchersList from 'components/molecules/WorkplacesSwitchersList/WorkplacesSwitchersList';
-import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import PopupInfo from 'components/molecules/PopupInfo/PopupInfo';
-import { WrapperLabel, Wrapper, StyledSubmitButton, WrapperInputs } from './NewUserForm.style';
+import ToggleButtonNew from 'components/molecules/ToggleButtonNew/ToggleButtonNew';
+import WorkplacesSwitchersList from 'components/molecules/WorkplacesSwitchersList/WorkplacesSwitchersList';
+import LoaderRing from 'components/atoms/LoaderRing/LoaderRing';
+import {
+  StyledForm,
+  WrapperLabel,
+  Wrapper,
+  StyledSubmitButton,
+  WrapperInputs,
+  WrapperAdmin,
+  CircleWrapper,
+  StyledWrapperLabel,
+} from './NewUserForm.style';
 
 const NewUserForm = () => {
-  const [rolesValues, setRolesValues] = useState({});
   const [popup, setPopup] = useState(false);
-  const { createUser } = useAuth();
+  const [error, setError] = useState('');
+  const [processing, setProcessing] = useState(false);
+  const [adminRole, setAdminRole] = useState(false);
+  const [workplaces, setWorkplaces] = useState({});
+  const { createUser } = managementUsers();
 
   const onSubmit = async (values, actions) => {
-    await createUser(values, rolesValues)
-      .then(() => {
-        setPopup(true);
-      })
-      .catch((error) => {
-        if (error === 'internalError/alias-already-in-use') {
-          window.alert(`Ten alias (${values.alias}) jest już w użyciu`);
-        } else {
-          window.alert(error.code);
-        }
-      });
-    actions.resetForm();
+    setProcessing(true);
+    const respond = await createUser(values, workplaces, adminRole).then((respondObj) => {
+      setProcessing(false);
+      return respondObj;
+    });
+
+    if (respond.status) {
+      setPopup(true);
+      actions.resetForm();
+    } else if (!respond.status) {
+      switch (respond.error) {
+        case 'auth/invalid-email':
+          setError('Nie poprawny email');
+          break;
+        case 'firestore/alias-already-in-use':
+          setError('Alias w użyciu');
+          break;
+        case 'auth/email-already-in-use':
+          setError('Email w użyciu');
+          break;
+        default:
+          setError(respond.error);
+      }
+    }
+    return null;
+  };
+
+  const handleResetError = () => {
+    if (error) {
+      setError('');
+    }
   };
 
   const initialValues = {
@@ -41,11 +73,11 @@ const NewUserForm = () => {
     email: Yup.string().email('Nie poprawny email').required('Podanie emaila jest wymagane'),
     firstName: Yup.string().required('Imie i nazwisko jest wymagane'),
     lastName: Yup.string().required('Imie i nazwisko jest wymagane'),
-    alias: Yup.string().required('Alias jest wymagany'),
+    alias: adminRole ? Yup.string() : Yup.string().required('Alias jest wymagany'),
   });
 
   const getValues = (values) => {
-    setRolesValues({ ...values });
+    setWorkplaces({ ...values });
   };
 
   return (
@@ -57,7 +89,8 @@ const NewUserForm = () => {
         subtitle="Haslo wygenerowane automatycznie, użytkownik aby zalogować sie na konto będzie musiał zresetować hasło"
       />
       <Wrapper>
-        <CardTitle>Dodaj uzytkownika</CardTitle>
+        <CardTitle>{adminRole ? 'Dodaj administratora' : 'Dodaj uzytkownika'}</CardTitle>
+        <StyledWrapperLabel>{error ? <ErrorMsg>{error}</ErrorMsg> : null}</StyledWrapperLabel>
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
@@ -65,7 +98,16 @@ const NewUserForm = () => {
         >
           {({ values, touched, errors, isSubmitting, handleChange, handleBlur, handleSubmit }) => {
             return (
-              <Form onSubmit={handleSubmit}>
+              <StyledForm onSubmit={handleSubmit} onClick={handleResetError}>
+                <WrapperAdmin>
+                  Administrator :
+                  <ToggleButtonNew
+                    onClick={() => setAdminRole(!adminRole)}
+                    type="button"
+                    state={adminRole}
+                  />
+                </WrapperAdmin>
+
                 <label htmlFor="name">
                   <WrapperLabel>
                     Imie i nazwisko :
@@ -84,6 +126,7 @@ const NewUserForm = () => {
                       onBlur={handleBlur}
                       isError={errors.firstName && touched.firstName}
                       className="first"
+                      onFocus={handleResetError}
                     />
                     <InputForm
                       id="lastName"
@@ -93,36 +136,41 @@ const NewUserForm = () => {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       isError={errors.lastName && touched.lastName}
+                      onFocus={handleResetError}
                     />
                   </WrapperInputs>
                 </label>
-                <label htmlFor="alias">
-                  <WrapperLabel>
-                    Rodo alias :
-                    {errors.alias && touched.alias && errors.alias ? (
-                      <ErrorMsg>{errors.alias}</ErrorMsg>
-                    ) : null}
-                  </WrapperLabel>
-                  <InputForm
-                    id="alias"
-                    placeholder={
-                      values.firstName || values.lastName
-                        ? `${values.lastName.slice(0, 3)} ${values.firstName.slice(0, 3)}`
-                        : 'Podaj alias'
-                    }
-                    type="text"
-                    value={values.alias}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    isError={errors.alias && touched.alias}
-                    onFocus={(e) => {
-                      if (e.target.value === '' || e.target.value === e.target.placeholder) {
-                        e.target.value = e.target.placeholder;
-                        values.alias = e.target.placeholder;
+                {!adminRole ? (
+                  <label htmlFor="alias">
+                    <WrapperLabel>
+                      Rodo alias :
+                      {errors.alias && touched.alias && errors.alias ? (
+                        <ErrorMsg>{errors.alias}</ErrorMsg>
+                      ) : null}
+                    </WrapperLabel>
+                    <InputForm
+                      id="alias"
+                      placeholder={
+                        values.firstName || values.lastName
+                          ? `${values.lastName.slice(0, 3)} ${values.firstName.slice(0, 3)}`
+                          : 'Podaj alias'
                       }
-                    }}
-                  />
-                </label>
+                      type="text"
+                      value={values.alias}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      isError={errors.alias && touched.alias}
+                      onFocus={(e) => {
+                        handleResetError();
+                        if (e.target.value === '' || e.target.value === e.target.placeholder) {
+                          e.target.value = e.target.placeholder;
+                          values.alias = e.target.placeholder;
+                        }
+                      }}
+                    />
+                  </label>
+                ) : null}
+
                 <label htmlFor="email">
                   <WrapperLabel>
                     Email :
@@ -138,14 +186,26 @@ const NewUserForm = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     isError={errors.email && touched.email}
+                    onFocus={handleResetError}
                   />
                 </label>
-                <WrapperLabel>Uprawnienia :</WrapperLabel>
-                <WorkplacesSwitchersList getValues={getValues} />
-                <StyledSubmitButton disabled={isSubmitting} customMargin="1rem" type="submit">
-                  Stwórz konto
-                </StyledSubmitButton>
-              </Form>
+
+                {!adminRole ? (
+                  <>
+                    <WrapperLabel>Uprawnienia :</WrapperLabel>
+                    <WorkplacesSwitchersList getValues={getValues} />
+                  </>
+                ) : null}
+                {processing ? (
+                  <CircleWrapper>
+                    <LoaderRing colorVariant2 />
+                  </CircleWrapper>
+                ) : (
+                  <StyledSubmitButton disabled={isSubmitting} customMargin="1rem" type="submit">
+                    Stwórz konto
+                  </StyledSubmitButton>
+                )}
+              </StyledForm>
             );
           }}
         </Formik>

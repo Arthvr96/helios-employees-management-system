@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import ViewTemplate from 'components/templates/ViewTemplate/ViewTemplate';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import LoginPanelForm from 'components/organisms/LoginPanelForm/LoginPanelForm';
-import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import BasicForm from 'components/organisms/BasicForm/BasicForm';
 import PopupInfo from 'components/molecules/PopupInfo/PopupInfo';
-import { StyledTitle, Version, Copyrights, StyledSubTitle } from './LoginPanel.style';
+import { StyledTitle, Version, Copyrights, StyledSubTitle, Wrapper } from './LoginPanel.style';
 
 const LoginPanel = () => {
   const [isVisibile, setIsVisible] = useState(false);
@@ -25,13 +24,15 @@ const LoginPanel = () => {
     <ViewTemplate navMargin="0" alignItems="center">
       {!basicForm ? (
         <CardTemplate>
-          <StyledTitle>{isResetPassword ? 'Zresetuj hasło' : 'Logowanie'}</StyledTitle>
-          <LoginPanelForm
-            isResetPassword={isResetPassword}
-            handleChangePage={handleChangePage}
-            handleBasicForm={() => setBasicForm(true)}
-          />
-          <Version>v0.3</Version>
+          <Wrapper>
+            <StyledTitle>{isResetPassword ? 'Zresetuj hasło' : 'Logowanie'}</StyledTitle>
+            <LoginPanelForm
+              isResetPassword={isResetPassword}
+              handleChangePage={handleChangePage}
+              handleBasicForm={() => setBasicForm(true)}
+            />
+            <Version>v0.1</Version>
+          </Wrapper>
         </CardTemplate>
       ) : null}
       {basicForm ? (

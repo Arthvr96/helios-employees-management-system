@@ -2,20 +2,22 @@ import styled from 'styled-components';
 
 export const Button = styled.button`
   width: 100px;
-  border: 1px solid ${({ theme }) => theme.colors.lightGrey};
-  border-radius: 15px;
-  background-color: ${({ theme }) => theme.lightGrey};
+  padding: 0.5rem 0.5rem;
+  margin-right: 2rem;
+  border: 1px solid ${({ theme }) => theme.colors.decors.black};
+  border-radius: 5px;
+  background-color: ${({ theme, isCancel }) =>
+    isCancel ? theme.colors.bg.secondary : theme.colors.bg.primary};
   font-size: ${({ theme }) => theme.fontSize.xs};
   font-weight: ${({ theme, isCancel }) =>
     isCancel ? theme.fontWeight.regular : theme.fontWeight.bold};
-  padding: 0.3rem;
-  margin-right: 2rem;
+  color: ${({ theme, isCancel }) => (isCancel ? theme.colors.text.black : theme.colors.text.white)};
   cursor: pointer;
   transition: background-color 0.3s ease-in;
 
   &:hover {
     background-color: ${({ isCancel }) =>
-      isCancel ? 'rgba(200, 3, 3, 0.6)' : 'rgba(0, 164, 16, 0.6)'};
+      isCancel ? 'rgba(200, 3, 3, 1)' : 'rgba(0, 164, 16, 1)'};
   }
 
   &:last-child {

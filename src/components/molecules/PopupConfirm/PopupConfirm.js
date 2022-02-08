@@ -2,16 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
-import {
-  Wrapper,
-  StyledTitle,
-  WrapperButtons,
-  StyledSubmitButton,
-} from 'components/molecules/PopupConfirm/PopupConfirm.styles';
+import PopupWrapper from 'components/atoms/PopupWrapper/PopupWrapper';
+import { StyledTitle, WrapperButtons, StyledSubmitButton } from './PopupConfirm.styles';
 
 const PopupConfirm = ({ title, subtitle, handleConfirm, handleCancel, isVisible }) => {
   return (
-    <Wrapper isVisible={isVisible}>
+    <PopupWrapper isVisible={isVisible}>
       <CardTemplate>
         <StyledTitle fontSize="m">{title}</StyledTitle>
         {subtitle ? <CardSubtitle>{subtitle}</CardSubtitle> : null}
@@ -22,7 +18,7 @@ const PopupConfirm = ({ title, subtitle, handleConfirm, handleCancel, isVisible 
           <StyledSubmitButton onClick={handleCancel}>Anuluj</StyledSubmitButton>
         </WrapperButtons>
       </CardTemplate>
-    </Wrapper>
+    </PopupWrapper>
   );
 };
 

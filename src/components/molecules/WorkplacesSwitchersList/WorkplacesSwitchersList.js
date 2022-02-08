@@ -3,16 +3,33 @@ import PropTypes from 'prop-types';
 import ToggleButtonNew from 'components/molecules/ToggleButtonNew/ToggleButtonNew';
 import { Wrapper } from './WorkplacesSwitchersList.style';
 
-const WorkplacesSwitchersList = ({ getValues, nightClose = true }) => {
-  const [roles, setRoles] = useState({
-    bar1: true,
-    bar2: false,
-    obs1: true,
-    obs2: true,
-    coffee: false,
-    tickets: true,
-    night: false,
-  });
+const INITSTATE = {
+  bar1: true,
+  bar2: false,
+  obs1: true,
+  obs2: true,
+  coffee: false,
+  tickets: true,
+  night: false,
+};
+
+const BUTTONS = [
+  ['bar1', 'Bar1'],
+  ['bar2', 'Bar2'],
+  ['obs1', 'obs1'],
+  ['obs2', 'obs2'],
+  ['coffee', 'kawiarnia'],
+  ['tickets', 'kasa'],
+];
+
+const WorkplacesSwitchersList = ({ getValues, initState, nightClose = true }) => {
+  const [roles, setRoles] = useState(INITSTATE);
+
+  useEffect(() => {
+    if (initState) {
+      setRoles({ ...initState });
+    }
+  }, [initState]);
 
   const handleSetRole = (roleName) => {
     setRoles({
@@ -27,41 +44,19 @@ const WorkplacesSwitchersList = ({ getValues, nightClose = true }) => {
 
   return (
     <Wrapper>
-      <li>
-        <span>Bar1 :</span>
-        <ToggleButtonNew onClick={() => handleSetRole('bar1')} type="button" state={roles.bar1} />
-      </li>
-      <li>
-        <span>Bar2 :</span>
-        <ToggleButtonNew onClick={() => handleSetRole('bar2')} type="button" state={roles.bar2} />
-      </li>
-      <li>
-        <span>Obs1 :</span>
-        <ToggleButtonNew onClick={() => handleSetRole('obs1')} type="button" state={roles.obs1} />
-      </li>
-      <li>
-        <span>Obs2 :</span>
-        <ToggleButtonNew onClick={() => handleSetRole('obs2')} type="button" state={roles.obs2} />
-      </li>
-      <li>
-        <span>Kawiarnia :</span>
-        <ToggleButtonNew
-          onClick={() => handleSetRole('coffee')}
-          type="button"
-          state={roles.coffee}
-        />
-      </li>
-      <li>
-        <span>Kasa :</span>
-        <ToggleButtonNew
-          onClick={() => handleSetRole('tickets')}
-          type="button"
-          state={roles.tickets}
-        />
-      </li>
+      {BUTTONS.map((item) => (
+        <li key={item[0]}>
+          <span>{item[1]} :</span>
+          <ToggleButtonNew
+            onClick={() => handleSetRole(item[0])}
+            type="button"
+            state={roles[item[0]]}
+          />
+        </li>
+      ))}
       {nightClose ? (
         <li>
-          <span>Zamkniecia obs :</span>
+          <span>Zamkniecia:</span>
           <ToggleButtonNew
             onClick={() => handleSetRole('night')}
             type="button"
@@ -78,4 +73,5 @@ export default WorkplacesSwitchersList;
 WorkplacesSwitchersList.propTypes = {
   getValues: PropTypes.func.isRequired,
   nightClose: PropTypes.bool,
+  initState: PropTypes.objectOf(PropTypes.bool),
 };
