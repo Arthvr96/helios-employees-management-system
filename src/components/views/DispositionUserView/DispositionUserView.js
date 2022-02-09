@@ -1,16 +1,17 @@
 import React from 'react';
-import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
-import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
-import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
+import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import ViewTemplate from 'components/templates/ViewTemplate/ViewTemplate';
+import DispositionBlocked from 'components/molecules/DispositionBlocked/DispositionBlocked';
+import DispositionActive from 'components/molecules/DispositionActive/DispositionActive';
 
 const DispositionUserView = () => {
+  const { appState } = useAuth();
   return (
-    <ViewTemplate navMargin="40">
-      <CardTemplate>
-        <CardTitle>Dyspozycja</CardTitle>
-        <CardSubtitle>hi user</CardSubtitle>
-      </CardTemplate>
+    <ViewTemplate justifyContent="center" navMargin="40">
+      {appState.state === 'nonActive' || appState.state === 'blocked' ? (
+        <DispositionBlocked />
+      ) : null}
+      {appState.state === 'active' ? <DispositionActive /> : null}
     </ViewTemplate>
   );
 };

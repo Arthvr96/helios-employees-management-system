@@ -59,7 +59,7 @@ const ListUsers = () => {
         setComparisonObj={setComparisonObj}
       />
       <Wrapper>
-        <StyledTitle>Lista użytkowników</StyledTitle>
+        <StyledTitle>{`Lista użytkowników (${usersList.length})`}</StyledTitle>
         <SearchBar
           respond={respond}
           usersList={usersList}

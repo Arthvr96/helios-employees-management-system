@@ -32,6 +32,18 @@ const NewUserForm = () => {
     setProcessing(true);
     const respond = await createUser(values, workplaces, adminRole).then((respondObj) => {
       setProcessing(false);
+      const obj = {
+        ...values,
+        id: respondObj.uid,
+        role: adminRole ? 'admin' : 'user',
+        workplaces: { ...workplaces },
+      };
+
+      if (localStorage.usersList) {
+        const usersList = JSON.parse(localStorage.usersList);
+        usersList.push(obj);
+        localStorage.setItem('usersList', JSON.stringify(usersList));
+      }
       return respondObj;
     });
 

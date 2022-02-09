@@ -8,5 +8,5 @@ export const Wrapper = styled.section`
   width: ${({ widthSize }) => widthSize}px;
   height: ${({ heightSize, navMargin }) =>
     navMargin ? heightSize - navMargin : heightSize - 65}px;
-  padding: 2.5rem 5rem;
+  padding: ${({ padding }) => padding || '2.5rem 5rem'};
 `;
