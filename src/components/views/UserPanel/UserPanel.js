@@ -6,11 +6,6 @@ import ScheduleUserView from 'components/views/ScheduleUserView/ScheduleUserView
 import HoursUserView from 'components/views/HoursUserView/HoursUserView';
 
 const UserPanel = () => {
-  useEffect(() => {
-    const viewportmeta = document.querySelector('meta[name="viewport"]');
-    viewportmeta.setAttribute('content', 'initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0');
-  }, []);
-
   return (
     <UserTemplateNavigation>
       <Route exact path="/user/disposition" component={DispositionUserView} />
