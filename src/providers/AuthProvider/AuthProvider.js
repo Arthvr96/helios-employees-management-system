@@ -140,7 +140,7 @@ const AuthProvider = ({ children }) => {
               setAuthAdmin(true);
               setCurrentUser({ ...respond.data() });
             } else if (respond.data().role === 'user') {
-              setAuthAdmin(true);
+              setAuthUser(true);
               setCurrentUser({ ...respond.data() });
             } else {
               throw 'Nie znana rola';

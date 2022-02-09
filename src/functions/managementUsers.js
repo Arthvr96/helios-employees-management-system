@@ -79,6 +79,7 @@ export const managementUsers = () => {
       await setDoc(doc(db, 'users', uid), { ...obj })
         .then(() => {
           respond = {
+            uid,
             status: true,
           };
         })
