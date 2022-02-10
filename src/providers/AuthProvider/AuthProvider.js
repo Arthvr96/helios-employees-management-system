@@ -6,8 +6,11 @@ import {
   onAuthStateChanged,
   signOut,
   sendPasswordResetEmail,
+  setPersistence,
+  browserSessionPersistence,
 } from 'firebase/auth';
 import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
+import { useHistory } from 'react-router-dom';
 
 const AuthContext = React.createContext({});
 
@@ -21,6 +24,7 @@ const AuthProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState(false);
   const [inProgress, setInProgress] = useState(false);
   const [appState, setAppState] = useState({ state: 'nonActive', date1: '', date2: '' });
+  const history = useHistory();
 
   const _updateAppState = (id, data) => {
     return setDoc(doc(db, 'statesApp', id), data);
@@ -50,6 +54,7 @@ const AuthProvider = ({ children }) => {
   const logOut = () => {
     signOut(auth)
       .then(() => {
+        setCurrentUser(null);
         setAuthAdmin(false);
         setAuthUser(false);
         localStorage.clear();
@@ -106,17 +111,6 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const handleEndSession = () => {
-      signOut(auth).catch((error) => window.alert(error));
-      localStorage.clear();
-    };
-    window.addEventListener('beforeunload', handleEndSession);
-    return () => {
-      window.removeEventListener('beforeunload', handleEndSession);
-    };
-  }, []);
-
-  useEffect(() => {
     let unsub = () => {};
     if (authAdmin || authUser) {
       unsub = onSnapshot(doc(db, 'statesApp', 'cycleState'), (item) => {
@@ -129,7 +123,18 @@ const AuthProvider = ({ children }) => {
     };
   }, [authAdmin, authUser]);
 
+  useEffect(() => {}, []);
+
   useEffect(() => {
+    let sessionEnded = false;
+    setPersistence(auth, browserSessionPersistence)
+      .then(() => {
+        sessionEnded = true;
+        history.push('/login');
+        return signOut(auth);
+      })
+      .catch((error) => window.alert(error.code));
+
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
         setCurrentUser(user);
@@ -147,13 +152,12 @@ const AuthProvider = ({ children }) => {
             }
           })
           .catch((error) => {
-            logOut(auth);
-            window.alert(`critical error : ${error}`);
+            if (!sessionEnded) {
+              logOut(auth);
+              window.alert(`critical error : ${error}`);
+            }
             setInProgress(false);
           });
-      } else {
-        setCurrentUser(null);
-        setInProgress(false);
       }
     });
 
