@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Route } from 'react-router-dom';
 import UserTemplateNavigation from 'components/templates/UserTemplateNavigation/UserTemplateNavigation';
 import DispositionUserView from 'components/views/DispositionUserView/DispositionUserView';
