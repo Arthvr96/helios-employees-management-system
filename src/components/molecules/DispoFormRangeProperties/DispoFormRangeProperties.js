@@ -56,7 +56,7 @@ const DispoFormRangeProperties = ({ rangeValues, handleSetRange, dayNumber }) =>
           value={rangeValues.to}
           onChange={(e) => handleSetRange(dayNumber, 'to', e.target.value)}
         >
-          <option value="26">obojętnie</option>
+          <option value="30">obojętnie</option>
           {Options.map((option) => (
             <option key={option[1]} value={option[0]}>
               {option[1]}

@@ -17,10 +17,25 @@ const initialValues = {
 };
 
 const NewCycleForm = ({ onSubmit }) => {
+  const { appState } = useAuth();
+
   // TODO: add calendar picker
 
   const handleValidation = Yup.object().shape({
-    date1: Yup.date().required('Podaj date początkową'),
+    date1: Yup.date()
+      .required('Podaj date początkową')
+      .test(
+        'is-bigger',
+        'Początek okresu musi zacząć się minimum dzień po zakończeniu ostatniego okresu',
+        (value) => {
+          if (value && appState.lastDate2) {
+            const date1 = new Date(value).getTime();
+            const date2 = new Date(appState.lastDate2).getTime();
+            return date1 > date2;
+          }
+          return null;
+        },
+      ),
     date2: Yup.date()
       .required('Podaj date końcową')
       .test(

@@ -32,32 +32,43 @@ HeaderDropDownList.propTypes = {
   handleToggle: PropTypes.func,
 };
 
-const Employee = () => {
+const Employee = ({ firstName, lastName, email }) => {
   return (
     <EmployeeWrapper>
       <EmployeeAvatar>
-        <span>Kuj</span>
-        <span>Mac</span>
+        <span>{firstName.slice(0, 3)}</span>
+        <span>{firstName.slice(0, 3)}</span>
       </EmployeeAvatar>
       <EmployeeInfo>
-        <EmployeeName>Kujawiński Maciej</EmployeeName>
-        <EmployeeMail>kujawinski.maciej@gmail.com</EmployeeMail>
+        <EmployeeName>{`${lastName} ${firstName}`}</EmployeeName>
+        <EmployeeMail>{email}</EmployeeMail>
       </EmployeeInfo>
     </EmployeeWrapper>
   );
+};
+
+Employee.propTypes = {
+  firstName: PropTypes.string,
+  lastName: PropTypes.string,
+  email: PropTypes.string,
 };
 
 const ContentDropDownList = ({ isOpen, data }) => {
   return (
     <ContentDropDownListWrapper isOpen={isOpen} isScrollable={data.length > 5}>
       {data.map((item) => (
-        <Employee key={uniqid()} />
+        <Employee
+          firstName={item.firstName}
+          lastName={item.lastName}
+          email={item.email}
+          key={uniqid()}
+        />
       ))}
     </ContentDropDownListWrapper>
   );
 };
 ContentDropDownList.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.string),
+  data: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
   isOpen: PropTypes.bool,
 };
 
@@ -85,5 +96,5 @@ export default DropDownListWindow;
 
 DropDownListWindow.propTypes = {
   title: PropTypes.string,
-  data: PropTypes.arrayOf(PropTypes.string),
+  data: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
 };

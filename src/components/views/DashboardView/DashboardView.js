@@ -7,6 +7,7 @@ import { useAuth } from 'providers/AuthProvider/AuthProvider';
 
 const DashBoard = () => {
   const { appState } = useAuth();
+
   return (
     <ViewTemplate>
       {appState.state === 'nonActive' ? <NewCycleWindow /> : null}

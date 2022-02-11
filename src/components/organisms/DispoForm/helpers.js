@@ -14,7 +14,7 @@ export const initRadio = {
 };
 export const dayRange = {
   from: '8',
-  to: '26',
+  to: '30',
 };
 export const initRanges = {
   day1: { ...dayRange },
