@@ -23,7 +23,8 @@ const AuthProvider = ({ children }) => {
   const [authAdmin, setAuthAdmin] = useState(false);
   const [authUser, setAuthUser] = useState(false);
   const [inProgress, setInProgress] = useState(false);
-  const [appState, setAppState] = useState({ state: 'nonActive', date1: '', date2: '' });
+  const [appState, setAppState] = useState({});
+
   const history = useHistory();
 
   const _updateAppState = (id, data) => {
@@ -83,11 +84,12 @@ const AuthProvider = ({ children }) => {
   const handleSetAppState = async (switcher, week) => {
     if (switcher === 'newCycle') {
       await _updateAppState('cycleState', {
+        ...appState,
         state: 'active',
         date1: week.date1,
         date2: week.date2,
       }).catch((error) => {
-        throw error;
+        window.alert(error.code);
       });
     }
     if (switcher === 'blockCycle') {
@@ -95,7 +97,7 @@ const AuthProvider = ({ children }) => {
         ...appState,
         state: 'blocked',
       }).catch((error) => {
-        throw error;
+        window.alert(error.code);
       });
     }
     if (switcher === 'endCycle') {
@@ -104,8 +106,10 @@ const AuthProvider = ({ children }) => {
         state: 'nonActive',
         date1: '',
         date2: '',
+        lastDate1: appState.date1,
+        lastDate2: appState.date2,
       }).catch((error) => {
-        throw error;
+        window.alert(error.code);
       });
     }
   };
@@ -122,8 +126,6 @@ const AuthProvider = ({ children }) => {
       unsub();
     };
   }, [authAdmin, authUser]);
-
-  useEffect(() => {}, []);
 
   useEffect(() => {
     let sessionEnded = false;

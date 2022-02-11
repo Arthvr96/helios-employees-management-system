@@ -5,15 +5,17 @@ import LoaderRing from 'components/atoms/LoaderRing/LoaderRing';
 import { Button } from 'components/atoms/Button/Button';
 import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import PropTypes from 'prop-types';
+import { dispositionSortedEmployeesFunctions } from 'functions/dispositionSortedEmployeesFunctions';
 import { Wrapper, StyledForm } from './DispoForm.style';
 
-const DispoForm = ({ handleSwitchPage }) => {
-  const { appState } = useAuth();
+const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
+  const { currentUser, appState } = useAuth();
   const [days, setDays] = useState([]);
   const [inProgress, setInProgress] = useState(false);
   const [radioValues, setRadioValues] = useState(initRadio);
   const [checkBoxValues, setCheckBoxValues] = useState(initCheckbox);
   const [rangeValues, setRangeValues] = useState(initRanges);
+  const { updateDisposition } = dispositionSortedEmployeesFunctions();
 
   const handleSetRadio = (day, nameRadio) => {
     setRadioValues({
@@ -48,25 +50,26 @@ const DispoForm = ({ handleSwitchPage }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    setInProgress(true);
 
     const getValues = (day, selectedOption) => {
       if (selectedOption === 'freeDay') {
-        return null;
+        return ['freeDay', '8', '30', false, false];
       }
       if (selectedOption === 'wholeDay') {
         if (checkBoxValues[day].wholeDayPlus && checkBoxValues[day].marathon) {
-          return ['8', '26', 'wholeDayPlus', 'marathon'];
+          return ['wholeDay', '8', '30', true, true];
         }
         if (checkBoxValues[day].wholeDayPlus) {
-          return ['8', '26', 'wholeDayPlus', ''];
+          return ['wholeDay', '8', '30', true, false];
         }
         if (checkBoxValues[day].marathon) {
-          return ['8', '26', '', 'marathon'];
+          return ['wholeDay', '8', '30', false, true];
         }
-        return ['8', '26', '', ''];
+        return ['wholeDay', '8', '30', false, false];
       }
       if (selectedOption === 'range') {
-        return [rangeValues[day].from, rangeValues[day].to];
+        return ['range', rangeValues[day].from, rangeValues[day].to, false, false];
       }
       return null;
     };
@@ -83,12 +86,31 @@ const DispoForm = ({ handleSwitchPage }) => {
         }
       }
     }
+    const comparison = { status: true };
 
-    setInProgress(true);
-    setTimeout(() => {
-      window.alert(JSON.stringify(values));
+    for (const key in values) {
+      if ({}.hasOwnProperty.call(radioValues, key)) {
+        values[key].forEach((value, i) => {
+          if (value !== cycleData[key][i]) {
+            comparison.status = false;
+          }
+        });
+      }
+    }
+
+    if (!comparison.status) {
+      const cycleId = `${appState.date1}-${appState.date2}`;
+      updateDisposition(currentUser.id, cycleId, values)
+        .then(() => {
+          setCycleData(values);
+          handleSwitchPage('toDispoDashboard');
+        })
+        .catch((error) => {
+          window.alert(error.code);
+        });
+    } else {
       handleSwitchPage('toDispoDashboard');
-    }, 300);
+    }
   };
 
   const getArrDays = (date1, date2) => {
@@ -125,6 +147,55 @@ const DispoForm = ({ handleSwitchPage }) => {
     const { date1, date2 } = appState;
     setDays([...getArrDays(date1, date2)]);
   }, []);
+
+  useEffect(() => {
+    const syncRadioValues = () => {
+      const obj = JSON.parse(JSON.stringify(radioValues));
+      for (const key in cycleData) {
+        if ({}.hasOwnProperty.call(cycleData, key)) {
+          const type = cycleData[key][0];
+          const newSet = {
+            freeDay: false,
+            wholeDay: false,
+            range: false,
+            [type]: true,
+          };
+          obj[key] = { ...newSet };
+        }
+      }
+      setRadioValues(JSON.parse(JSON.stringify(obj)));
+    };
+
+    const syncRangeValues = () => {
+      const obj = JSON.parse(JSON.stringify(rangeValues));
+      for (const key in cycleData) {
+        if ({}.hasOwnProperty.call(cycleData, key)) {
+          obj[key].from = `${cycleData[key][1]}`;
+          obj[key].to = `${cycleData[key][2]}`;
+        }
+      }
+      setRangeValues(JSON.parse(JSON.stringify(obj)));
+    };
+
+    const syncCheckBoxValues = () => {
+      const obj = JSON.parse(JSON.stringify(checkBoxValues));
+      for (const key in cycleData) {
+        if ({}.hasOwnProperty.call(cycleData, key)) {
+          const wholeDayPlus = cycleData[key][3];
+          const marathon = cycleData[key][4];
+          obj[key].wholeDayPlus = wholeDayPlus;
+          obj[key].marathon = marathon;
+        }
+      }
+      setCheckBoxValues(JSON.parse(JSON.stringify(obj)));
+    };
+
+    if (cycleData) {
+      syncRadioValues();
+      syncRangeValues();
+      syncCheckBoxValues();
+    }
+  }, [cycleData]);
 
   return (
     <StyledForm onSubmit={onSubmit}>
@@ -166,5 +237,9 @@ const DispoForm = ({ handleSwitchPage }) => {
 export default DispoForm;
 
 DispoForm.propTypes = {
+  setCycleData: PropTypes.func.isRequired,
   handleSwitchPage: PropTypes.func.isRequired,
+  cycleData: PropTypes.objectOf(
+    PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])),
+  ),
 };

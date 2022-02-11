@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { managementUsers } from 'functions/managementUsers';
@@ -9,6 +9,7 @@ import PopupInfo from 'components/molecules/PopupInfo/PopupInfo';
 import ToggleButtonNew from 'components/molecules/ToggleButtonNew/ToggleButtonNew';
 import WorkplacesSwitchersList from 'components/molecules/WorkplacesSwitchersList/WorkplacesSwitchersList';
 import LoaderRing from 'components/atoms/LoaderRing/LoaderRing';
+import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import {
   StyledForm,
   WrapperLabel,
@@ -27,25 +28,28 @@ const NewUserForm = () => {
   const [adminRole, setAdminRole] = useState(false);
   const [workplaces, setWorkplaces] = useState({});
   const { createUser } = managementUsers();
+  const { dispoSendInfo } = useContext(AdminStateContext);
 
   const onSubmit = async (values, actions) => {
     setProcessing(true);
-    const respond = await createUser(values, workplaces, adminRole).then((respondObj) => {
-      setProcessing(false);
-      const obj = {
-        ...values,
-        id: respondObj.uid,
-        role: adminRole ? 'admin' : 'user',
-        workplaces: { ...workplaces },
-      };
+    const respond = await createUser(values, workplaces, adminRole, dispoSendInfo).then(
+      (respondObj) => {
+        setProcessing(false);
+        const obj = {
+          ...values,
+          id: respondObj.uid,
+          role: adminRole ? 'admin' : 'user',
+          workplaces: { ...workplaces },
+        };
 
-      if (localStorage.usersList) {
-        const usersList = JSON.parse(localStorage.usersList);
-        usersList.push(obj);
-        localStorage.setItem('usersList', JSON.stringify(usersList));
-      }
-      return respondObj;
-    });
+        if (localStorage.usersList) {
+          const usersList = JSON.parse(localStorage.usersList);
+          usersList.push(obj);
+          localStorage.setItem('usersList', JSON.stringify(usersList));
+        }
+        return respondObj;
+      },
+    );
 
     if (respond.status) {
       setPopup(true);

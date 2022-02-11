@@ -9,6 +9,7 @@ export const StyledForm = styled.form`
   label {
     display: flex;
     flex-direction: column;
+    align-items: center;
     font-size: ${({ theme }) => theme.fontSize.xs};
     font-weight: ${({ theme }) => theme.fontWeight.bold};
     color: ${({ theme }) => theme.colors.text.darkGrey};

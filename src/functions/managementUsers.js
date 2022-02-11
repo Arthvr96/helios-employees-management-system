@@ -14,7 +14,7 @@ export const managementUsers = () => {
     return resond;
   };
 
-  const createUser = async (values, workplaces, adminRole) => {
+  const createUser = async (values, workplaces, adminRole, dispoSendInfo) => {
     const checkAlias = async () => {
       let respond = false;
       if (!adminRole) {
@@ -86,7 +86,53 @@ export const managementUsers = () => {
         .catch((error) => {
           respond = {
             status: false,
-            error,
+            error: error.code,
+          };
+        });
+      return respond;
+    };
+
+    const addUserToDispoDb = async (uid) => {
+      let respond;
+      await setDoc(doc(db, 'dispositionsSortedEmployees', uid), {})
+        .then(() => {
+          respond = {
+            uid,
+            status: true,
+          };
+        })
+        .catch((error) => {
+          respond = {
+            status: false,
+            error: error.code,
+          };
+        });
+      return respond;
+    };
+    const addUserToDispoSendInfoDb = async (uid) => {
+      const obj = JSON.parse(JSON.stringify(dispoSendInfo));
+      let respond;
+      await setDoc(doc(db, 'statesApp', 'dispoSendInfo'), {
+        ...obj,
+        [uid]: {
+          status: false,
+          info: {
+            email: values.email.toLowerCase().trim(),
+            firstName: values.firstName.toLowerCase().trim(),
+            lastName: values.lastName.toLowerCase().trim(),
+          },
+        },
+      })
+        .then(() => {
+          respond = {
+            uid,
+            status: true,
+          };
+        })
+        .catch((error) => {
+          respond = {
+            status: false,
+            error: error.code,
           };
         });
       return respond;
@@ -96,12 +142,20 @@ export const managementUsers = () => {
     const respondCreateAuthUser = respondCheckAlias
       ? await createAuthUser(values.email)
       : { status: false, error: 'firestore/alias-already-in-use' };
-    let respondAddUserInfo;
 
+    let respondAddUserInfo;
     if (respondCreateAuthUser.status) {
       respondAddUserInfo = await addUserInfo(respondCreateAuthUser.uid);
     } else if (!respondCreateAuthUser.status) {
       respondAddUserInfo = { status: false, error: respondCreateAuthUser.error };
+    }
+
+    if (respondAddUserInfo.status) {
+      respondAddUserInfo = await addUserToDispoDb(respondCreateAuthUser.uid);
+    }
+
+    if (respondAddUserInfo.status) {
+      respondAddUserInfo = await addUserToDispoSendInfoDb(respondCreateAuthUser.uid);
     }
 
     return respondAddUserInfo;

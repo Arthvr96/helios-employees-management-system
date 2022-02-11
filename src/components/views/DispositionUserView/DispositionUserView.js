@@ -6,6 +6,7 @@ import DispositionActive from 'components/molecules/DispositionActive/Dispositio
 
 const DispositionUserView = () => {
   const { appState } = useAuth();
+
   return (
     <ViewTemplate justifyContent="center" navMargin="40">
       {appState.state === 'nonActive' || appState.state === 'blocked' ? (
