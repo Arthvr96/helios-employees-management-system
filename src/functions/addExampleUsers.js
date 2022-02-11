@@ -19,7 +19,7 @@ export const addExampleUsers = async () => {
   });
 };
 
-const addingToUserState = async () => {
+export const addingToUserState = async () => {
   const q = query(collection(db, 'users'), where('role', '==', 'user'));
   await getDocs(q)
     .then((docs) => {

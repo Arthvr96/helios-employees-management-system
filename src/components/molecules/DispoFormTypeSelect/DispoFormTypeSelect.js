@@ -10,9 +10,9 @@ const radioButtons = [
   ['zakres', 'range'],
 ];
 
-const DispoFormTypeSelect = ({ radioValues, handleSetRadio, dayName, dayNumber }) => {
+const DispoFormTypeSelect = ({ radioValues, handleSetRadio, dayName, dayNumber, isError }) => {
   return (
-    <Wrapper>
+    <Wrapper isError={isError} freeDaySelected={radioValues.freeDay}>
       <h3>{dayName}</h3>
       <ul>
         {radioButtons.map((radioButton) => (
@@ -42,4 +42,5 @@ DispoFormTypeSelect.propTypes = {
   handleSetRadio: PropTypes.func.isRequired,
   dayName: PropTypes.string.isRequired,
   dayNumber: PropTypes.string.isRequired,
+  isError: PropTypes.bool.isRequired,
 };

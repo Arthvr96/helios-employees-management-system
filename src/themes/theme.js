@@ -21,6 +21,8 @@ export const theme = {
       secondary: '#ffffff',
       grey: '#DDDDDD',
       darkGrey: '#4A4A4A',
+      success: '#05a500',
+      error: '#db0000',
     },
     decors: {
       white: '#ffffff',

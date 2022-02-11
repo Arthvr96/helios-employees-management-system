@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { initCheckbox, initRadio, initRanges } from 'components/organisms/DispoForm/helpers';
+import {
+  initCheckbox,
+  initRadio,
+  initRangeErrors,
+  initRanges,
+} from 'components/organisms/DispoForm/helpers';
 import DispoFormDay from 'components/molecules/DispoFormDay/DispoFormDay';
 import LoaderRing from 'components/atoms/LoaderRing/LoaderRing';
 import { Button } from 'components/atoms/Button/Button';
@@ -15,6 +20,8 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
   const [radioValues, setRadioValues] = useState(initRadio);
   const [checkBoxValues, setCheckBoxValues] = useState(initCheckbox);
   const [rangeValues, setRangeValues] = useState(initRanges);
+  const [rangeError, setRangeError] = useState(initRangeErrors);
+  const [blockSubmitting, setBlockSubmitting] = useState(false);
   const { updateDisposition } = dispositionSortedEmployeesFunctions();
 
   const handleSetRadio = (day, nameRadio) => {
@@ -50,66 +57,68 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    setInProgress(true);
 
-    const getValues = (day, selectedOption) => {
-      if (selectedOption === 'freeDay') {
-        return ['freeDay', '8', '30', false, false];
-      }
-      if (selectedOption === 'wholeDay') {
-        if (checkBoxValues[day].wholeDayPlus && checkBoxValues[day].marathon) {
-          return ['wholeDay', '8', '30', true, true];
+    if (!blockSubmitting) {
+      setInProgress(true);
+      const getValues = (day, selectedOption) => {
+        if (selectedOption === 'freeDay') {
+          return ['freeDay', '8', '30', false, false];
         }
-        if (checkBoxValues[day].wholeDayPlus) {
-          return ['wholeDay', '8', '30', true, false];
+        if (selectedOption === 'wholeDay') {
+          if (checkBoxValues[day].wholeDayPlus && checkBoxValues[day].marathon) {
+            return ['wholeDay', '8', '30', true, true];
+          }
+          if (checkBoxValues[day].wholeDayPlus) {
+            return ['wholeDay', '8', '30', true, false];
+          }
+          if (checkBoxValues[day].marathon) {
+            return ['wholeDay', '8', '30', false, true];
+          }
+          return ['wholeDay', '8', '30', false, false];
         }
-        if (checkBoxValues[day].marathon) {
-          return ['wholeDay', '8', '30', false, true];
+        if (selectedOption === 'range') {
+          return ['range', rangeValues[day].from, rangeValues[day].to, false, false];
         }
-        return ['wholeDay', '8', '30', false, false];
-      }
-      if (selectedOption === 'range') {
-        return ['range', rangeValues[day].from, rangeValues[day].to, false, false];
-      }
-      return null;
-    };
+        return null;
+      };
 
-    const values = {};
-    for (const key in radioValues) {
-      if ({}.hasOwnProperty.call(radioValues, key)) {
-        for (const keyNested in radioValues[key]) {
-          if ({}.hasOwnProperty.call(radioValues, key)) {
-            if (radioValues[key][keyNested]) {
-              values[key] = getValues(key, keyNested);
+      const values = {};
+      for (const key in radioValues) {
+        if ({}.hasOwnProperty.call(radioValues, key)) {
+          for (const keyNested in radioValues[key]) {
+            if ({}.hasOwnProperty.call(radioValues, key)) {
+              if (radioValues[key][keyNested]) {
+                values[key] = getValues(key, keyNested);
+              }
             }
           }
         }
       }
-    }
-    const comparison = { status: true };
+      const comparison = { status: true };
 
-    for (const key in values) {
-      if ({}.hasOwnProperty.call(radioValues, key)) {
-        values[key].forEach((value, i) => {
-          if (value !== cycleData[key][i]) {
-            comparison.status = false;
-          }
-        });
+      for (const key in values) {
+        if ({}.hasOwnProperty.call(radioValues, key)) {
+          values[key].forEach((value, i) => {
+            if (value !== cycleData[key][i]) {
+              comparison.status = false;
+            }
+          });
+        }
       }
-    }
 
-    if (!comparison.status) {
-      const cycleId = `${appState.date1}-${appState.date2}`;
-      updateDisposition(currentUser.id, cycleId, values)
-        .then(() => {
-          setCycleData(values);
-          handleSwitchPage('toDispoDashboard');
-        })
-        .catch((error) => {
-          window.alert(error.code);
-        });
-    } else {
-      handleSwitchPage('toDispoDashboard');
+      if (!comparison.status) {
+        const cycleId = `${appState.date1}-${appState.date2}`;
+        updateDisposition(currentUser.id, cycleId, values)
+          .then(() => {
+            setCycleData(values);
+            handleSwitchPage('toDispoDashboard');
+          })
+          .catch((error) => {
+            window.alert(error.code);
+          });
+      } else {
+        handleSwitchPage('toDispoDashboard');
+      }
     }
   };
 
@@ -142,6 +151,40 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
     });
     return completeArr;
   };
+
+  useEffect(() => {
+    // after set free day from another state, reset range values
+    const obj = {
+      ...rangeValues,
+    };
+    const obj2 = {
+      ...rangeError,
+    };
+    for (const key in radioValues) {
+      if ({}.hasOwnProperty.call(radioValues, key)) {
+        if (radioValues[key].freeDay === true) {
+          obj[key] = {
+            from: '8',
+            to: '30',
+          };
+          obj2[key] = false;
+        }
+      }
+    }
+    setRangeValues({ ...obj });
+    setRangeError({ ...obj2 });
+  }, [radioValues]);
+
+  useEffect(() => {
+    const arr = Object.values(rangeError);
+    let status = false;
+    arr.forEach((el) => {
+      if (el) {
+        status = true;
+      }
+    });
+    setBlockSubmitting(status);
+  }, [rangeError]);
 
   useEffect(() => {
     const { date1, date2 } = appState;
@@ -205,6 +248,8 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
           handleSetRange={handleSetRange}
           handleSetCheckbox={handleSetCheckbox}
           handleSetRadio={handleSetRadio}
+          setRangeError={setRangeError}
+          rangeError={rangeError}
           dayName={day}
           dayNumber={`day${i + 1}`}
           rangeValues={rangeValues[`day${i + 1}`]}
@@ -227,7 +272,9 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
           >
             Anuluj
           </Button>
-          <Button type="submit">Zapisz</Button>
+          <Button disabled={blockSubmitting} type="submit">
+            Zapisz
+          </Button>
         </Wrapper>
       )}
     </StyledForm>

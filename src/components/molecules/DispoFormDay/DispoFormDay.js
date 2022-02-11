@@ -13,15 +13,18 @@ const DispoFormDay = ({
   handleSetCheckbox,
   checkBoxValues,
   handleSetRange,
+  setRangeError,
   rangeValues,
+  rangeError,
 }) => {
   return (
-    <StyledLabel htmlFor={dayNumber}>
+    <StyledLabel isError={rangeError[dayNumber]} htmlFor={dayNumber}>
       <DispoFormTypeSelect
         handleSetRadio={handleSetRadio}
         radioValues={radioValues}
         dayNumber={dayNumber}
         dayName={dayName}
+        isError={rangeError[dayNumber]}
       />
       {radioValues.wholeDay ? (
         <DispoFormWholeDayProperties
@@ -35,6 +38,8 @@ const DispoFormDay = ({
           dayNumber={dayNumber}
           handleSetRange={handleSetRange}
           rangeValues={rangeValues}
+          rangeError={rangeError}
+          setRangeError={setRangeError}
         />
       ) : null}
     </StyledLabel>
@@ -48,8 +53,10 @@ DispoFormDay.propTypes = {
   dayNumber: PropTypes.string.isRequired,
   handleSetRange: PropTypes.func.isRequired,
   handleSetCheckbox: PropTypes.func.isRequired,
+  setRangeError: PropTypes.func.isRequired,
   handleSetRadio: PropTypes.func.isRequired,
   radioValues: PropTypes.objectOf(PropTypes.bool),
+  rangeError: PropTypes.objectOf(PropTypes.bool),
   checkBoxValues: PropTypes.objectOf(PropTypes.bool),
   rangeValues: PropTypes.objectOf(PropTypes.string),
 };
