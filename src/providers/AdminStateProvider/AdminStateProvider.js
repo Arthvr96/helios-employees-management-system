@@ -4,7 +4,7 @@ import { cmsResponseEmployeesDispo } from 'data/cmsResponseEmployeesDispo';
 import { cmsResponseShiftsSchema } from 'data/cmsResponseShiftsSchema';
 import { cmsResponseEmployeesInfo } from 'data/cmsResponseEmployeesInfo';
 import { getGraph } from 'generatorGraph/getGraph';
-import { doc, onSnapshot, setDoc } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot, setDoc } from 'firebase/firestore';
 import { db } from 'api/firebase/firebase.config';
 import { useAuth } from 'providers/AuthProvider/AuthProvider';
 
@@ -22,13 +22,17 @@ const AdminStateProvider = ({ children }) => {
   const { appState, authAdmin } = useAuth();
 
   const handleClearDispoSendList = () => {
-    const obj = JSON.parse(JSON.stringify(dispoSendInfo));
-    for (const key in dispoSendInfo) {
-      if ({}.hasOwnProperty.call(dispoSendInfo, key)) {
-        obj[key].status = false;
+    return getDoc(doc(db, 'statesApp', 'dispoSendInfo')).then((docItem) => {
+      const obj = { ...docItem.data() };
+      for (const key in dispoSendInfo) {
+        if ({}.hasOwnProperty.call(dispoSendInfo, key)) {
+          obj[key].status = false;
+        }
       }
-    }
-    return setDoc(doc(db, 'statesApp', 'dispoSendInfo'), obj);
+      return setDoc(doc(db, 'statesApp', 'dispoSendInfo'), obj).catch((error) => {
+        throw error;
+      });
+    });
   };
 
   useEffect(() => {

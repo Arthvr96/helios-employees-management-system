@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { PropertiesWrapper } from 'components/atoms/PropertiesWrapper/PropertiesWrapper';
+import { ErrorMsg } from 'components/atoms/ErrorMsg/ErrorMsg';
 
 export const Options = [
   [9, '9:00'],
@@ -33,37 +34,86 @@ export const Options = [
   [22.5, '22:30'],
 ];
 
-const DispoFormRangeProperties = ({ rangeValues, handleSetRange, dayNumber }) => {
+const DispoFormRangeProperties = ({
+  rangeValues,
+  handleSetRange,
+  dayNumber,
+  setRangeError,
+  rangeError,
+}) => {
+  const [error, setError] = useState('');
+
+  const validation = (rangeType, value) => {
+    if (rangeType === 'from') {
+      if (parseFloat(value) < parseFloat(rangeValues.to)) {
+        setError('');
+        setRangeError({
+          ...rangeError,
+          [dayNumber]: false,
+        });
+      } else {
+        setRangeError({
+          ...rangeError,
+          [dayNumber]: true,
+        });
+        setError(`'od' nie może być mniejsze niż 'do'`);
+      }
+    } else if (rangeType === 'to') {
+      if (parseFloat(value) > parseFloat(rangeValues.from)) {
+        setError('');
+        setRangeError({
+          ...rangeError,
+          [dayNumber]: false,
+        });
+      } else {
+        setRangeError({
+          ...rangeError,
+          [dayNumber]: true,
+        });
+        setError(`'od' nie może być mniejsze niż 'do'`);
+      }
+    }
+  };
+
   return (
     <PropertiesWrapper>
-      <span>
-        od:
-        <select
-          value={rangeValues.from}
-          onChange={(e) => handleSetRange(dayNumber, 'from', e.target.value)}
-        >
-          <option value="8">obojetnie</option>
-          {Options.map((option) => (
-            <option key={option[1]} value={option[0]}>
-              {option[1]}
-            </option>
-          ))}
-        </select>
-      </span>
-      <span className="disabled">
-        do:
-        <select
-          value={rangeValues.to}
-          onChange={(e) => handleSetRange(dayNumber, 'to', e.target.value)}
-        >
-          <option value="30">obojętnie</option>
-          {Options.map((option) => (
-            <option key={option[1]} value={option[0]}>
-              {option[1]}
-            </option>
-          ))}
-        </select>
-      </span>
+      {error ? <ErrorMsg>{error}</ErrorMsg> : null}
+      <div>
+        <span>
+          od:
+          <select
+            value={rangeValues.from}
+            onChange={(e) => {
+              handleSetRange(dayNumber, 'from', e.target.value);
+              validation('from', e.target.value);
+            }}
+          >
+            <option value="8">obojetnie</option>
+            {Options.map((option) => (
+              <option key={option[1]} value={option[0]}>
+                {option[1]}
+              </option>
+            ))}
+          </select>
+        </span>
+        <span>
+          do:
+          <select
+            value={rangeValues.to}
+            onChange={(e) => {
+              handleSetRange(dayNumber, 'to', e.target.value);
+              validation('to', e.target.value);
+            }}
+          >
+            <option value="30">obojętnie</option>
+            {Options.map((option) => (
+              <option key={option[1]} value={option[0]}>
+                {option[1]}
+              </option>
+            ))}
+          </select>
+        </span>
+      </div>
     </PropertiesWrapper>
   );
 };
@@ -72,6 +122,8 @@ export default DispoFormRangeProperties;
 
 DispoFormRangeProperties.propTypes = {
   rangeValues: PropTypes.objectOf(PropTypes.string),
+  rangeError: PropTypes.objectOf(PropTypes.bool),
   handleSetRange: PropTypes.func.isRequired,
+  setRangeError: PropTypes.func.isRequired,
   dayNumber: PropTypes.string.isRequired,
 };

@@ -38,3 +38,12 @@ export const initCheckbox = {
   day6: { ...dayCheckbox },
   day7: { ...dayCheckbox },
 };
+export const initRangeErrors = {
+  day1: false,
+  day2: false,
+  day3: false,
+  day4: false,
+  day5: false,
+  day6: false,
+  day7: false,
+};

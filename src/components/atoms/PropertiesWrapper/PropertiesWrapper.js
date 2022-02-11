@@ -2,8 +2,14 @@ import styled from 'styled-components';
 
 export const PropertiesWrapper = styled.div`
   display: flex;
-  justify-content: space-around;
-  padding: 1.5rem;
+  flex-direction: column;
+  padding: 1rem 1rem 1.5rem 1rem;
+
+  div {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: space-around;
+  }
 
   span {
     width: 50%;

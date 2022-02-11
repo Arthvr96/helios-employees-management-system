@@ -23,4 +23,14 @@ export const Button = styled.button`
   &:last-child {
     margin-right: 0;
   }
+
+  &:disabled {
+    background-color: ${({ theme }) => theme.colors.bg.grey};
+    border-color: ${({ theme }) => theme.colors.decors.grey};
+    color: ${({ theme }) => theme.colors.text.grey};
+    cursor: not-allowed;
+
+    &:hover {
+      border-color: ${({ theme }) => theme.colors.decors.grey};
+  }
 `;

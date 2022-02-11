@@ -5,7 +5,15 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 1rem;
-  background-color: ${({ theme }) => theme.colors.bg.grey};
+  background-color: ${({ isError, freeDaySelected, theme }) => {
+    if (isError) {
+      return theme.colors.bg.error;
+    }
+    if (!freeDaySelected) {
+      return theme.colors.bg.success;
+    }
+    return theme.colors.bg.grey;
+  }};
 
   h3 {
     text-transform: capitalize;

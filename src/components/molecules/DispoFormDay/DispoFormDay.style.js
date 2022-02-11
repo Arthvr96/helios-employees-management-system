@@ -4,7 +4,9 @@ export const StyledLabel = styled.label`
   display: flex;
   flex-direction: column;
   width: 100%;
-  border: 1px solid ${({ theme }) => theme.colors.decors.grey};
+  border: 1px solid
+    ${({ theme, isError }) =>
+      isError ? theme.colors.decors.hoverError : theme.colors.decors.black};
   border-radius: 5px;
   margin-bottom: 1rem;
 
