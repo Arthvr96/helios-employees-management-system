@@ -3,6 +3,7 @@ import { useListUsers } from 'hooks/useListUsers';
 import { UserAvatar } from 'components/atoms/UserAvatar/UserAvatar';
 import SearchBar from 'components/organisms/SearchBar/SearchBar';
 import EditUserPopup from 'components/organisms/EditUserPopup/EditUserPopup';
+import PopupInfo from 'components/molecules/PopupInfo/PopupInfo';
 import { Wrapper, List, StyledTitle } from './ListUsers.style';
 
 const initState = {
@@ -24,7 +25,8 @@ const ListUsers = () => {
   const [filterOptions, setFilterOptions] = useState({ ...initState });
   const [editUserMode, setMode] = useState(false);
   const [selectedUser, setSelectedUser] = useState('');
-  const [comparisonObj, setComparisonObj] = useState(true);
+  const [triggerUpdateUsersList, setTriggerUpdateUsersList] = useState(true);
+  const [confirmDeletion, setConfirmDeletion] = useState({ id: '', status: false });
 
   const handleEditUserMode = (mode, id) => {
     if (mode) {
@@ -43,11 +45,11 @@ const ListUsers = () => {
   }, [respond]);
 
   useEffect(() => {
-    if (!comparisonObj) {
+    if (!triggerUpdateUsersList) {
       setUsersList(JSON.parse(localStorage.usersList));
-      setComparisonObj(true);
+      setTriggerUpdateUsersList(true);
     }
-  }, [comparisonObj]);
+  }, [triggerUpdateUsersList]);
 
   return (
     <>
@@ -55,8 +57,14 @@ const ListUsers = () => {
         selectedUser={selectedUser}
         handleEditUserMode={handleEditUserMode}
         isVisible={editUserMode}
-        comparisonObj={comparisonObj}
-        setComparisonObj={setComparisonObj}
+        triggerUpdateUsersList={setTriggerUpdateUsersList}
+        setConfirmDeletion={setConfirmDeletion}
+      />
+      <PopupInfo
+        isVisible={confirmDeletion.status}
+        handleConfirm={() => setConfirmDeletion({ id: '', status: false })}
+        title="Użytkownik usunięty"
+        subtitle={`Pamietaj aby usunąć użytkownika ręcznie z bazy danych firebase! id: ${confirmDeletion.id}`}
       />
       <Wrapper>
         <StyledTitle>{`Lista użytkowników (${usersList.length})`}</StyledTitle>
