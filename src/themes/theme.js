@@ -14,8 +14,8 @@ export const theme = {
     textTertiary: '#F40000',
 
     active: '#005EEB',
-    error: '#C70000',
-    success: '#00B227',
+    error: '#db0000',
+    success: '#05a500',
     bg: {
       primary: '#002047',
       secondary: '#ffffff',

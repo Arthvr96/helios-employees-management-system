@@ -133,6 +133,7 @@ const AuthProvider = ({ children }) => {
       .then(() => {
         sessionEnded = true;
         history.push('/login');
+        localStorage.clear();
         return signOut(auth);
       })
       .catch((error) => window.alert(error.code));

@@ -1,4 +1,13 @@
-import { collection, doc, getDocs, query, setDoc, where, updateDoc } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+  updateDoc,
+  deleteDoc,
+} from 'firebase/firestore';
 import { auth2, db } from 'api/firebase/firebase.config';
 import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import uniqid from 'uniqid';
@@ -12,6 +21,28 @@ export const managementUsers = () => {
       throw error;
     });
     return resond;
+  };
+
+  const deleteUser = async (id, dispoSendInfo) => {
+    await deleteDoc(doc(db, 'users', id)).catch((error) => {
+      window.alert(error.code);
+    });
+    await deleteDoc(doc(db, 'dispositionsSortedEmployees', id)).catch((error) => {
+      window.alert(error.code);
+    });
+
+    const obj = {};
+    for (const key in dispoSendInfo) {
+      if ({}.hasOwnProperty.call(dispoSendInfo, key)) {
+        if (key !== id) {
+          obj[key] = JSON.parse(JSON.stringify(dispoSendInfo[key]));
+        }
+      }
+    }
+    const userInfoRef = doc(db, 'statesApp', 'dispoSendInfo');
+    await setDoc(userInfoRef, obj).catch((error) => {
+      window.alert(error.code);
+    });
   };
 
   const createUser = async (values, workplaces, adminRole, dispoSendInfo) => {
@@ -164,5 +195,6 @@ export const managementUsers = () => {
   return {
     createUser,
     updateUserInfo,
+    deleteUser,
   };
 };

@@ -4,7 +4,7 @@ export const Wrapper = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: ${({ isVisible }) => (isVisible ? '500' : '-500')};
+  z-index: ${({ isVisible }) => (isVisible ? '3000' : '-500')};
   display: flex;
   opacity: ${({ isVisible }) => (isVisible ? '1' : '0')};
   justify-content: center;

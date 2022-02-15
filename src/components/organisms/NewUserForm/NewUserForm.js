@@ -32,44 +32,39 @@ const NewUserForm = () => {
 
   const onSubmit = async (values, actions) => {
     setProcessing(true);
-    const respond = await createUser(values, workplaces, adminRole, dispoSendInfo).then(
-      (respondObj) => {
-        setProcessing(false);
+    await createUser(values, workplaces, adminRole, dispoSendInfo).then((respondObj) => {
+      setProcessing(false);
+
+      if (respondObj.status) {
         const obj = {
           ...values,
           id: respondObj.uid,
           role: adminRole ? 'admin' : 'user',
           workplaces: { ...workplaces },
         };
-
         if (localStorage.usersList) {
           const usersList = JSON.parse(localStorage.usersList);
           usersList.push(obj);
           localStorage.setItem('usersList', JSON.stringify(usersList));
         }
-        return respondObj;
-      },
-    );
-
-    if (respond.status) {
-      setPopup(true);
-      actions.resetForm();
-    } else if (!respond.status) {
-      switch (respond.error) {
-        case 'auth/invalid-email':
-          setError('Nie poprawny email');
-          break;
-        case 'firestore/alias-already-in-use':
-          setError('Alias w użyciu');
-          break;
-        case 'auth/email-already-in-use':
-          setError('Email w użyciu');
-          break;
-        default:
-          setError(respond.error);
+        setPopup(true);
+        actions.resetForm();
+      } else if (!respondObj.status) {
+        switch (respondObj.error) {
+          case 'auth/invalid-email':
+            setError('Nie poprawny email');
+            break;
+          case 'firestore/alias-already-in-use':
+            setError('Alias w użyciu');
+            break;
+          case 'auth/email-already-in-use':
+            setError('Email w użyciu');
+            break;
+          default:
+            setError(respondObj.error);
+        }
       }
-    }
-    return null;
+    });
   };
 
   const handleResetError = () => {

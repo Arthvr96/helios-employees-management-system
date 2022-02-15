@@ -2,8 +2,10 @@ import styled from 'styled-components';
 import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
+import trashSvg from 'assets/trash.svg';
 
 export const StyledCardTemplate = styled(CardTemplate)`
+  position: relative;
   padding: 1rem 5rem;
 `;
 
@@ -49,4 +51,42 @@ export const Span = styled.span`
 export const WrapperButtons = styled.div`
   display: flex;
   margin: 2rem 0 1rem;
+
+  button {
+    margin-right: 1rem;
+  }
+`;
+
+export const DeleteAccButton = styled.button`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.7rem 1.5rem 0.7rem 3.5rem;
+  margin-top: 1rem;
+  border-radius: 5px;
+  border: 1px solid ${({ theme }) => theme.colors.decors.darkGrey};
+  background-color: ${({ theme }) => theme.colors.bg.darkGrey};
+  font-size: ${({ theme }) => theme.fontSize.xxs};
+  font-weight: ${({ theme }) => theme.fontWeight.regular};
+  color: ${({ theme }) => theme.colors.text.white};
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    transform: translateY(-50%);
+    background: url(${trashSvg}) no-repeat;
+  }
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.error};
+    border: 1px solid ${({ theme }) => theme.colors.error};
+  }
 `;

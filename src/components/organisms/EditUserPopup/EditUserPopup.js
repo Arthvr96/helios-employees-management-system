@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import PopupWrapper from 'components/atoms/PopupWrapper/PopupWrapper';
 import { Button } from 'components/atoms/Button/Button';
@@ -6,6 +6,8 @@ import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import { UserAvatar } from 'components/atoms/UserAvatar/UserAvatar';
 import WorkplacesSwitchersList from 'components/molecules/WorkplacesSwitchersList/WorkplacesSwitchersList';
 import { managementUsers } from 'functions/managementUsers';
+import PopupConfirm from 'components/molecules/PopupConfirm/PopupConfirm';
+import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import {
   StyledCardTemplate,
   StyledTitle,
@@ -13,13 +15,22 @@ import {
   ListValues,
   Span,
   WrapperButtons,
+  DeleteAccButton,
 } from './EditUserPopup.style';
 
-const EditUserPopup = ({ selectedUser, handleEditUserMode, isVisible, setComparisonObj }) => {
+const EditUserPopup = ({
+  selectedUser,
+  handleEditUserMode,
+  isVisible,
+  triggerUpdateUsersList,
+  setConfirmDeletion,
+}) => {
   const [user, setUser] = useState({});
+  const [popupToggle, setPopupToggle] = useState(false);
   const [workplaces, setWorkplaces] = useState({});
   const { getUserInfo } = useAuth();
-  const { updateUserInfo } = managementUsers();
+  const { dispoSendInfo } = useContext(AdminStateContext);
+  const { updateUserInfo, deleteUser } = managementUsers();
 
   const getValues = (values) => {
     setWorkplaces({ ...values });
@@ -45,14 +56,24 @@ const EditUserPopup = ({ selectedUser, handleEditUserMode, isVisible, setCompari
           );
           newUsersList.push({ ...user, workplaces: { ...workplaces } });
           localStorage.setItem('usersList', JSON.stringify(newUsersList));
-          setComparisonObj(false);
+          triggerUpdateUsersList(false);
         })
         .catch((error) => {
           window.alert(error.code);
         });
     } else {
-      setComparisonObj(false);
+      triggerUpdateUsersList(false);
     }
+  };
+
+  const handleDeleteUser = () => {
+    deleteUser(user.id, dispoSendInfo).then(() => {
+      const newUsersList = JSON.parse(localStorage.usersList).filter((item) => item.id !== user.id);
+      localStorage.setItem('usersList', JSON.stringify(newUsersList));
+      triggerUpdateUsersList(false);
+      handleEditUserMode(false);
+      setConfirmDeletion({ id: user.id, status: true });
+    });
   };
 
   useEffect(() => {
@@ -79,14 +100,14 @@ const EditUserPopup = ({ selectedUser, handleEditUserMode, isVisible, setCompari
         if ({}.hasOwnProperty.call(userLocalStorage, key)) {
           if (typeof userLocalStorage[key] !== 'object') {
             if (userLocalStorage[key] !== user[key]) {
-              setComparisonObj(false);
+              triggerUpdateUsersList(false);
               comparison = false;
             }
           } else if (typeof userLocalStorage[key] === 'object') {
             for (const keyNested in userLocalStorage[key]) {
               if ({}.hasOwnProperty.call(userLocalStorage[key], keyNested)) {
                 if (userLocalStorage[key][keyNested] !== user[key][keyNested]) {
-                  setComparisonObj(false);
+                  triggerUpdateUsersList(false);
                   comparison = false;
                 }
               }
@@ -106,6 +127,13 @@ const EditUserPopup = ({ selectedUser, handleEditUserMode, isVisible, setCompari
 
   return (
     <PopupWrapper isVisible={isVisible}>
+      <PopupConfirm
+        isVisible={popupToggle}
+        handleConfirm={handleDeleteUser}
+        handleCancel={() => setPopupToggle(false)}
+        title="Usuwanie użytkownika"
+        subtitle={`Czy napewno chcesz usunąc użytkownika : ${user.firstName} ${user.lastName}`}
+      />
       <StyledCardTemplate>
         <StyledTitle fontSize="l">Profil użytkownika</StyledTitle>
         <UserAvatar bgColor="#002047" size="xl">
@@ -124,6 +152,9 @@ const EditUserPopup = ({ selectedUser, handleEditUserMode, isVisible, setCompari
           <li>Uprawnienia </li>
         </ListValues>
         <WorkplacesSwitchersList initState={user.workplaces} getValues={getValues} />
+        <DeleteAccButton type="click" onClick={() => setPopupToggle(true)}>
+          usuń użytkownika
+        </DeleteAccButton>
         <WrapperButtons>
           <Button type="button" onClick={handleUpdate}>
             Zapisz
@@ -143,5 +174,6 @@ EditUserPopup.propTypes = {
   selectedUser: PropTypes.string,
   handleEditUserMode: PropTypes.func.isRequired,
   isVisible: PropTypes.bool.isRequired,
-  setComparisonObj: PropTypes.func.isRequired,
+  triggerUpdateUsersList: PropTypes.func.isRequired,
+  setConfirmDeletion: PropTypes.func.isRequired,
 };
