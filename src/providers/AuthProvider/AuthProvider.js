@@ -39,6 +39,10 @@ const AuthProvider = ({ children }) => {
     return docSnap;
   };
 
+  const addBasicInfo = async (values) => {
+    return setDoc(doc(db, 'basicInfo', values.email), values);
+  };
+
   const logIn = async (email, password) => {
     setInProgress(true);
     await signInWithEmailAndPassword(auth, email, password)
@@ -180,6 +184,7 @@ const AuthProvider = ({ children }) => {
     resetPassword,
     handleSetAppState,
     getUserInfo,
+    addBasicInfo,
   };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
