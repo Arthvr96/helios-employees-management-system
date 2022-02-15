@@ -28,13 +28,11 @@ const BasicForm = ({ handleBasicForm, setIsVisible, handleConfirm }) => {
   const onSubmit = async (values, { resetForm }) => {
     setInProgress(true);
     await addBasicInfo(values)
-      .then((respond) => {
-        if (respond) {
-          resetForm();
-          setInProgress(false);
-          setIsVisible(true);
-          setError(null);
-        }
+      .then(() => {
+        resetForm();
+        setInProgress(false);
+        setIsVisible(true);
+        setError(null);
       })
       .catch((error) => {
         setError('Email juz w użyciu');
