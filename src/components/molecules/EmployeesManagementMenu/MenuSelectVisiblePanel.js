@@ -8,9 +8,8 @@ const MenuSelectVisiblePanel = ({ state, handleClick, links }) => {
     <CardTemplate margin="0 0 2rem 0">
       <CardNav>
         {links.map((el) => (
-          <li>
+          <li key={el[0]}>
             <CardNavButton
-              key={el[0]}
               onClick={() => {
                 handleClick(el[0]);
               }}
