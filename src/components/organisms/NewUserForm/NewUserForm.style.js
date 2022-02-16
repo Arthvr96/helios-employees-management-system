@@ -50,7 +50,6 @@ export const WrapperAdmin = styled.div`
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 3rem;
 `;
 
 export const WrapperInputs = styled.div`

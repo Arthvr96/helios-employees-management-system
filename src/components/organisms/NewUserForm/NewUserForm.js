@@ -10,6 +10,7 @@ import ToggleButtonNew from 'components/molecules/ToggleButtonNew/ToggleButtonNe
 import WorkplacesSwitchersList from 'components/molecules/WorkplacesSwitchersList/WorkplacesSwitchersList';
 import LoaderRing from 'components/atoms/LoaderRing/LoaderRing';
 import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
+import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import {
   StyledForm,
   WrapperLabel,
@@ -92,7 +93,7 @@ const NewUserForm = () => {
   };
 
   return (
-    <>
+    <CardTemplate>
       <PopupInfo
         isVisible={popup}
         handleConfirm={() => setPopup(false)}
@@ -221,7 +222,7 @@ const NewUserForm = () => {
           }}
         </Formik>
       </Wrapper>
-    </>
+    </CardTemplate>
   );
 };
 

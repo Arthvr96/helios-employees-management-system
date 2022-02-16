@@ -1,5 +1,20 @@
 import styled from 'styled-components';
 
+export const CardNav = styled.ul`
+  position: relative;
+  display: flex;
+  list-style: none;
+
+  li {
+    padding: 0 1rem;
+    border-right: 1px solid ${({ theme }) => theme.colors.decors.darkGrey};
+  }
+
+  li:last-child {
+    border: none;
+  }
+`;
+
 export const CardNavButton = styled.button`
   padding: 1rem 1.5rem;
   background-color: ${({ theme, isSelected }) =>

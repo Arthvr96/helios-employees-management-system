@@ -1,28 +1,30 @@
 import React, { useState } from 'react';
-import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import ViewTemplate from 'components/templates/ViewTemplate/ViewTemplate';
-import EmployeesManagementMenu from 'components/molecules/EmployeesManagementMenu/EmployeesManagementMenu';
+import MenuSelectVisiblePanel from 'components/molecules/EmployeesManagementMenu/MenuSelectVisiblePanel';
 import NewUserForm from 'components/organisms/NewUserForm/NewUserForm';
 import ListUsers from 'components/organisms/ListUsers/ListUsers';
 
-const EmployeesView = () => {
-  const [state, setState] = useState('');
+const links = [
+  ['1', 'Stwórz nowe konto'],
+  ['2', 'Lista kont użytkowników'],
+];
 
-  const handleClick = (name) => {
-    if (state === name) {
-      setState('');
-    } else if (state !== name) {
-      setState(name);
+const EmployeesView = () => {
+  const [page, setPage] = useState('0');
+
+  const handleSetPage = (nrPage) => {
+    if (page === nrPage) {
+      setPage('0');
+    } else if (page !== nrPage) {
+      setPage(nrPage);
     }
   };
 
   return (
-    <ViewTemplate>
-      <CardTemplate>
-        <EmployeesManagementMenu handleClick={handleClick} state={state} />
-        {state === 'new' ? <NewUserForm /> : null}
-        {state === 'list' ? <ListUsers /> : null}
-      </CardTemplate>
+    <ViewTemplate flexDirection="column" alignItems="center" justifyContent="flex-start">
+      <MenuSelectVisiblePanel handleClick={handleSetPage} state={page} links={links} />
+      {page === '1' ? <NewUserForm /> : null}
+      {page === '2' ? <ListUsers /> : null}
     </ViewTemplate>
   );
 };

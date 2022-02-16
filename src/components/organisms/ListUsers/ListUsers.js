@@ -4,6 +4,7 @@ import { UserAvatar } from 'components/atoms/UserAvatar/UserAvatar';
 import SearchBar from 'components/organisms/SearchBar/SearchBar';
 import EditUserPopup from 'components/organisms/EditUserPopup/EditUserPopup';
 import PopupInfo from 'components/molecules/PopupInfo/PopupInfo';
+import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import { Wrapper, List, StyledTitle } from './ListUsers.style';
 
 const initState = {
@@ -52,7 +53,7 @@ const ListUsers = () => {
   }, [triggerUpdateUsersList]);
 
   return (
-    <>
+    <CardTemplate>
       <EditUserPopup
         selectedUser={selectedUser}
         handleEditUserMode={handleEditUserMode}
@@ -95,7 +96,7 @@ const ListUsers = () => {
           ))}
         </List>
       </Wrapper>
-    </>
+    </CardTemplate>
   );
 };
 
