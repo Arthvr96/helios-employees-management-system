@@ -3,8 +3,8 @@ import { NavigationListWrapper, NavigationItem, StyledLink } from './NavigationL
 
 const LINKS = [
   ['dashboard', '/admin/dashboard'],
-  ['szablon grafiku', '/admin/schemaView'],
-  ['generator grafiku', '/admin/graphGeneratorView'],
+  ['dyspozycje i grafiki', '/admin/dispoSchedule'],
+  ['generator grafiku', '/admin/scheduleGenerator'],
   ['pracownicy', '/admin/employeesView'],
 ];
 
