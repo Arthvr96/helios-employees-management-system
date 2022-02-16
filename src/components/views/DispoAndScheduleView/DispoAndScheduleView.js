@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import ViewTemplate from 'components/templates/ViewTemplate/ViewTemplate';
 import MenuSelectVisiblePanel from 'components/molecules/EmployeesManagementMenu/MenuSelectVisiblePanel';
-import NewUserForm from 'components/organisms/NewUserForm/NewUserForm';
-import ListUsers from 'components/organisms/ListUsers/ListUsers';
+import DispositionsArchive from 'components/organisms/DispositionsArchive/DispositionsArchive';
 
 const links = [
-  ['1', 'Stwórz nowe konto'],
-  ['2', 'Lista kont użytkowników'],
+  ['1', 'Wysłane dyspozycje'],
+  ['2', 'Grafiki'],
 ];
 
-const EmployeesView = () => {
+const DispoAndScheduleView = () => {
   const [page, setPage] = useState('0');
 
   const handleSetPage = (nrPage) => {
@@ -22,11 +21,10 @@ const EmployeesView = () => {
 
   return (
     <ViewTemplate flexDirection="column" alignItems="center" justifyContent="flex-start">
-      <MenuSelectVisiblePanel handleClick={handleSetPage} state={page} links={links} />
-      {page === '1' ? <NewUserForm /> : null}
-      {page === '2' ? <ListUsers /> : null}
+      <MenuSelectVisiblePanel links={links} state={page} handleClick={handleSetPage} />
+      {page === '1' ? <DispositionsArchive /> : null}
     </ViewTemplate>
   );
 };
 
-export default EmployeesView;
+export default DispoAndScheduleView;

@@ -4,9 +4,9 @@ import TableEmployess from 'components/organisms/TableEmployees/TableEmployess';
 import { getNameShift, getHourFormat } from 'generatorGraph/helpers';
 import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import { csvGenerator } from 'generatorGraph/csvGenerator';
-import { Wrapper, WrapperButtons, Button, WrapperTabs } from './GraphGeneratorView.style';
+import { Wrapper, WrapperButtons, Button, WrapperTabs } from './ScheduleGenerator.style';
 
-const GraphGeneratorView = () => {
+const ScheduleGenerator = () => {
   const { employeesDispo, shiftsSchema, graph, handleGenerateGraph, handleClearState } =
     useContext(AdminStateContext);
 
@@ -82,4 +82,4 @@ const GraphGeneratorView = () => {
   );
 };
 
-export default GraphGeneratorView;
+export default ScheduleGenerator;
