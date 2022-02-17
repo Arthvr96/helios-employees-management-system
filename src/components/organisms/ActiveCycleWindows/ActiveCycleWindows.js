@@ -1,46 +1,46 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import BlockDispoSendingWindow from 'components/molecules/BlockDispoSendingWindow/BlockDispoSendingWindow';
-import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
+import { useAdminContext } from 'providers/AuthProvider/AdminStateProvider/AdminStateProvider';
 import DropDownListWindow from '../DropDownListWindow/DropDownListWindow';
 import { WrapperWindows, WrapperDropDownWindows } from './ActiveCycleWindows.style';
 
-const TITLEDROPDOWN1 = 'Pracownicy, którzy nie wysłali dyspo';
-const TITLEDROPDOWN2 = 'Pracownicy, którzy wysłali dyspo';
-const EMPLOYEES1 = new Array(5);
-EMPLOYEES1.fill('x');
-const EMPLOYEES2 = new Array(35);
-EMPLOYEES2.fill('x');
+const titleDropDown1 = 'Pracownicy, którzy nie wysłali dyspo';
+const titleDropDown2 = 'Pracownicy, którzy wysłali dyspo';
 
 const ActiveCycleWindows = () => {
-  const [peopleWhoSendDyspo, setList1] = useState(null);
-  const [peopleWhoDontSendDyspo, setList2] = useState(null);
-  const { dispoSendInfo } = useContext(AdminStateContext);
+  const [peopleWhoSendDispo, setPeopleWhoSendDispo] = useState(null);
+  const [peopleWhoDontSendDispo, setList2] = useState(null);
+  const { dispoSendInfo } = useAdminContext();
 
   useEffect(() => {
-    if (dispoSendInfo) {
-      const list1 = [];
-      const list2 = [];
-      for (const key in dispoSendInfo) {
-        if (dispoSendInfo[key].status) {
-          list1.push(dispoSendInfo[key].info);
-        } else if (!dispoSendInfo[key].status) {
-          list2.push(dispoSendInfo[key].info);
+    // Sorting on employees who sent and didn't send disposition
+    const sortingEmployees = () => {
+      if (dispoSendInfo) {
+        const list1 = [];
+        const list2 = [];
+        for (const key in dispoSendInfo) {
+          if (dispoSendInfo[key].status) {
+            list1.push(dispoSendInfo[key].info);
+          } else if (!dispoSendInfo[key].status) {
+            list2.push(dispoSendInfo[key].info);
+          }
         }
+        setPeopleWhoSendDispo([...list1]);
+        setList2([...list2]);
       }
-      setList1([...list1]);
-      setList2([...list2]);
-    }
+    };
+    sortingEmployees();
   }, [dispoSendInfo]);
 
   return (
     <WrapperWindows>
       <BlockDispoSendingWindow />
       <WrapperDropDownWindows>
-        {peopleWhoDontSendDyspo ? (
-          <DropDownListWindow title={TITLEDROPDOWN1} data={peopleWhoDontSendDyspo} />
+        {peopleWhoDontSendDispo ? (
+          <DropDownListWindow title={titleDropDown1} data={peopleWhoDontSendDispo} />
         ) : null}
-        {peopleWhoSendDyspo ? (
-          <DropDownListWindow title={TITLEDROPDOWN2} data={peopleWhoSendDyspo} />
+        {peopleWhoSendDispo ? (
+          <DropDownListWindow title={titleDropDown2} data={peopleWhoSendDispo} />
         ) : null}
       </WrapperDropDownWindows>
     </WrapperWindows>

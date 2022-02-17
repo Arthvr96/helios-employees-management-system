@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { managementUsers } from 'functions/managementUsers';
@@ -9,8 +9,9 @@ import PopupInfo from 'components/molecules/PopupInfo/PopupInfo';
 import ToggleButtonNew from 'components/molecules/ToggleButtonNew/ToggleButtonNew';
 import WorkplacesSwitchersList from 'components/molecules/WorkplacesSwitchersList/WorkplacesSwitchersList';
 import LoaderRing from 'components/atoms/LoaderRing/LoaderRing';
-import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
+import { useAdminContext } from 'providers/AuthProvider/AdminStateProvider/AdminStateProvider';
+import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import {
   StyledForm,
   WrapperLabel,
@@ -29,11 +30,12 @@ const NewUserForm = () => {
   const [adminRole, setAdminRole] = useState(false);
   const [workplaces, setWorkplaces] = useState({});
   const { createUser } = managementUsers();
-  const { dispoSendInfo } = useContext(AdminStateContext);
+  const { dispoSendInfo } = useAdminContext();
+  const { appState } = useAuth();
 
   const onSubmit = async (values, actions) => {
     setProcessing(true);
-    await createUser(values, workplaces, adminRole, dispoSendInfo).then((respondObj) => {
+    await createUser(values, workplaces, adminRole, dispoSendInfo, appState).then((respondObj) => {
       setProcessing(false);
 
       if (respondObj.status) {

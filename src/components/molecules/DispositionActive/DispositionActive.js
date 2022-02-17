@@ -11,7 +11,7 @@ import { dispositionSortedEmployeesFunctions } from 'functions/dispositionSorted
 const DispositionActive = () => {
   const { appState, currentUser } = useAuth();
   const [cycleData, setCycleData] = useState({});
-  const [dispoSanded, setDispoSanded] = useState(false);
+  const [dispoSent, setDispoSent] = useState(false);
   const [page, setPage] = useState('dispoDashboard');
   const { createNewCycle, getEmployeeDispositions, updateDispoSendInfo } =
     dispositionSortedEmployeesFunctions();
@@ -25,7 +25,7 @@ const DispositionActive = () => {
   };
 
   const handleCreateNewCycle = () => {
-    if (!cycleData) {
+    if (!cycleData.day1) {
       const cycleId = `${appState.date1}-${appState.date2}`;
       createNewCycle(currentUser.id, cycleId)
         .then((cycleSchema) => {
@@ -42,9 +42,9 @@ const DispositionActive = () => {
 
   useEffect(() => {
     if (appState.state === 'active' && cycleData) {
-      setDispoSanded(true);
+      setDispoSent(true);
     } else if (appState.state === 'active' && !cycleData) {
-      setDispoSanded(false);
+      setDispoSent(false);
     }
   }, [cycleData]);
 
@@ -89,7 +89,7 @@ const DispositionActive = () => {
               handleCreateNewCycle();
             }}
           >
-            {dispoSanded ? 'Edytuj dyspozycje' : 'Wyślij dyspozycje'}
+            {dispoSent ? 'Edytuj dyspozycje' : 'Wyślij dyspozycje'}
           </Button>
         </>
       ) : null}

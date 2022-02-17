@@ -5,17 +5,20 @@ import DashboardView from 'components/views/DashboardView/DashboardView';
 import DispoAndScheduleView from 'components/views/DispoAndScheduleView/DispoAndScheduleView';
 import ScheduleGeneratorView from 'components/views/ScheduleGeneratorView/ScheduleGeneratorView';
 import EmployeesView from 'components/views/EmployeesView/EmployessView';
-import AdminStateProvider from 'providers/AdminStateProvider/AdminStateProvider';
+import OLDAdminStateProvider from 'providers/OLDAdminStateProvider/OLDAdminStateProvider';
+import AdminStateProvider from 'providers/AuthProvider/AdminStateProvider/AdminStateProvider';
 
 const AdminPanel = () => {
   return (
     <MainTemplate>
-      <AdminStateProvider>
-        <Route exact path="/admin/dashboard" component={DashboardView} />
-        <Route exact path="/admin/dispoSchedule" component={DispoAndScheduleView} />
-        <Route exact path="/admin/scheduleGenerator" component={ScheduleGeneratorView} />
-        <Route exact path="/admin/employeesView" component={EmployeesView} />
-      </AdminStateProvider>
+      <OLDAdminStateProvider>
+        <AdminStateProvider>
+          <Route exact path="/admin/dashboard" component={DashboardView} />
+          <Route exact path="/admin/dispoSchedule" component={DispoAndScheduleView} />
+          <Route exact path="/admin/scheduleGenerator" component={ScheduleGeneratorView} />
+          <Route exact path="/admin/employeesView" component={EmployeesView} />
+        </AdminStateProvider>
+      </OLDAdminStateProvider>
     </MainTemplate>
   );
 };

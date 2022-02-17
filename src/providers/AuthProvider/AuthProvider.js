@@ -24,12 +24,7 @@ const AuthProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState(false);
   const [inProgress, setInProgress] = useState(false);
   const [appState, setAppState] = useState({});
-
   const history = useHistory();
-
-  const _updateAppState = (id, data) => {
-    return setDoc(doc(db, 'statesApp', id), data);
-  };
 
   const getUserInfo = async (id) => {
     const docRef = doc(db, 'users', id);
@@ -40,6 +35,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const addBasicInfo = async (values) => {
+    // in the future to delete.
     return setDoc(doc(db, 'basicInfo', values.email), values);
   };
 
@@ -63,6 +59,7 @@ const AuthProvider = ({ children }) => {
         setAuthAdmin(false);
         setAuthUser(false);
         localStorage.clear();
+        history.push('/login');
       })
       .catch((error) => {
         window.alert(`Wylogowanie nie powiodło się | Error-code : ${error.code}`);
@@ -85,44 +82,18 @@ const AuthProvider = ({ children }) => {
     return respond;
   };
 
-  const handleSetAppState = async (switcher, week) => {
-    if (switcher === 'newCycle') {
-      await _updateAppState('cycleState', {
-        ...appState,
-        state: 'active',
-        date1: week.date1,
-        date2: week.date2,
-      }).catch((error) => {
-        window.alert(error.code);
-      });
-    }
-    if (switcher === 'blockCycle') {
-      await _updateAppState('cycleState', {
-        ...appState,
-        state: 'blocked',
-      }).catch((error) => {
-        window.alert(error.code);
-      });
-    }
-    if (switcher === 'endCycle') {
-      await _updateAppState('cycleState', {
-        ...appState,
-        state: 'nonActive',
-        date1: '',
-        date2: '',
-        lastDate1: appState.date1,
-        lastDate2: appState.date2,
-      }).catch((error) => {
-        window.alert(error.code);
-      });
-    }
-  };
-
   useEffect(() => {
+    // Run after signIn.
+    // Method observe statesApp/cycleState in firestore and update appState on any change.
+
     let unsub = () => {};
     if (authAdmin || authUser) {
       unsub = onSnapshot(doc(db, 'statesApp', 'cycleState'), (item) => {
         setAppState({ ...item.data() });
+        if (item.data().state === 'blocked') {
+          localStorage.removeItem('options');
+          localStorage.removeItem('dispoRespond');
+        }
       });
     }
 
@@ -132,11 +103,16 @@ const AuthProvider = ({ children }) => {
   }, [authAdmin, authUser]);
 
   useEffect(() => {
+    // Run on app start.
+    // setPersistence method listening on end of session (session ends whenever browser get refresh or user close the tab with app).
+    // onAuthStateChanged - method which observe changes on auth object.
+    // After signIn, script check role of signed user.
+
     let sessionEnded = false;
+
     setPersistence(auth, browserSessionPersistence)
       .then(() => {
         sessionEnded = true;
-        history.push('/login');
         localStorage.clear();
         return signOut(auth);
       })
@@ -182,7 +158,6 @@ const AuthProvider = ({ children }) => {
     logIn,
     logOut,
     resetPassword,
-    handleSetAppState,
     getUserInfo,
     addBasicInfo,
   };

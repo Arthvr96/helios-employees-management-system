@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import PopupWrapper from 'components/atoms/PopupWrapper/PopupWrapper';
 import { Button } from 'components/atoms/Button/Button';
@@ -7,7 +7,7 @@ import { UserAvatar } from 'components/atoms/UserAvatar/UserAvatar';
 import WorkplacesSwitchersList from 'components/molecules/WorkplacesSwitchersList/WorkplacesSwitchersList';
 import { managementUsers } from 'functions/managementUsers';
 import PopupConfirm from 'components/molecules/PopupConfirm/PopupConfirm';
-import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
+import { useAdminContext } from 'providers/AuthProvider/AdminStateProvider/AdminStateProvider';
 import {
   StyledCardTemplate,
   StyledTitle,
@@ -29,7 +29,7 @@ const EditUserPopup = ({
   const [popupToggle, setPopupToggle] = useState(false);
   const [workplaces, setWorkplaces] = useState({});
   const { getUserInfo } = useAuth();
-  const { dispoSendInfo } = useContext(AdminStateContext);
+  const { dispoSendInfo } = useAdminContext();
   const { updateUserInfo, deleteUser } = managementUsers();
 
   const getValues = (values) => {

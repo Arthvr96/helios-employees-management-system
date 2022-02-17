@@ -1,13 +1,13 @@
-import React, { useContext, useState } from 'react';
-import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
+import React, { useState } from 'react';
 import SchemaGraphForm from 'components/organisms/SchemaGraphForm/SchemaGraphForm';
 import SchemaGraphMenu from 'components/organisms/SchemaGrahpMenu/SchemaGraphMenu';
 import SchemaCreatorDisabled from 'components/molecules/SchemaCreatorDisabled/SchemaCreatorDisabled';
 // import { schema } from 'data/schema1';
+import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import { Wrapper } from './SchemaGenerator.style';
 
 const SchemaView = () => {
-  const { cycleState } = useContext(AdminStateContext);
+  const { appState } = useAuth();
   const [createSchema, setCreateSchema] = useState(false);
 
   const handleCreateSchema = (option) => {
@@ -16,10 +16,10 @@ const SchemaView = () => {
 
   return (
     <Wrapper>
-      {!createSchema && cycleState !== 'new' ? (
+      {!createSchema && appState.state !== 'nonActive' ? (
         <SchemaGraphMenu handleCreateSchema={handleCreateSchema} />
       ) : null}
-      {cycleState === 'blocked' ? <SchemaCreatorDisabled /> : null}
+      {appState.state === 'nonActive' ? <SchemaCreatorDisabled /> : null}
       {createSchema ? <SchemaGraphForm setCreateSchema={setCreateSchema} /> : null}
     </Wrapper>
   );

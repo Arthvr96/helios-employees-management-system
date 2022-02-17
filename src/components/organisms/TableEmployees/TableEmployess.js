@@ -1,7 +1,7 @@
 import TableEmployee from 'components/molecules/TableEmployee/TableEmployee';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
+import { OLDAdminStateContext } from 'providers/OLDAdminStateProvider/OLDAdminStateProvider';
 
 const Table = styled.table`
   position: absolute;
@@ -28,7 +28,7 @@ const Table = styled.table`
 `;
 
 const TableEmployess = () => {
-  const { employeesDispo } = useContext(AdminStateContext);
+  const { employeesDispo } = useContext(OLDAdminStateContext);
   React.useEffect(() => {
     const table = document.querySelector('.tableEmployeeDispo');
 

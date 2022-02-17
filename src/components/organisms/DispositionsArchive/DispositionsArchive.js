@@ -4,21 +4,53 @@ import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import InputSelect from 'components/atoms/InputSelect/InputSelect';
 import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import { Button } from 'components/atoms/Button/Button';
-import { dispoExample } from 'components/organisms/DispositionsArchive/alias';
+import { collection, getDocs, query } from 'firebase/firestore';
+import { db } from 'api/firebase/firebase.config';
 import { WrapperWindows, Wrapper, Table } from './DispositionsArchive.style';
-
-const values = ['Aktualny-01-02-2022-07-02-2022', '08-02-2022-15-02-2022', '16-02-2022-23-02-2022'];
 
 const DispositionsArchive = () => {
   const [selectedCycle, setSelectedCycle] = useState('selectCycle');
   const [dispoRespond, setDispoRespond] = useState(null);
+  const [selectedDispo, setSelectedDispo] = useState(null);
+  const [options, setOptions] = useState(null);
 
   const handleGetDisposition = () => {
-    setDispoRespond(JSON.parse(dispoExample));
+    setSelectedDispo(Object.values(dispoRespond[selectedCycle]));
   };
 
   useEffect(() => {
-    setDispoRespond(null);
+    if (!localStorage.options && !localStorage.dispoRespond) {
+      const q = query(collection(db, 'dispositionsSortedByCycles'));
+      getDocs(q)
+        .then((docs) => {
+          const dispoObj = {};
+          const optionsArr = [];
+          docs.forEach((el) => {
+            dispoObj[el.id] = el.data();
+            optionsArr.push(el.id);
+          });
+          optionsArr.sort((a, b) => {
+            const date1 = new Date(a.slice(0, 10));
+            const date2 = new Date(b.slice(0, 10));
+
+            return date2 - date1;
+          });
+          setOptions(optionsArr);
+          setDispoRespond(dispoObj);
+          localStorage.setItem('options', JSON.stringify(optionsArr));
+          localStorage.setItem('dispoRespond', JSON.stringify(dispoObj));
+        })
+        .catch((error) => {
+          window.alert(error.code);
+        });
+    } else {
+      setOptions(JSON.parse(localStorage.options));
+      setDispoRespond(JSON.parse(localStorage.dispoRespond));
+    }
+  }, []);
+
+  useEffect(() => {
+    setSelectedDispo(null);
   }, [selectedCycle]);
 
   const getShiftName = (dispo) => {
@@ -58,7 +90,7 @@ const DispositionsArchive = () => {
           </CardSubtitle>
           <InputSelect
             margin="1rem 0 0 0"
-            values={values}
+            values={options}
             value={selectedCycle}
             handleChange={setSelectedCycle}
           />
@@ -71,39 +103,51 @@ const DispositionsArchive = () => {
           Wyświetl dyspozycje
         </Button>
       </CardTemplate>
-      {dispoRespond ? (
+      {selectedDispo ? (
         <CardTemplate margin="0 0 0 3rem">
           <CardTitle margin="0 0 2rem 0">{selectedCycle}</CardTitle>
-          {dispoRespond ? (
-            <Table>
-              <thead>
-                <tr>
-                  <th>Alias</th>
-                  <th>PT</th>
-                  <th>SB</th>
-                  <th>ND</th>
-                  <th>PN</th>
-                  <th>WT</th>
-                  <th>SR</th>
-                  <th>CZ</th>
+          <Table>
+            <thead>
+              <tr>
+                <th>Alias</th>
+                <th>PT</th>
+                <th>SB</th>
+                <th>ND</th>
+                <th>PN</th>
+                <th>WT</th>
+                <th>SR</th>
+                <th>CZ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedDispo.map((dispo) => (
+                <tr key={dispo.alias} className={!dispo.disposition.day1 ? 'notSent' : 'sent'}>
+                  <td className="alias">{dispo.alias}</td>
+                  {dispo.disposition.day1 ? (
+                    <>
+                      <td>{getShiftName(dispo.disposition.day1)}</td>
+                      <td>{getShiftName(dispo.disposition.day2)}</td>
+                      <td>{getShiftName(dispo.disposition.day3)}</td>
+                      <td>{getShiftName(dispo.disposition.day4)}</td>
+                      <td>{getShiftName(dispo.disposition.day5)}</td>
+                      <td>{getShiftName(dispo.disposition.day6)}</td>
+                      <td>{getShiftName(dispo.disposition.day7)}</td>
+                    </>
+                  ) : (
+                    <>
+                      <td>C</td>
+                      <td>C</td>
+                      <td>C</td>
+                      <td>C</td>
+                      <td>C</td>
+                      <td>C</td>
+                      <td>C</td>
+                    </>
+                  )}
                 </tr>
-              </thead>
-              <tbody>
-                {dispoRespond.map((dispo) => (
-                  <tr key={dispo.alias}>
-                    <td className="alias">{dispo.alias}</td>
-                    <td>{getShiftName(dispo.disposition.day1)}</td>
-                    <td>{getShiftName(dispo.disposition.day2)}</td>
-                    <td>{getShiftName(dispo.disposition.day3)}</td>
-                    <td>{getShiftName(dispo.disposition.day4)}</td>
-                    <td>{getShiftName(dispo.disposition.day5)}</td>
-                    <td>{getShiftName(dispo.disposition.day6)}</td>
-                    <td>{getShiftName(dispo.disposition.day7)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          ) : null}
+              ))}
+            </tbody>
+          </Table>
         </CardTemplate>
       ) : null}
     </WrapperWindows>

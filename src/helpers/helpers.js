@@ -29,46 +29,12 @@ export const getPolishDayName = (dayName) => {
   return polishDayName;
 };
 
-export const randomColor = () => {
-  const number = Math.floor(Math.random() * 10);
-  let color;
-
-  switch (number) {
-    case 0:
-      color = '132469';
-      break;
-    case 1:
-      color = '2A50E8';
-      break;
-    case 2:
-      color = '29366B';
-      break;
-    case 3:
-      color = '213EB5';
-      break;
-    case 4:
-      color = '3C1369';
-      break;
-    case 5:
-      color = '03690C';
-      break;
-    case 6:
-      color = '6821B5';
-      break;
-    case 7:
-      color = '694803';
-      break;
-    case 8:
-      color = 'E82A2A';
-      break;
-    case 9:
-      color = '6B2222';
-      break;
-    case 10:
-      color = 'B52121';
-      break;
-    default:
-      color = 'E8A107';
-  }
-  return color;
+export const dispoPlaceholder = {
+  day1: ['freeDay', '8', '30', false, false],
+  day2: ['freeDay', '8', '30', false, false],
+  day3: ['freeDay', '8', '30', false, false],
+  day4: ['freeDay', '8', '30', false, false],
+  day5: ['freeDay', '8', '30', false, false],
+  day6: ['freeDay', '8', '30', false, false],
+  day7: ['freeDay', '8', '30', false, false],
 };
