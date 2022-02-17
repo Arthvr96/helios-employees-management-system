@@ -2,13 +2,13 @@ import React, { useContext, useEffect } from 'react';
 import TableGraph from 'components/organisms/TableGraph/TableGraph';
 import TableEmployess from 'components/organisms/TableEmployees/TableEmployess';
 import { getNameShift, getHourFormat } from 'generatorGraph/helpers';
-import { AdminStateContext } from 'providers/AdminStateProvider/AdminStateProvider';
+import { OLDAdminStateContext } from 'providers/OLDAdminStateProvider/OLDAdminStateProvider';
 import { csvGenerator } from 'generatorGraph/csvGenerator';
 import { Wrapper, WrapperButtons, Button, WrapperTabs } from './ScheduleGenerator.style';
 
 const ScheduleGenerator = () => {
   const { employeesDispo, shiftsSchema, graph, handleGenerateGraph, handleClearState } =
-    useContext(AdminStateContext);
+    useContext(OLDAdminStateContext);
 
   useEffect(() => {
     const days = Object.keys(graph);

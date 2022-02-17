@@ -1,15 +1,6 @@
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from 'api/firebase/firebase.config';
-
-const docSchema = {
-  day1: ['freeDay', '8', '30', false, false],
-  day2: ['freeDay', '8', '30', false, false],
-  day3: ['freeDay', '8', '30', false, false],
-  day4: ['freeDay', '8', '30', false, false],
-  day5: ['freeDay', '8', '30', false, false],
-  day6: ['freeDay', '8', '30', false, false],
-  day7: ['freeDay', '8', '30', false, false],
-};
+import { dispoPlaceholder } from 'helpers/helpers';
 
 export const dispositionSortedEmployeesFunctions = () => {
   const getEmployeeDispositions = async (id) => {
@@ -26,9 +17,9 @@ export const dispositionSortedEmployeesFunctions = () => {
 
   const createNewCycle = async (id, date) => {
     const docRef = doc(db, 'dispositionsSortedEmployees', id);
-    const docSnap = await updateDoc(docRef, { [date]: docSchema })
+    const docSnap = await updateDoc(docRef, { [date]: dispoPlaceholder })
       .then(() => {
-        return docSchema;
+        return dispoPlaceholder;
       })
       .catch((error) => {
         throw error;

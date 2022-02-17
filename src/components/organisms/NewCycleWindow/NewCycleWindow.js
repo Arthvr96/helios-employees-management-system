@@ -9,17 +9,11 @@ import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
 import PopupConfirm from 'components/molecules/PopupConfirm/PopupConfirm';
 import { useAuth } from 'providers/AuthProvider/AuthProvider';
+import { useAdminContext } from 'providers/AuthProvider/AdminStateProvider/AdminStateProvider';
 import { StyledForm, ErrorMessages } from './NewCycleWindow.style';
-
-const initialValues = {
-  date1: '',
-  date2: '',
-};
 
 const NewCycleForm = ({ onSubmit }) => {
   const { appState } = useAuth();
-
-  // TODO: add calendar picker
 
   const handleValidation = Yup.object().shape({
     date1: Yup.date()
@@ -56,14 +50,21 @@ const NewCycleForm = ({ onSubmit }) => {
           const date1 = new Date(context.parent.date1).getTime();
           const date2 = new Date(value).getTime();
           const numberOfDays = (date2 - date1) / dayMiliseconds + 1;
-          return numberOfDays === 7;
+          return numberOfDays > 6.7 && numberOfDays < 7.7;
         }
         return null;
       }),
   });
 
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={handleValidation}>
+    <Formik
+      initialValues={{
+        date1: appState.lastDate2,
+        date2: appState.lastDate2,
+      }}
+      onSubmit={onSubmit}
+      validationSchema={handleValidation}
+    >
       {({ values, touched, errors, isSubmitting, handleChange, handleSubmit, handleBlur }) => (
         <StyledForm onSubmit={handleSubmit}>
           <label htmlFor="date1">
@@ -115,7 +116,8 @@ const TITLEPOPUP = 'Czy napewno chcesz zacząć nowy okres dla grafiku?';
 const SUBTITLEPOPUP = 'Wybrany okres to : ';
 
 const NewCycleWindow = () => {
-  const { handleSetAppState } = useAuth();
+  const { appState } = useAuth();
+  const { handleChangeCycleState } = useAdminContext();
   const [isVisible, setVisible] = useState(false);
   const [valuesForm, setValuesForm] = useState({ date1: '', date2: '' });
 
@@ -131,7 +133,7 @@ const NewCycleWindow = () => {
 
   const handleConfirm = () => {
     toggleVisible();
-    handleSetAppState('newCycle', valuesForm);
+    handleChangeCycleState('newCycle', valuesForm);
   };
 
   return (
@@ -146,6 +148,7 @@ const NewCycleWindow = () => {
       <CardTemplate>
         <CardTitle>{TITLE}</CardTitle>
         <CardSubtitle>{SUBTITLE}</CardSubtitle>
+        <CardSubtitle>{`Ostatni wybrany okres: ${appState.lastDate1} - ${appState.lastDate2}`}</CardSubtitle>
         <NewCycleForm toggleVisible={toggleVisible} onSubmit={handleSubmit} />
       </CardTemplate>
     </>

@@ -11,16 +11,17 @@ import {
 import { auth2, db } from 'api/firebase/firebase.config';
 import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import uniqid from 'uniqid';
+import { dispoPlaceholder } from 'helpers/helpers';
 
 export const managementUsers = () => {
   const updateUserInfo = async (id, values) => {
     const userInfoRef = doc(db, 'users', id);
-    const resond = await updateDoc(userInfoRef, {
+    const respond = await updateDoc(userInfoRef, {
       ...values,
     }).catch((error) => {
       throw error;
     });
-    return resond;
+    return respond;
   };
 
   const deleteUser = async (id, dispoSendInfo) => {
@@ -45,7 +46,7 @@ export const managementUsers = () => {
     });
   };
 
-  const createUser = async (values, workplaces, adminRole, dispoSendInfo) => {
+  const createUser = async (values, workplaces, adminRole, dispoSendInfo, appState) => {
     const checkAlias = async () => {
       let respond = false;
       if (!adminRole) {
@@ -125,7 +126,7 @@ export const managementUsers = () => {
 
     const addUserToDispoDb = async (uid) => {
       let respond;
-      await setDoc(doc(db, 'dispositionsSortedEmployees', uid), {})
+      await setDoc(doc(db, 'dispositionsSortedEmployees', uid), { alias: values.alias })
         .then(() => {
           respond = {
             uid,
@@ -169,6 +170,35 @@ export const managementUsers = () => {
       return respond;
     };
 
+    const addCycleToDispoDb = async (uid) => {
+      let respond;
+      const date = `${appState.date1}-${appState.date2}`;
+      let data = {};
+      if (appState.state === 'blocked') {
+        data = {
+          [date]: dispoPlaceholder,
+        };
+      } else if (appState.state === 'active') {
+        data = {
+          [date]: {},
+        };
+      }
+      await updateDoc(doc(db, 'dispositionsSortedEmployees', uid), data)
+        .then(() => {
+          respond = {
+            uid,
+            status: true,
+          };
+        })
+        .catch((error) => {
+          respond = {
+            status: false,
+            error: error.code,
+          };
+        });
+      return respond;
+    };
+
     const respondCheckAlias = await checkAlias();
     const respondCreateAuthUser = respondCheckAlias
       ? await createAuthUser(values.email)
@@ -187,6 +217,10 @@ export const managementUsers = () => {
 
     if (respondAddUserInfo.status) {
       respondAddUserInfo = await addUserToDispoSendInfoDb(respondCreateAuthUser.uid);
+    }
+
+    if (respondAddUserInfo.status && appState.state !== 'nonActive') {
+      respondAddUserInfo = await addCycleToDispoDb(respondCreateAuthUser.uid);
     }
 
     return respondAddUserInfo;

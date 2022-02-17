@@ -25,4 +25,10 @@ export const Table = styled.table`
     font-weight: ${({ theme }) => theme.fontWeight.light};
     color: ${({ theme }) => theme.colors.text.black};
   }
+
+  tr.notSent {
+    td {
+      background-color: ${({ theme }) => theme.colors.error};
+    }
+  }
 `;

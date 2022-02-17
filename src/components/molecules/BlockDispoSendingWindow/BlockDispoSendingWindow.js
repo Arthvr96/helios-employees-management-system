@@ -5,21 +5,24 @@ import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
+import { useAdminContext } from 'providers/AuthProvider/AdminStateProvider/AdminStateProvider';
 
 const TITLEPOPUP = 'Czy napewno chcesz zablokować wysyłanie dyspozycji?';
 
 const BlockDispoSendingWindow = () => {
-  const { appState, handleSetAppState } = useAuth();
+  const { appState } = useAuth();
+  const { handleChangeCycleState } = useAdminContext();
   const [isVisible, setVisible] = useState(false);
 
   const handleConfirm = () => {
     toggleVisible();
-    handleSetAppState('blockCycle');
+    handleChangeCycleState('blockSendingDisposition');
   };
 
   const toggleVisible = () => {
     setVisible(!isVisible);
   };
+
   return (
     <>
       <PopupConfirm
