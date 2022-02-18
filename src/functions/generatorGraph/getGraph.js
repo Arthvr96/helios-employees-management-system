@@ -1,6 +1,6 @@
-import { getPeoplePerShift } from 'generatorGraph/getPeoplePerShift';
-import { getShiftPriority } from 'generatorGraph/getShiftPriority';
-import { getEmployeeDispo, getNameShift } from './helpers';
+import { getPeoplePerShift } from 'functions/generatorGraph/getPeoplePerShift';
+import { getShiftPriority } from 'functions/generatorGraph/getShiftPriority';
+import { getEmployeeDispo, getNameShift } from 'functions/generatorGraph/helpers';
 
 // creating strcuture for everyone day which will reflect the structure of shifts from shiftsSchema
 const createStructureOfGraph = (days, peoplePerShift, graph) => {

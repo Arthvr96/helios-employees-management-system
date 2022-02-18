@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { getEmployeeInfo } from 'generatorGraph/helpers';
+import { getEmployeeInfo } from 'functions/generatorGraph/helpers';
 import { OLDAdminStateContext } from 'providers/OLDAdminStateProvider/OLDAdminStateProvider';
 import { Employee, Avatar, Wrapper, AvatarFullName, AvatarMail } from './EmployeeListItem.style';
 

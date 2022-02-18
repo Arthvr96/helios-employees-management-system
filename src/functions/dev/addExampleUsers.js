@@ -1,4 +1,4 @@
-import { exampleUsers } from 'devData/exampleUsers';
+import { exampleUsers } from 'data/exampleUsers';
 import { managementUsers } from 'functions/managementUsers';
 import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import { db } from 'api/firebase/firebase.config';

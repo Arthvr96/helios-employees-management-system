@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from 'react';
 import TableGraph from 'components/organisms/TableGraph/TableGraph';
 import TableEmployess from 'components/organisms/TableEmployees/TableEmployess';
-import { getNameShift, getHourFormat } from 'generatorGraph/helpers';
+import { getNameShift, getHourFormat } from 'functions/generatorGraph/helpers';
 import { OLDAdminStateContext } from 'providers/OLDAdminStateProvider/OLDAdminStateProvider';
-import { csvGenerator } from 'generatorGraph/csvGenerator';
+import { csvGenerator } from 'functions/generatorGraph/csvGenerator';
 import { Wrapper, WrapperButtons, Button, WrapperTabs } from './ScheduleGenerator.style';
 
 const ScheduleGenerator = () => {

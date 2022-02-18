@@ -1,4 +1,4 @@
-import { getEmployeeInfo } from './helpers';
+import { getEmployeeInfo } from 'functions/generatorGraph/helpers';
 
 const validateEmployee = (nameEmployee, workplaceID, shiftEnd, employeesInfo) => {
   const { bar1, bar2, obs1, obs2, coffee, tickets, sex } = getEmployeeInfo(

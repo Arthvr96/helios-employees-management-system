@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { cmsResponseEmployeesDispo } from 'data/cmsResponseEmployeesDispo';
 import { cmsResponseShiftsSchema } from 'data/cmsResponseShiftsSchema';
 import { cmsResponseEmployeesInfo } from 'data/cmsResponseEmployeesInfo';
-import { getGraph } from 'generatorGraph/getGraph';
+import { getGraph } from 'functions/generatorGraph/getGraph';
 
 export const OLDAdminStateContext = createContext({ cycleState: '', changeCycle: () => {} });
 
