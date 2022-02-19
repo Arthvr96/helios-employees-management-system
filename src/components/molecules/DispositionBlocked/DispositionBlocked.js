@@ -1,12 +1,12 @@
 import React from 'react';
-import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import { StyledStrong } from 'components/atoms/StyledStrong/StyledStrong';
+import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 
 const DispositionBlocked = () => {
-  const { appState } = useAuth();
+  const { appState } = useGlobalState();
   return (
     <CardTemplate>
       <CardTitle>Wysyłanie dyspo zablokowane!</CardTitle>

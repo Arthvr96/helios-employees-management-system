@@ -5,7 +5,6 @@ export const Wrapper = styled.ul`
   list-style: none;
   padding-top: 1rem;
   columns: 2;
-
   li {
     display: flex;
     justify-content: space-between;
@@ -14,12 +13,10 @@ export const Wrapper = styled.ul`
     font-size: ${({ theme }) => theme.fontSize.s};
     font-weight: ${({ theme }) => theme.fontWeight.light};
     color: ${({ theme }) => theme.colors.text.black};
-
     span {
       margin-right: 1rem;
     }
   }
-
   li:last-child {
     margin-bottom: 0;
   }

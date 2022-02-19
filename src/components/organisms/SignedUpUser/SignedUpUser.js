@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useAuth } from 'providers/AuthProvider/AuthProvider';
-import { ArrowIcone } from 'components/atoms/ArowIcone/ArowIcone';
+import { ArrowIcon } from 'components/atoms/ArowIcone/ArowIcon';
 import { UserAvatar } from 'components/atoms/UserAvatar/UserAvatar';
+import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 import {
   UserNavWrapper,
   User,
@@ -14,7 +14,7 @@ import {
 
 const SignedUpUser = () => {
   const [isOpen, setOpen] = useState(false);
-  const { currentUser, logOut } = useAuth();
+  const { currentUser, handleLogOut } = useGlobalState();
   const { email, firstName, lastName } = currentUser;
 
   return (
@@ -28,12 +28,12 @@ const SignedUpUser = () => {
           <span>{firstName && firstName.slice(0, 3)}</span>
           <span>{lastName && lastName.slice(0, 3)}</span>
         </UserAvatar>
-        <ArrowIcone isRotate={isOpen} isReversed />
+        <ArrowIcon isRotate={isOpen} isReversed />
       </User>
       <UserMenu isOpen={isOpen}>
         <div>
           <LinkButton type="button">Ustawienia</LinkButton>
-          <LinkButton type="button" onClick={logOut}>
+          <LinkButton type="button" onClick={handleLogOut}>
             Wyloguj
           </LinkButton>
         </div>

@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import ViewTemplate from 'components/templates/ViewTemplate/ViewTemplate';
 import NavigationListUser from 'components/molecules/NavigationListUser/NavigationListUser';
+import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 import { Wrapper, SignOutButton } from './HamburgerMenu.style';
 
 const HamburgerMenu = ({ isOpen, handleCloseHamburger }) => {
-  const { logOut } = useAuth();
+  const { handleLogOut } = useGlobalState();
   return (
     <Wrapper isOpen={isOpen}>
       <ViewTemplate
@@ -16,7 +16,7 @@ const HamburgerMenu = ({ isOpen, handleCloseHamburger }) => {
         alignItems="center"
       >
         <NavigationListUser handleCloseHamburger={handleCloseHamburger} />
-        <SignOutButton type="button" onClick={logOut}>
+        <SignOutButton type="button" onClick={handleLogOut}>
           Wyloguj
         </SignOutButton>
       </ViewTemplate>

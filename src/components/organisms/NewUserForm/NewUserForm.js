@@ -6,12 +6,12 @@ import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { ErrorMsg } from 'components/atoms/ErrorMsg/ErrorMsg';
 import { InputForm } from 'components/atoms/InputForm/InputForm';
 import PopupInfo from 'components/molecules/PopupInfo/PopupInfo';
-import ToggleButtonNew from 'components/molecules/ToggleButtonNew/ToggleButtonNew';
+import ToggleButton from 'components/molecules/ToggleButton/ToggleButton';
 import WorkplacesSwitchersList from 'components/molecules/WorkplacesSwitchersList/WorkplacesSwitchersList';
 import LoaderRing from 'components/atoms/LoaderRing/LoaderRing';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
-import { useAdminContext } from 'providers/AuthProvider/AdminStateProvider/AdminStateProvider';
-import { useAuth } from 'providers/AuthProvider/AuthProvider';
+import { useAdminContext } from 'providers/AdminStateProvider/AdminStateProvider';
+import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 import {
   StyledForm,
   WrapperLabel,
@@ -31,7 +31,7 @@ const NewUserForm = () => {
   const [workplaces, setWorkplaces] = useState({});
   const { createUser } = managementUsers();
   const { dispoSendInfo } = useAdminContext();
-  const { appState } = useAuth();
+  const { appState } = useGlobalState();
 
   const onSubmit = async (values, actions) => {
     setProcessing(true);
@@ -115,7 +115,7 @@ const NewUserForm = () => {
               <StyledForm onSubmit={handleSubmit} onClick={handleResetError}>
                 <WrapperAdmin>
                   Administrator :
-                  <ToggleButtonNew
+                  <ToggleButton
                     onClick={() => setAdminRole(!adminRole)}
                     type="button"
                     state={adminRole}

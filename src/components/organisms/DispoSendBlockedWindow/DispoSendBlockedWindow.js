@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PopupConfirm from 'components/molecules/PopupConfirm/PopupConfirm';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
-import { useAdminContext } from 'providers/AuthProvider/AdminStateProvider/AdminStateProvider';
+import { useAdminContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import {
   StyledSubTitle,
   StyledCardTemplate,
