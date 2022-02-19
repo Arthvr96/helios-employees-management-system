@@ -6,11 +6,15 @@ import {
   signOut,
 } from 'firebase/auth';
 import { auth, db } from 'api/firebase/firebase.config';
-import { doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot, query, collection, where, getDocs } from 'firebase/firestore';
 
-const firestore = {
+const firestoreConstants = {
   paths: {
     users: 'users',
+  },
+  roles: {
+    admin: 'admin',
+    user: 'user',
   },
 };
 
@@ -20,10 +24,32 @@ const __handleGetDoc__ = (collectionName, documentName) => {
   return getDoc(doc(db, collectionName, documentName));
 };
 
+const __hadnleGetDocs__ = async (collectionName, fieldPath, opStr, value) => {
+  let q;
+
+  if (fieldPath !== undefined && opStr !== undefined && value !== undefined) {
+    q = query(collection(db, collectionName), where(fieldPath, opStr, value));
+  } else {
+    q = query(collection(db, collectionName));
+  }
+
+  return getDocs(q);
+};
+
 // firestore requests
 
 const getUserInfo = (id) => {
-  return __handleGetDoc__(firestore.paths.users, id);
+  return __handleGetDoc__(firestoreConstants.paths.users, id);
+};
+
+const getEmployeesList = async () => {
+  const employeesList = await __hadnleGetDocs__(
+    firestoreConstants.paths.users,
+    'role',
+    '==',
+    firestoreConstants.roles.user,
+  );
+  return employeesList;
 };
 
 // auth functions
@@ -75,6 +101,7 @@ const resetPassword = async (email) => {
 };
 
 const heliosAppSdk = {
+  firestoreConstants,
   auth: {
     logIn,
     logOut,
@@ -84,6 +111,7 @@ const heliosAppSdk = {
   },
   firestore: {
     getUserInfo,
+    getEmployeesList,
   },
 };
 

@@ -34,7 +34,12 @@ const SignInForm = ({ handleChangePage }) => {
         setInProgress(false);
       })
       .catch((error) => {
-        setError('Zły login lub/i hasło');
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+          setError('Zły login lub/i hasło');
+        } else {
+          setError('Błąd logowania');
+        }
+        window.alert(`Błąd krytyczny logowania : ${error.code}`);
         setInProgress(false);
         resetForm();
       });

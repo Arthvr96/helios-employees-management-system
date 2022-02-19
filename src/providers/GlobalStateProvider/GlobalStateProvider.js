@@ -20,9 +20,9 @@ const GlobalStateProvider = ({ children }) => {
   const handleLogIn = (email, password) => {
     return logIn(email, password).then((userInfo) => {
       setCurrentUser(userInfo);
-      if (userInfo.role === 'admin') {
+      if (userInfo.role === heliosAppSdk.firestoreConstants.roles.admin) {
         setAuthAdmin(true);
-      } else if (userInfo.role === 'user') {
+      } else if (userInfo.role === heliosAppSdk.firestoreConstants.roles.user) {
         setAuthUser(true);
       }
     });
