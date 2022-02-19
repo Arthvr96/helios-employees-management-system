@@ -5,7 +5,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { theme } from 'themes/theme';
 import { GlobalStyle } from 'themes/GlobalStyles';
-import AuthProvider from 'providers/AuthProvider/AuthProvider';
+import GlobalStateProvider from 'providers/GlobalStateProvider/GlobalStateProvider';
 
 const Providers = ({ children }) => {
   return (
@@ -13,7 +13,7 @@ const Providers = ({ children }) => {
       <Router>
         <ThemeProvider theme={theme}>
           <GlobalStyle />
-          <AuthProvider>{children}</AuthProvider>
+          <GlobalStateProvider>{children}</GlobalStateProvider>
         </ThemeProvider>
       </Router>
     </SEO>

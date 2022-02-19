@@ -8,12 +8,12 @@ import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
 import PopupConfirm from 'components/molecules/PopupConfirm/PopupConfirm';
-import { useAuth } from 'providers/AuthProvider/AuthProvider';
-import { useAdminContext } from 'providers/AuthProvider/AdminStateProvider/AdminStateProvider';
+import { useAdminContext } from 'providers/AdminStateProvider/AdminStateProvider';
+import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 import { StyledForm, ErrorMessages } from './NewCycleWindow.style';
 
 const NewCycleForm = ({ onSubmit }) => {
-  const { appState } = useAuth();
+  const { appState } = useGlobalState();
 
   const handleValidation = Yup.object().shape({
     date1: Yup.date()
@@ -116,7 +116,7 @@ const TITLEPOPUP = 'Czy napewno chcesz zacząć nowy okres dla grafiku?';
 const SUBTITLEPOPUP = 'Wybrany okres to : ';
 
 const NewCycleWindow = () => {
-  const { appState } = useAuth();
+  const { appState } = useGlobalState();
   const { handleChangeCycleState } = useAdminContext();
   const [isVisible, setVisible] = useState(false);
   const [valuesForm, setValuesForm] = useState({ date1: '', date2: '' });

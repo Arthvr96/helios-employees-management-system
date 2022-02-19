@@ -10,8 +10,8 @@ import ToggleButtonNew from 'components/molecules/ToggleButtonNew/ToggleButtonNe
 import WorkplacesSwitchersList from 'components/molecules/WorkplacesSwitchersList/WorkplacesSwitchersList';
 import LoaderRing from 'components/atoms/LoaderRing/LoaderRing';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
-import { useAdminContext } from 'providers/AuthProvider/AdminStateProvider/AdminStateProvider';
-import { useAuth } from 'providers/AuthProvider/AuthProvider';
+import { useAdminContext } from 'providers/AdminStateProvider/AdminStateProvider';
+import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 import {
   StyledForm,
   WrapperLabel,
@@ -31,7 +31,7 @@ const NewUserForm = () => {
   const [workplaces, setWorkplaces] = useState({});
   const { createUser } = managementUsers();
   const { dispoSendInfo } = useAdminContext();
-  const { appState } = useAuth();
+  const { appState } = useGlobalState();
 
   const onSubmit = async (values, actions) => {
     setProcessing(true);

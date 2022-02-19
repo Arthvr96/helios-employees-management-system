@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import DispoForm from 'components/organisms/DispoForm/DispoForm';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
@@ -7,9 +6,10 @@ import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import { Button } from 'components/atoms/Button/Button';
 import { StyledStrong } from 'components/atoms/StyledStrong/StyledStrong';
 import { dispositionSortedEmployeesFunctions } from 'functions/dispositionSortedEmployeesFunctions';
+import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 
 const DispositionActive = () => {
-  const { appState, currentUser } = useAuth();
+  const { appState, currentUser } = useGlobalState();
   const [cycleData, setCycleData] = useState({});
   const [dispoSent, setDispoSent] = useState(false);
   const [page, setPage] = useState('dispoDashboard');

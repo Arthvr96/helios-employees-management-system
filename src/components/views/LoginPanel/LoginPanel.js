@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import ViewTemplate from 'components/templates/ViewTemplate/ViewTemplate';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import LoginPanelForm from 'components/organisms/LoginPanelForm/LoginPanelForm';
-import BasicForm from 'components/organisms/BasicForm/BasicForm';
 import PopupInfo from 'components/molecules/PopupInfo/PopupInfo';
-import { StyledTitle, Version, Copyrights, StyledSubTitle, Wrapper } from './LoginPanel.style';
+import { StyledTitle, Version, Copyrights, Wrapper } from './LoginPanel.style';
 
 const LoginPanel = () => {
-  const [isVisibile, setIsVisible] = useState(false);
-  const [basicForm, setBasicForm] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [isResetPassword, setResetPassword] = useState(false);
 
   const handleChangePage = () => {
@@ -17,43 +15,22 @@ const LoginPanel = () => {
 
   const handleConfirm = () => {
     setIsVisible(false);
-    setBasicForm(false);
   };
 
   return (
     <ViewTemplate navMargin="0" alignItems="center">
-      {!basicForm ? (
-        <CardTemplate>
-          <Wrapper>
-            <StyledTitle>{isResetPassword ? 'Zresetuj hasło' : 'Logowanie'}</StyledTitle>
-            <LoginPanelForm
-              isResetPassword={isResetPassword}
-              handleChangePage={handleChangePage}
-              handleBasicForm={() => setBasicForm(true)}
-            />
-            <Version>v0.1</Version>
-          </Wrapper>
-        </CardTemplate>
-      ) : null}
-      {basicForm ? (
-        <CardTemplate>
-          <StyledTitle>Zgłoś swój email i dane</StyledTitle>
-          <StyledSubTitle>
-            Na podstawie tych danych bedą tworzone konta, Prosze o poprawne wypełnienie formularza
-            bez śmieszków 💩
-          </StyledSubTitle>
-          <BasicForm
-            handleBasicForm={setBasicForm}
-            setIsVisible={setIsVisible}
-            handleConfirm={handleConfirm}
-          />
-        </CardTemplate>
-      ) : null}
+      <CardTemplate>
+        <Wrapper>
+          <StyledTitle>{isResetPassword ? 'Zresetuj hasło' : 'Logowanie'}</StyledTitle>
+          <LoginPanelForm isResetPassword={isResetPassword} handleChangePage={handleChangePage} />
+          <Version>v0.1</Version>
+        </Wrapper>
+      </CardTemplate>
       <Copyrights>
         © All rights reserved | <span>Created by Artur Chmielewski</span>
       </Copyrights>
       <PopupInfo
-        isVisible={isVisibile}
+        isVisible={isVisible}
         handleConfirm={handleConfirm}
         title="Dane zostały wysłane"
         subtitle="W przyszłosci za pomocą maila będziesz logować sie do systemu, wczesniej będzie trzeba zresetować hasło"

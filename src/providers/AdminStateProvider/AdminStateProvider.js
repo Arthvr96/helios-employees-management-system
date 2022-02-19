@@ -2,8 +2,8 @@ import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { db } from 'api/firebase/firebase.config';
-import { useAuth } from 'providers/AuthProvider/AuthProvider';
-import { functionsAdminStateProvider } from 'providers/AuthProvider/AdminStateProvider/FunctionsAdminStateProvider';
+import { functionsAdminStateProvider } from 'providers/AdminStateProvider/FunctionsAdminStateProvider';
+import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 
 const AdminContext = React.createContext({});
 
@@ -12,7 +12,7 @@ export const useAdminContext = () => {
 };
 
 const AdminStateProvider = ({ children }) => {
-  const { appState, authAdmin } = useAuth();
+  const { appState, authAdmin } = useGlobalState();
   const [dispoSendInfo, setDispoSendInfo] = useState({});
   const {
     handleClearDispoSendList,

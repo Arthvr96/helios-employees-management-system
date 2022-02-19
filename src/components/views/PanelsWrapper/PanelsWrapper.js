@@ -1,16 +1,16 @@
 import React, { useEffect, Suspense, lazy } from 'react';
 import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
-import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import LoaderRing from 'components/atoms/LoaderRing/LoaderRing';
 import ViewTemplate from 'components/templates/ViewTemplate/ViewTemplate';
 import LoginPanel from 'components/views/LoginPanel/LoginPanel';
 import Site404 from 'components/templates/Site404/Site404';
+import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 
 const AdminPanel = lazy(() => import('components/views/AdminPanel/AdminPanel'));
 const UserPanel = lazy(() => import('components/views/UserPanel/UserPanel'));
 
 const PanelsWrapper = () => {
-  const { authUser, authAdmin, currentUser } = useAuth();
+  const { authUser, authAdmin, currentUser } = useGlobalState();
   const history = useHistory();
 
   const goToRoute = (routeName) => {

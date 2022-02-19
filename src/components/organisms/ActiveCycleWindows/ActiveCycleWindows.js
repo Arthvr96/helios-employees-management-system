@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import BlockDispoSendingWindow from 'components/molecules/BlockDispoSendingWindow/BlockDispoSendingWindow';
-import { useAdminContext } from 'providers/AuthProvider/AdminStateProvider/AdminStateProvider';
+import { useAdminContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import DropDownListWindow from '../DropDownListWindow/DropDownListWindow';
 import { WrapperWindows, WrapperDropDownWindows } from './ActiveCycleWindows.style';
 

@@ -8,13 +8,13 @@ import {
 import DispoFormDay from 'components/molecules/DispoFormDay/DispoFormDay';
 import LoaderRing from 'components/atoms/LoaderRing/LoaderRing';
 import { Button } from 'components/atoms/Button/Button';
-import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import PropTypes from 'prop-types';
 import { dispositionSortedEmployeesFunctions } from 'functions/dispositionSortedEmployeesFunctions';
+import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 import { Wrapper, StyledForm } from './DispoForm.style';
 
 const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
-  const { currentUser, appState } = useAuth();
+  const { currentUser, appState } = useGlobalState();
   const [days, setDays] = useState([]);
   const [inProgress, setInProgress] = useState(false);
   const [radioValues, setRadioValues] = useState(initRadio);

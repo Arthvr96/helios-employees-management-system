@@ -6,7 +6,7 @@ import DispoAndScheduleView from 'components/views/DispoAndScheduleView/DispoAnd
 import ScheduleGeneratorView from 'components/views/ScheduleGeneratorView/ScheduleGeneratorView';
 import EmployeesView from 'components/views/EmployeesView/EmployessView';
 import OLDAdminStateProvider from 'providers/OLDAdminStateProvider/OLDAdminStateProvider';
-import AdminStateProvider from 'providers/AuthProvider/AdminStateProvider/AdminStateProvider';
+import AdminStateProvider from 'providers/AdminStateProvider/AdminStateProvider';
 
 const AdminPanel = () => {
   return (

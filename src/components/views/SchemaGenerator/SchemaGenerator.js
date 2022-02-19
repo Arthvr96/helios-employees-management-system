@@ -3,11 +3,11 @@ import SchemaGraphForm from 'components/organisms/SchemaGraphForm/SchemaGraphFor
 import SchemaGraphMenu from 'components/organisms/SchemaGrahpMenu/SchemaGraphMenu';
 import SchemaCreatorDisabled from 'components/molecules/SchemaCreatorDisabled/SchemaCreatorDisabled';
 // import { schema } from 'data/schema1';
-import { useAuth } from 'providers/AuthProvider/AuthProvider';
+import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 import { Wrapper } from './SchemaGenerator.style';
 
 const SchemaView = () => {
-  const { appState } = useAuth();
+  const { appState } = useGlobalState();
   const [createSchema, setCreateSchema] = useState(false);
 
   const handleCreateSchema = (option) => {

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { useAuth } from 'providers/AuthProvider/AuthProvider';
 import { ErrorMsg } from 'components/atoms/ErrorMsg/ErrorMsg';
 import { InputForm } from 'components/atoms/InputForm/InputForm';
 import LoaderRing from 'components/atoms/LoaderRing/LoaderRing';
 import PropTypes from 'prop-types';
 import PopupInfo from 'components/molecules/PopupInfo/PopupInfo';
+import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 import {
   SignInButton,
   StyledForm,
@@ -16,23 +16,27 @@ import {
   SignInWrapper,
 } from './LoginPanelForm.style';
 
-const SignInForm = ({ handleChangePage, handleBasicForm }) => {
-  const { logIn, inProgress } = useAuth();
-  const [errorSignin, setError] = useState(null);
+const SignInForm = ({ handleChangePage }) => {
+  const { handleLogIn } = useGlobalState();
+  const [errorLogIn, setError] = useState(null);
+  const [inProgress, setInProgress] = useState(false);
 
   const handleClearError = () => {
-    if (errorSignin) {
+    if (errorLogIn) {
       setError(null);
     }
   };
 
-  const onSubmit = async ({ email, password }, { resetForm, setSubmitting }) => {
-    logIn(email, password)
+  const onSubmit = ({ email, password }, { resetForm }) => {
+    setInProgress(true);
+    handleLogIn(email, password)
       .then(() => {
-        setError(null);
+        setInProgress(false);
       })
-      .catch(() => {
-        setError('Login lub/i hasło jest/są błędne');
+      .catch((error) => {
+        setError('Zły login lub/i hasło');
+        setInProgress(false);
+        resetForm();
       });
   };
 
@@ -50,7 +54,7 @@ const SignInForm = ({ handleChangePage, handleBasicForm }) => {
       {({ values, touched, errors, isSubmitting, handleChange, handleBlur, handleSubmit }) => {
         return (
           <StyledForm onSubmit={handleSubmit} onClick={handleClearError}>
-            {errorSignin && <ErrorMsg>{errorSignin}</ErrorMsg>}
+            {errorLogIn && <ErrorMsg>{errorLogIn}</ErrorMsg>}
             <label htmlFor="email">
               <Wrapper>
                 Email{errors.email && touched.email ? <ErrorMsg>{errors.email}</ErrorMsg> : null}
@@ -93,9 +97,6 @@ const SignInForm = ({ handleChangePage, handleBasicForm }) => {
                 <ResetPasswordButton type="button" onClick={handleChangePage}>
                   odzyskaj haslo
                 </ResetPasswordButton>
-                <ResetPasswordButton type="button" onClick={handleBasicForm}>
-                  Zgłoś emaila
-                </ResetPasswordButton>
               </>
             )}
           </StyledForm>
@@ -107,12 +108,12 @@ const SignInForm = ({ handleChangePage, handleBasicForm }) => {
 
 SignInForm.propTypes = {
   handleChangePage: PropTypes.func.isRequired,
-  handleBasicForm: PropTypes.func.isRequired,
 };
 
 const ResetPasswordForm = ({ handleChangePage }) => {
-  const { inProgress, resetPassword } = useAuth();
-  const [errorSignin, setError] = useState(null);
+  const [inProgress, setInProgress] = useState(false);
+  const { handleResetPassword } = useGlobalState();
+  const [errorResetPassword, setError] = useState(null);
   const [popup, setPopup] = useState(false);
 
   const handleConfirm = () => {
@@ -121,18 +122,21 @@ const ResetPasswordForm = ({ handleChangePage }) => {
   };
 
   const handleClearError = () => {
-    if (errorSignin) {
+    if (errorResetPassword) {
       setError(null);
     }
   };
 
   const onSubmit = ({ email, password }, { resetForm, setSubmitting }) => {
-    resetPassword(email)
+    setInProgress(true);
+    handleResetPassword(email)
       .then((respond) => {
+        setInProgress(false);
         setPopup(true);
         setError(null);
       })
       .catch((error) => {
+        setInProgress(false);
         if (error.code === 'auth/user-not-found') {
           setError('Nie znaleziono użytkownika');
         } else {
@@ -161,7 +165,7 @@ const ResetPasswordForm = ({ handleChangePage }) => {
         {({ values, touched, errors, isSubmitting, handleChange, handleBlur, handleSubmit }) => {
           return (
             <StyledForm onSubmit={handleSubmit} onClick={handleClearError}>
-              {errorSignin && <ErrorMsg>{errorSignin}</ErrorMsg>}
+              {errorResetPassword && <ErrorMsg>{errorResetPassword}</ErrorMsg>}
               <label htmlFor="email">
                 <Wrapper>
                   Email{errors.email && touched.email ? <ErrorMsg>{errors.email}</ErrorMsg> : null}
@@ -201,12 +205,10 @@ ResetPasswordForm.propTypes = {
   handleChangePage: PropTypes.func.isRequired,
 };
 
-const LoginPanelForm = ({ isResetPassword, handleChangePage, handleBasicForm }) => {
+const LoginPanelForm = ({ isResetPassword, handleChangePage }) => {
   return (
     <SignInWrapper>
-      {!isResetPassword && (
-        <SignInForm handleChangePage={handleChangePage} handleBasicForm={handleBasicForm} />
-      )}
+      {!isResetPassword && <SignInForm handleChangePage={handleChangePage} />}
       {isResetPassword && <ResetPasswordForm handleChangePage={handleChangePage} />}
     </SignInWrapper>
   );
@@ -217,5 +219,4 @@ export default LoginPanelForm;
 LoginPanelForm.propTypes = {
   isResetPassword: PropTypes.bool.isRequired,
   handleChangePage: PropTypes.func.isRequired,
-  handleBasicForm: PropTypes.func.isRequired,
 };
