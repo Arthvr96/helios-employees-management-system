@@ -2,15 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ButtonActive } from './ToggleButton.style';
 
-const ToggleButton = ({ buttonState, setButtonState }) => {
+const ToggleButton = ({ type, state, onClick }) => {
   return (
-    <ButtonActive
-      state={buttonState}
-      onClick={() => {
-        setButtonState(!buttonState);
-      }}
-    >
-      <span>{buttonState ? 'ON' : 'OFF'}</span>
+    <ButtonActive type={type} state={state} onClick={onClick}>
+      <span>{state ? 'ON' : 'OFF'}</span>
     </ButtonActive>
   );
 };
@@ -18,6 +13,7 @@ const ToggleButton = ({ buttonState, setButtonState }) => {
 export default ToggleButton;
 
 ToggleButton.propTypes = {
-  buttonState: PropTypes.bool.isRequired,
-  setButtonState: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired,
+  state: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import ToggleButtonNew from 'components/molecules/ToggleButtonNew/ToggleButtonNew';
+import ToggleButton from 'components/molecules/ToggleButton/ToggleButton';
 import { Wrapper } from './WorkplacesSwitchersList.style';
 
 const INITSTATE = {
@@ -47,7 +47,7 @@ const WorkplacesSwitchersList = ({ getValues, initState, nightClose = true }) =>
       {BUTTONS.map((item) => (
         <li key={item[0]}>
           <span>{item[1]} :</span>
-          <ToggleButtonNew
+          <ToggleButton
             onClick={() => handleSetRole(item[0])}
             type="button"
             state={roles[item[0]]}
@@ -57,11 +57,7 @@ const WorkplacesSwitchersList = ({ getValues, initState, nightClose = true }) =>
       {nightClose ? (
         <li>
           <span>Zamkniecia:</span>
-          <ToggleButtonNew
-            onClick={() => handleSetRole('night')}
-            type="button"
-            state={roles.night}
-          />
+          <ToggleButton onClick={() => handleSetRole('night')} type="button" state={roles.night} />
         </li>
       ) : null}
     </Wrapper>

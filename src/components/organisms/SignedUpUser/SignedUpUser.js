@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowIcone } from 'components/atoms/ArowIcone/ArowIcone';
+import { ArrowIcon } from 'components/atoms/ArowIcone/ArowIcon';
 import { UserAvatar } from 'components/atoms/UserAvatar/UserAvatar';
 import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 import {
@@ -28,7 +28,7 @@ const SignedUpUser = () => {
           <span>{firstName && firstName.slice(0, 3)}</span>
           <span>{lastName && lastName.slice(0, 3)}</span>
         </UserAvatar>
-        <ArrowIcone isRotate={isOpen} isReversed />
+        <ArrowIcon isRotate={isOpen} isReversed />
       </User>
       <UserMenu isOpen={isOpen}>
         <div>

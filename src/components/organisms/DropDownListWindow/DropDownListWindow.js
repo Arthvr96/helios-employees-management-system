@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import uniqid from 'uniqid';
-import { ArrowIcone } from 'components/atoms/ArowIcone/ArowIcone';
+import { ArrowIcon } from 'components/atoms/ArowIcone/ArowIcon';
 import {
   DropDownList,
   WrappingButton,
@@ -20,7 +20,7 @@ const HeaderDropDownList = ({ title, countEmployees, isOpen, handleToggle }) => 
     <WrappingButton onClick={handleToggle}>
       <StyledInterfaceWindowTemplate isOpen={isOpen}>
         <StyledInterfaceWindowTitle fontSize="s">{`${title} (${countEmployees})`}</StyledInterfaceWindowTitle>
-        <ArrowIcone isRotate={isOpen} />
+        <ArrowIcon isRotate={isOpen} />
       </StyledInterfaceWindowTemplate>
     </WrappingButton>
   );
