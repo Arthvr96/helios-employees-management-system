@@ -14,7 +14,8 @@ const GlobalStateProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [authAdmin, setAuthAdmin] = useState(false);
   const [authUser, setAuthUser] = useState(false);
-  const { logIn, logOut, resetPassword, sessionObserver, cycleStateObserver } = heliosAppSdk.auth;
+  const { logIn, logOut, resetPassword, sessionObserver } = heliosAppSdk.auth;
+  const { cycleStateObserver } = heliosAppSdk.appState;
   const history = useHistory();
 
   const handleLogIn = (email, password) => {
@@ -52,7 +53,15 @@ const GlobalStateProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    cycleStateObserver(authAdmin, authUser, setAppState);
+    let unsub = () => {};
+
+    if (authAdmin || authUser) {
+      unsub = cycleStateObserver(setAppState);
+    }
+
+    return () => {
+      unsub();
+    };
   }, [authAdmin, authUser]);
 
   const values = {
