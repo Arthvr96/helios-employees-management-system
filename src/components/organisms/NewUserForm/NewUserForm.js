@@ -229,36 +229,3 @@ const NewUserForm = () => {
 };
 
 export default NewUserForm;
-// .then((respondObj) => {
-//   setProcessing(false);
-//   console.log(respondObj);
-// if (respondObj.status) {
-//   const obj = {
-//     ...values,
-//     id: respondObj.uid,
-//     role: adminRole ? 'admin' : 'user',
-//     workplaces: { ...workplaces },
-//   };
-//   if (localStorage.usersList) {
-//     const usersList = JSON.parse(localStorage.usersList);
-//     usersList.push(obj);
-//     localStorage.setItem('usersList', JSON.stringify(usersList));
-//   }
-//   setPopup(true);
-//   actions.resetForm();
-// } else if (!respondObj.status) {
-//   switch (respondObj.error) {
-//     case 'auth/invalid-email':
-//       setError('Nie poprawny email');
-//       break;
-//     case 'firestore/alias-already-in-use':
-//       setError('Alias w użyciu');
-//       break;
-//     case 'auth/email-already-in-use':
-//       setError('Email w użyciu');
-//       break;
-//     default:
-//       setError(respondObj.error);
-//   }
-// }
-// });
