@@ -1,7 +1,11 @@
-import { doc, setDoc, query, collection, getDocs, updateDoc, deleteDoc } from 'firebase/firestore';
-import { db } from 'api/firebase/firebase.config';
-import { __handleGetDoc__ } from 'HeliosAppSdk/dist/firestoreFunctionsPrivate';
-import firestoreConstants from 'HeliosAppSdk/dist/firestoreConstants';
+import firestoreConstants from 'HeliosAppSdk/dist/firestoreConstatns/firestoreConstants';
+import {
+  __handleDeleteDoc__,
+  __handleGetDoc__,
+  __handleGetDocs__,
+  __handleSetDoc__,
+  __handleUpdateDoc__,
+} from 'HeliosAppSdk/dist/firestoreFunctionsPrivate/firestoreFunctionsPrivate';
 
 export const __resetDispoSendList__ = (dispoSendInfo) => {
   const { pathName, segments } = firestoreConstants.paths.stateApp;
@@ -13,38 +17,30 @@ export const __resetDispoSendList__ = (dispoSendInfo) => {
           obj[key].status = false;
         }
       }
-      return setDoc(doc(db, pathName, segments.dispoSendInfo), obj);
+      return __handleSetDoc__(pathName, segments.dispoSendInfo, obj);
     })
     .catch((error) => window.alert(error.code));
 };
 
-export const __createNewCycleInDispoSortedEmployees__ = (dateCycle) => {};
-
-const createNewCycleInDispoSortedEmployees = (dateCycle) => {
-  const request = async () => {
-    const q = query(collection(db, 'dispositionsSortedEmployees'));
-    await getDocs(q)
-      .then((querySnapshot) => {
-        querySnapshot.forEach((docSnap) => {
-          updateDoc(doc(db, 'dispositionsSortedEmployees', docSnap.id), {
-            [dateCycle]: {},
-          }).catch((error) => {
-            throw error;
-          });
+export const __createNewCycleInDispoSortedEmployees__ = (dateCycle) => {
+  const { dispositionsEmployees } = firestoreConstants.paths;
+  __handleGetDocs__(dispositionsEmployees)
+    .then((querySnapshot) => {
+      querySnapshot.forEach((docSnap) => {
+        __handleUpdateDoc__(dispositionsEmployees, docSnap.id, {
+          [dateCycle]: {},
+        }).catch((error) => {
+          throw error;
         });
-      })
-      .catch((error) => {
-        throw error;
       });
-  };
-  request().catch((error) => window.alert(error.code));
+    })
+    .catch((error) => window.alert(error.code));
 };
 
-const archiveActualDispo = (appState) => {
-  const request = async () => {
-    const date = `${appState.date1}-${appState.date2}`;
-    const q = query(collection(db, 'dispositionsSortedEmployees'));
-    await getDocs(q).then((querySnapshot) => {
+export const __archiveActualDispo__ = (date) => {
+  const { dispositionsEmployees, dispositionsCycles } = firestoreConstants.paths;
+  __handleGetDocs__(dispositionsEmployees)
+    .then((querySnapshot) => {
       const data = {};
       querySnapshot.forEach((el) => {
         data[el.id] = {
@@ -52,29 +48,25 @@ const archiveActualDispo = (appState) => {
           alias: el.data().alias,
         };
       });
-      setDoc(doc(db, 'dispositionsSortedByCycles', date), data);
-    });
-  };
-  request().catch((error) => {
-    window.alert(error.code);
-  });
+      return __handleSetDoc__(dispositionsCycles, date, data);
+    })
+    .catch((error) => window.alert(error.code));
 };
 
-const deleteOldestCycleInDispoSortedEmployees = () => {
-  const request = async () => {
-    const q = query(collection(db, 'dispositionsSortedEmployees'));
-    await getDocs(q).then((querySnapshot) => {
+export const __cleanupDispoEmployees__ = () => {
+  const { dispositionsEmployees } = firestoreConstants.paths;
+  __handleGetDocs__(dispositionsEmployees)
+    .then((querySnapshot) => {
       querySnapshot.forEach((el) => {
         const cycles = Object.keys(el.data()).filter((a) => a !== 'alias');
-
         if (cycles.length > 4) {
+          const data = {};
           cycles.sort((a, b) => {
             const date1 = new Date(a.slice(0, 10));
             const date2 = new Date(b.slice(0, 10));
-
             return date2 - date1;
           });
-          const data = {};
+
           for (const key in el.data()) {
             if ({}.hasOwnProperty.call(el.data(), key)) {
               if (key !== cycles[cycles.length - 1]) {
@@ -82,22 +74,19 @@ const deleteOldestCycleInDispoSortedEmployees = () => {
               }
             }
           }
-          setDoc(doc(db, 'dispositionsSortedEmployees', el.id), data).catch((error) => {
+          __handleSetDoc__(dispositionsEmployees, el.id, data).catch((error) => {
             throw error;
           });
         }
       });
-    });
-  };
-  request().catch((error) => {
-    window.alert(error.code);
-  });
+    })
+    .catch((error) => window.alert(error.code));
 };
 
-const deleteOldestCycleInDispoSortedByCycle = () => {
-  const request = async () => {
-    const q = query(collection(db, 'dispositionsSortedByCycles'));
-    await getDocs(q).then((querySnapshot) => {
+export const __cleanupDispoCycles__ = () => {
+  const { dispositionsCycles } = firestoreConstants.paths;
+  __handleGetDocs__(dispositionsCycles)
+    .then((querySnapshot) => {
       if (querySnapshot.size > 16) {
         const cycles = [];
         querySnapshot.forEach((el) => {
@@ -109,20 +98,10 @@ const deleteOldestCycleInDispoSortedByCycle = () => {
 
           return date2 - date1;
         });
-        deleteDoc(doc(db, 'dispositionsSortedByCycles', cycles[cycles.length - 1]));
+        __handleDeleteDoc__(dispositionsCycles, cycles[cycles.length - 1]).catch((error) => {
+          throw error;
+        });
       }
-    });
-  };
-  request().catch((error) => {
-    window.alert(error.code);
-  });
-};
-
-export const functionsAdminStateProvider = () => {
-  return {
-    createNewCycleInDispoSortedEmployees,
-    archiveActualDispo,
-    deleteOldestCycleInDispoSortedEmployees,
-    deleteOldestCycleInDispoSortedByCycle,
-  };
+    })
+    .catch((error) => window.alert(error));
 };

@@ -1,7 +1,7 @@
 import { cycleStateManagement } from 'HeliosAppSdk/dist/cycleStateManagement/cycleStateManagement';
-import firestoreConstants from './dist/firestoreConstants';
-import { authFunctions } from './dist/auth';
-import { firestoreRequest } from './dist/firestoreRequest';
+import { authFunctions } from 'HeliosAppSdk/dist/auth/auth';
+import firestoreConstants from 'HeliosAppSdk/dist/firestoreConstatns/firestoreConstants';
+import { firestoreRequest } from 'HeliosAppSdk/dist/firestoreRequest/firestoreRequest';
 
 const heliosAppSdk = {
   firestoreConstants,

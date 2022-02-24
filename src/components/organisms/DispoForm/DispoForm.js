@@ -9,8 +9,8 @@ import DispoFormDay from 'components/molecules/DispoFormDay/DispoFormDay';
 import LoaderRing from 'components/atoms/LoaderRing/LoaderRing';
 import { Button } from 'components/atoms/Button/Button';
 import PropTypes from 'prop-types';
-import { dispositionSortedEmployeesFunctions } from 'functions/dispositionSortedEmployeesFunctions';
 import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
+import HeliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
 import { Wrapper, StyledForm } from './DispoForm.style';
 
 const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
@@ -22,7 +22,7 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
   const [rangeValues, setRangeValues] = useState(initRanges);
   const [rangeError, setRangeError] = useState(initRangeErrors);
   const [blockSubmitting, setBlockSubmitting] = useState(false);
-  const { updateDisposition } = dispositionSortedEmployeesFunctions();
+  const { updateEmployeeDisposition } = HeliosAppSdk.firestore;
 
   const handleSetRadio = (day, nameRadio) => {
     setRadioValues({
@@ -108,7 +108,7 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
 
       if (!comparison.status) {
         const cycleId = `${appState.date1}-${appState.date2}`;
-        updateDisposition(currentUser.id, cycleId, values)
+        updateEmployeeDisposition(currentUser.id, cycleId, values)
           .then(() => {
             setCycleData(values);
             handleSwitchPage('toDispoDashboard');
@@ -124,8 +124,16 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
 
   const getArrDays = (date1, date2) => {
     const getDaysArray = (s, e) => {
+      // returns arrays with dates between date 's' and date 'e'.
       const a = [];
-      for (let d = new Date(s); d <= e; d.setDate(d.getDate() + 1)) {
+      const xe = e;
+      if (e.getTimezoneOffset() > s.getTimezoneOffset()) {
+        // if date 's' is Summer-time and date 'e' is Standard-time then you need to do this:
+        const t = -(s.getTimezoneOffset() - e.getTimezoneOffset()) / 60;
+        xe.setDate(xe.getDate() + t);
+        // I have no idea what is going on here, but it works
+      }
+      for (let d = new Date(s); d <= xe; d.setDate(d.getDate() + 1)) {
         a.push(new Date(d));
       }
       return a;
@@ -137,6 +145,11 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
     }
 
     const dayListString = getDaysArray(new Date(date1), new Date(date2));
+
+    dayListString.forEach((el, i) => {
+      dayListString[i] = new Date(dayListString[i].getTime() + 1000 * 60 * 60);
+    });
+
     const dayListArr = dayListString.map((v) => v.toISOString().slice(0, 10));
 
     const daysName = [];

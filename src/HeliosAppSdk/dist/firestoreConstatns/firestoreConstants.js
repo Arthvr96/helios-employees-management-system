@@ -1,6 +1,8 @@
 const firestoreConstants = {
   paths: {
     users: 'users',
+    dispositionsCycles: 'dispositionsSortedByCycles',
+    dispositionsEmployees: 'dispositionsSortedEmployees',
     stateApp: {
       pathName: 'statesApp',
       segments: {

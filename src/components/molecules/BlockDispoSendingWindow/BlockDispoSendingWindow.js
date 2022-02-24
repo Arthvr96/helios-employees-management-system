@@ -4,19 +4,18 @@ import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
-import { useAdminContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 
 const TITLEPOPUP = 'Czy napewno chcesz zablokować wysyłanie dyspozycji?';
 
 const BlockDispoSendingWindow = () => {
   const { appState } = useGlobalState();
-  const { handleChangeCycleState } = useAdminContext();
+  const { handleChangeStateApp } = useGlobalState();
   const [isVisible, setVisible] = useState(false);
 
   const handleConfirm = () => {
     toggleVisible();
-    handleChangeCycleState('blockSendingDisposition');
+    handleChangeStateApp('blockSendingDisposition');
   };
 
   const toggleVisible = () => {

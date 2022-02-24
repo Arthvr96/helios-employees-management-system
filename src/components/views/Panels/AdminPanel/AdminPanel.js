@@ -5,17 +5,14 @@ import DashboardView from 'components/views/AdminViews/DashboardView/DashboardVi
 import DispoAndScheduleView from 'components/views/AdminViews/DispoAndScheduleView/DispoAndScheduleView';
 import ScheduleGeneratorView from 'components/views/AdminViews/ScheduleGeneratorView/ScheduleGeneratorView';
 import EmployeesView from 'components/views/AdminViews/EmployeesView/EmployessView';
-import AdminStateProvider from 'providers/AdminStateProvider/AdminStateProvider';
 
 const AdminPanel = () => {
   return (
     <MainTemplate>
-      <AdminStateProvider>
-        <Route exact path="/admin/dashboard" component={DashboardView} />
-        <Route exact path="/admin/dispoSchedule" component={DispoAndScheduleView} />
-        <Route exact path="/admin/scheduleGenerator" component={ScheduleGeneratorView} />
-        <Route exact path="/admin/employeesView" component={EmployeesView} />
-      </AdminStateProvider>
+      <Route exact path="/admin/dashboard" component={DashboardView} />
+      <Route exact path="/admin/dispoSchedule" component={DispoAndScheduleView} />
+      <Route exact path="/admin/scheduleGenerator" component={ScheduleGeneratorView} />
+      <Route exact path="/admin/employeesView" component={EmployeesView} />
     </MainTemplate>
   );
 };

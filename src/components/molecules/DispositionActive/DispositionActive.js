@@ -5,16 +5,17 @@ import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import { Button } from 'components/atoms/Button/Button';
 import { StyledStrong } from 'components/atoms/StyledStrong/StyledStrong';
-import { dispositionSortedEmployeesFunctions } from 'functions/dispositionSortedEmployeesFunctions';
 import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
+import HeliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
+import { dispoPlaceholder } from 'helpers/helpers';
 
 const DispositionActive = () => {
   const { appState, currentUser } = useGlobalState();
   const [cycleData, setCycleData] = useState({});
   const [dispoSent, setDispoSent] = useState(false);
   const [page, setPage] = useState('dispoDashboard');
-  const { createNewCycle, getEmployeeDispositions, updateDispoSendInfo } =
-    dispositionSortedEmployeesFunctions();
+  const { setDefaultEmployeeDisposition, getEmployeeDisposition, updateDispoSendInfo } =
+    HeliosAppSdk.firestore;
 
   const handleSwitchPage = (target) => {
     if (target === 'toDispoDashboard') {
@@ -27,33 +28,33 @@ const DispositionActive = () => {
   const handleCreateNewCycle = () => {
     if (!cycleData.day1) {
       const cycleId = `${appState.date1}-${appState.date2}`;
-      createNewCycle(currentUser.id, cycleId)
-        .then((cycleSchema) => {
-          setCycleData({ ...cycleSchema });
+      setDefaultEmployeeDisposition(currentUser.id, cycleId)
+        .then(() => {
+          setCycleData({ ...dispoPlaceholder });
         })
         .catch((error) => {
           window.alert(error.code);
         });
-      updateDispoSendInfo(currentUser).catch((error) => {
-        window.alert(error.code);
-      });
+      updateDispoSendInfo(currentUser);
     }
   };
 
   useEffect(() => {
-    if (appState.state === 'active' && cycleData) {
-      setDispoSent(true);
-    } else if (appState.state === 'active' && !cycleData) {
-      setDispoSent(false);
+    if (cycleData) {
+      if (appState.state === 'active' && cycleData.day1) {
+        setDispoSent(true);
+      } else if (appState.state === 'active' && !cycleData.day1) {
+        setDispoSent(false);
+      }
     }
   }, [cycleData]);
 
   useEffect(() => {
     if (appState.state === 'active') {
       const cycleId = `${appState.date1}-${appState.date2}`;
-      getEmployeeDispositions(currentUser.id)
+      getEmployeeDisposition(currentUser.id)
         .then((docData) => {
-          setCycleData(docData[cycleId]);
+          setCycleData(docData.data()[cycleId]);
         })
         .catch((error) => {
           window.alert(error.code);

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { managementUsers } from 'functions/managementUsers';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import { ErrorMsg } from 'components/atoms/ErrorMsg/ErrorMsg';
 import { InputForm } from 'components/atoms/InputForm/InputForm';
@@ -10,8 +9,8 @@ import ToggleButton from 'components/molecules/ToggleButton/ToggleButton';
 import WorkplacesSwitchersList from 'components/molecules/WorkplacesSwitchersList/WorkplacesSwitchersList';
 import LoaderRing from 'components/atoms/LoaderRing/LoaderRing';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
-import { useAdminContext } from 'providers/AdminStateProvider/AdminStateProvider';
 import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
+import HeliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
 import {
   StyledForm,
   WrapperLabel,
@@ -29,45 +28,46 @@ const NewUserForm = () => {
   const [processing, setProcessing] = useState(false);
   const [adminRole, setAdminRole] = useState(false);
   const [workplaces, setWorkplaces] = useState({});
-  const { createUser } = managementUsers();
-  const { dispoSendInfo } = useAdminContext();
+  const { createUser } = HeliosAppSdk.auth;
+  const { dispoSendInfo } = useGlobalState();
   const { appState } = useGlobalState();
 
-  const onSubmit = async (values, actions) => {
+  const onSubmit = (values, actions) => {
     setProcessing(true);
-    await createUser(values, workplaces, adminRole, dispoSendInfo, appState).then((respondObj) => {
-      setProcessing(false);
-
-      if (respondObj.status) {
-        const obj = {
-          ...values,
-          id: respondObj.uid,
-          role: adminRole ? 'admin' : 'user',
-          workplaces: { ...workplaces },
-        };
-        if (localStorage.usersList) {
-          const usersList = JSON.parse(localStorage.usersList);
-          usersList.push(obj);
-          localStorage.setItem('usersList', JSON.stringify(usersList));
+    createUser(values, workplaces, adminRole, dispoSendInfo, appState)
+      .then((respond) => {
+        setProcessing(false);
+        if (respond.status) {
+          const obj = {
+            ...values,
+            id: respond.uid,
+            role: adminRole ? 'admin' : 'user',
+            workplaces: { ...workplaces },
+          };
+          if (localStorage.usersList) {
+            const usersList = JSON.parse(localStorage.usersList);
+            usersList.push(obj);
+            localStorage.setItem('usersList', JSON.stringify(usersList));
+          }
+          setPopup(true);
+          actions.resetForm();
+        } else if (!respond.status) {
+          switch (respond.error) {
+            case 'auth/invalid-email':
+              setError('Nie poprawny email');
+              break;
+            case 'firestore/alias-already-in-use':
+              setError('Alias w użyciu');
+              break;
+            case 'auth/email-already-in-use':
+              setError('Email w użyciu');
+              break;
+            default:
+              setError(respond.error);
+          }
         }
-        setPopup(true);
-        actions.resetForm();
-      } else if (!respondObj.status) {
-        switch (respondObj.error) {
-          case 'auth/invalid-email':
-            setError('Nie poprawny email');
-            break;
-          case 'firestore/alias-already-in-use':
-            setError('Alias w użyciu');
-            break;
-          case 'auth/email-already-in-use':
-            setError('Email w użyciu');
-            break;
-          default:
-            setError(respondObj.error);
-        }
-      }
-    });
+      })
+      .catch((errorCode) => window.alert(errorCode.code));
   };
 
   const handleResetError = () => {
@@ -215,7 +215,7 @@ const NewUserForm = () => {
                     <LoaderRing colorVariant2 />
                   </CircleWrapper>
                 ) : (
-                  <StyledSubmitButton disabled={isSubmitting} customMargin="1rem" type="submit">
+                  <StyledSubmitButton customMargin="1rem" type="submit">
                     Stwórz konto
                   </StyledSubmitButton>
                 )}
@@ -229,3 +229,36 @@ const NewUserForm = () => {
 };
 
 export default NewUserForm;
+// .then((respondObj) => {
+//   setProcessing(false);
+//   console.log(respondObj);
+// if (respondObj.status) {
+//   const obj = {
+//     ...values,
+//     id: respondObj.uid,
+//     role: adminRole ? 'admin' : 'user',
+//     workplaces: { ...workplaces },
+//   };
+//   if (localStorage.usersList) {
+//     const usersList = JSON.parse(localStorage.usersList);
+//     usersList.push(obj);
+//     localStorage.setItem('usersList', JSON.stringify(usersList));
+//   }
+//   setPopup(true);
+//   actions.resetForm();
+// } else if (!respondObj.status) {
+//   switch (respondObj.error) {
+//     case 'auth/invalid-email':
+//       setError('Nie poprawny email');
+//       break;
+//     case 'firestore/alias-already-in-use':
+//       setError('Alias w użyciu');
+//       break;
+//     case 'auth/email-already-in-use':
+//       setError('Email w użyciu');
+//       break;
+//     default:
+//       setError(respondObj.error);
+//   }
+// }
+// });
