@@ -4,10 +4,9 @@ import PopupWrapper from 'components/atoms/PopupWrapper/PopupWrapper';
 import { Button } from 'components/atoms/Button/Button';
 import { UserAvatar } from 'components/atoms/UserAvatar/UserAvatar';
 import WorkplacesSwitchersList from 'components/molecules/WorkplacesSwitchersList/WorkplacesSwitchersList';
-import { managementUsers } from 'functions/managementUsers';
 import PopupConfirm from 'components/molecules/PopupConfirm/PopupConfirm';
-import { useAdminContext } from 'providers/AdminStateProvider/AdminStateProvider';
-import heliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
+import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
+import HeliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
 import {
   StyledCardTemplate,
   StyledTitle,
@@ -28,9 +27,9 @@ const EditUserPopup = ({
   const [user, setUser] = useState({});
   const [popupToggle, setPopupToggle] = useState(false);
   const [workplaces, setWorkplaces] = useState({});
-  const { getUserInfo } = heliosAppSdk.firestore;
-  const { dispoSendInfo } = useAdminContext();
-  const { updateUserInfo, deleteUser } = managementUsers();
+  const { dispoSendInfo } = useGlobalState();
+  const { getUserInfo } = HeliosAppSdk.firestore;
+  const { deleteUser, updateUserInfo } = HeliosAppSdk.auth;
 
   const getValues = (values) => {
     setWorkplaces({ ...values });

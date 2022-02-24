@@ -1,10 +1,10 @@
 import { exampleUsers } from 'functions/dev/exampleUsers';
-import { managementUsers } from 'functions/managementUsers';
 import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import { db } from 'api/firebase/firebase.config';
+import HeliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
 
 export const addExampleUsers = async () => {
-  const { createUser } = managementUsers();
+  const { createUser } = HeliosAppSdk.auth;
   exampleUsers.forEach((user, i) => {
     const { firstName, lastName, email, alias, workplaces } = user;
     const values = {
@@ -14,7 +14,7 @@ export const addExampleUsers = async () => {
       alias,
     };
     createUser(values, workplaces, false).catch((error) => {
-      console.log(error);
+      window.alert(error.code);
     });
   });
 };
@@ -44,4 +44,17 @@ export const addingToUserState = async () => {
     .catch((error) => {
       window.alert(error.code);
     });
+};
+
+export const clearDispositionsEmployees = () => {
+  const q = query(collection(db, 'dispositionsSortedEmployees'));
+  getDocs(q).then((respond) => {
+    respond.forEach((docItem) => {
+      setDoc(doc(db, 'dispositionsSortedEmployees', docItem.id), {
+        alias: docItem.data().alias,
+      })
+        .then(() => console.log('updated'))
+        .catch((error) => window.alert(error.code));
+    });
+  });
 };

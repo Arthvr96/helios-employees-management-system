@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import BlockDispoSendingWindow from 'components/molecules/BlockDispoSendingWindow/BlockDispoSendingWindow';
-import { useAdminContext } from 'providers/AdminStateProvider/AdminStateProvider';
+import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 import DropDownListWindow from '../DropDownListWindow/DropDownListWindow';
 import { WrapperWindows, WrapperDropDownWindows } from './ActiveCycleWindows.style';
 
@@ -10,7 +10,7 @@ const titleDropDown2 = 'Pracownicy, którzy wysłali dyspo';
 const ActiveCycleWindows = () => {
   const [peopleWhoSendDispo, setPeopleWhoSendDispo] = useState(null);
   const [peopleWhoDontSendDispo, setList2] = useState(null);
-  const { dispoSendInfo } = useAdminContext();
+  const { dispoSendInfo } = useGlobalState();
 
   useEffect(() => {
     // Sorting on employees who sent and didn't send disposition

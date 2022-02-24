@@ -14,15 +14,18 @@ const GlobalStateProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [authAdmin, setAuthAdmin] = useState(false);
   const [authUser, setAuthUser] = useState(false);
-  const { logIn, logOut, resetPassword, sessionObserver, cycleStateObserver } = heliosAppSdk.auth;
+  const [dispoSendInfo, setDispoSendInfo] = useState({});
+  const { logIn, logOut, resetPassword, sessionObserver } = heliosAppSdk.auth;
+  const { changeStateApp, cycleStateObserver, dispoSendInfoObserver } = heliosAppSdk.appState;
   const history = useHistory();
 
   const handleLogIn = (email, password) => {
+    const { roles } = heliosAppSdk.firestoreConstants;
     return logIn(email, password).then((userInfo) => {
       setCurrentUser(userInfo);
-      if (userInfo.role === heliosAppSdk.firestoreConstants.roles.admin) {
+      if (userInfo.role === roles.admin) {
         setAuthAdmin(true);
-      } else if (userInfo.role === heliosAppSdk.firestoreConstants.roles.user) {
+      } else if (userInfo.role === roles.user) {
         setAuthUser(true);
       }
     });
@@ -47,12 +50,38 @@ const GlobalStateProvider = ({ children }) => {
     return resetPassword(email);
   };
 
+  const handleChangeStateApp = (target, values) => {
+    changeStateApp(target, values, appState, dispoSendInfo).catch((error) =>
+      window.alert(error.code),
+    );
+  };
+
   useEffect(() => {
     sessionObserver();
   }, []);
 
   useEffect(() => {
-    cycleStateObserver(authAdmin, authUser, setAppState);
+    let unsub = () => {};
+
+    if (authAdmin) {
+      unsub = dispoSendInfoObserver(setDispoSendInfo);
+    }
+
+    return () => {
+      unsub();
+    };
+  }, [authAdmin]);
+
+  useEffect(() => {
+    let unsub = () => {};
+
+    if (authAdmin || authUser) {
+      unsub = cycleStateObserver(setAppState);
+    }
+
+    return () => {
+      unsub();
+    };
   }, [authAdmin, authUser]);
 
   const values = {
@@ -60,9 +89,11 @@ const GlobalStateProvider = ({ children }) => {
     currentUser,
     authAdmin,
     authUser,
+    dispoSendInfo,
     handleLogIn,
     handleLogOut,
     handleResetPassword,
+    handleChangeStateApp,
   };
 
   return <GlobalStateContext.Provider value={values}>{children}</GlobalStateContext.Provider>;

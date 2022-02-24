@@ -13,10 +13,10 @@
     "react/require-default-props": 0,
     "no-param-reassign": 0,
     "no-alert": 0,
-    "no-return-await": "error",
     "no-underscore-dangle": "off",
     "no-throw-literal": "off",
     "jsx-a11y/label-has-associated-control": "off",
+    "no-return-await": "off",
     "react/jsx-props-no-spreading": [
       2,
       {
