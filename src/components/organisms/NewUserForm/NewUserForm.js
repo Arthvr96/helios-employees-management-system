@@ -24,7 +24,7 @@ import {
 
 const NewUserForm = () => {
   const [popup, setPopup] = useState(false);
-  const [error, setError] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
   const [processing, setProcessing] = useState(false);
   const [adminRole, setAdminRole] = useState(false);
   const [workplaces, setWorkplaces] = useState({});
@@ -35,44 +35,44 @@ const NewUserForm = () => {
   const onSubmit = (values, actions) => {
     setProcessing(true);
     createUser(values, workplaces, adminRole, dispoSendInfo, appState)
-      .then((respond) => {
+      .then((uid) => {
         setProcessing(false);
-        if (respond.status) {
-          const obj = {
-            ...values,
-            id: respond.uid,
-            role: adminRole ? 'admin' : 'user',
-            workplaces: { ...workplaces },
-          };
-          if (localStorage.usersList) {
-            const usersList = JSON.parse(localStorage.usersList);
-            usersList.push(obj);
-            localStorage.setItem('usersList', JSON.stringify(usersList));
-          }
-          setPopup(true);
-          actions.resetForm();
-        } else if (!respond.status) {
-          switch (respond.error) {
-            case 'auth/invalid-email':
-              setError('Nie poprawny email');
-              break;
-            case 'firestore/alias-already-in-use':
-              setError('Alias w użyciu');
-              break;
-            case 'auth/email-already-in-use':
-              setError('Email w użyciu');
-              break;
-            default:
-              setError(respond.error);
-          }
+        const obj = {
+          ...values,
+          id: uid,
+          role: adminRole ? 'admin' : 'user',
+          workplaces: { ...workplaces },
+        };
+        if (localStorage.usersList) {
+          const usersList = JSON.parse(localStorage.usersList);
+          usersList.push(obj);
+          localStorage.setItem('usersList', JSON.stringify(usersList));
         }
+        setPopup(true);
+        actions.resetForm();
       })
-      .catch((errorCode) => window.alert(errorCode.code));
+      .catch((error) => {
+        const errorCode = !error.code ? error.message : error.code;
+        setProcessing(false);
+        switch (errorCode) {
+          case 'auth/invalid-email':
+            setErrorMsg('Nie poprawny email');
+            break;
+          case 'firestore/alias-already-in-use':
+            setErrorMsg('Alias w użyciu');
+            break;
+          case 'auth/email-already-in-use':
+            setErrorMsg('Email w użyciu');
+            break;
+          default:
+            setErrorMsg(errorCode);
+        }
+      });
   };
 
   const handleResetError = () => {
-    if (error) {
-      setError('');
+    if (errorMsg) {
+      setErrorMsg('');
     }
   };
 
@@ -104,7 +104,7 @@ const NewUserForm = () => {
       />
       <Wrapper>
         <CardTitle>{adminRole ? 'Dodaj administratora' : 'Dodaj uzytkownika'}</CardTitle>
-        <StyledWrapperLabel>{error ? <ErrorMsg>{error}</ErrorMsg> : null}</StyledWrapperLabel>
+        <StyledWrapperLabel>{errorMsg ? <ErrorMsg>{errorMsg}</ErrorMsg> : null}</StyledWrapperLabel>
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}

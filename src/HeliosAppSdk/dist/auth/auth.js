@@ -137,45 +137,28 @@ const createUser = async (values, workplaces, adminRole, dispoSendInfo, appState
     return __handleUpdateDoc__(dispositionsEmployees, uid, data);
   };
 
-  const respond = {
-    status: true,
-    error: '',
-    uid: '',
-  };
-
-  await __checkAlias__()
-    .then(async (docs) => {
-      if (adminRole || (!adminRole && docs.size === 0)) {
-        await __createAuthUser__()
-          .then((uid) => {
-            respond.uid = uid;
-            return __addUserInfo__(uid);
-          })
-          .then(() => {
-            if (!adminRole) {
-              __addUserToDispositionsEmployees__(respond.uid).catch((error) =>
-                window.alert(error.code),
-              );
-              __addUserToDispoSendInfo__(respond.uid).catch((error) => window.alert(error.code));
-              __addNewCycleToDispositionsEmployees__(respond.uid).catch((error) =>
-                window.alert(error.code),
-              );
-            }
-          })
-          .catch((error) => {
-            respond.status = false;
-            respond.error = error.code;
-          });
-      } else {
-        respond.status = false;
-        respond.error = 'firestore/alias-already-in-use';
-      }
+  return __checkAlias__()
+    .then((docs) => {
+      return new Promise((resolve, reject) => {
+        if (adminRole || docs.size === 0) {
+          resolve(__createAuthUser__());
+        } else {
+          reject(new Error('firestore/alias-already-in-use'));
+        }
+      });
     })
-    .catch((error) => {
-      respond.status = false;
-      respond.error = error.code;
+    .then((uid) => {
+      if (!adminRole) {
+        __addUserInfo__(uid)
+          .then(() => __addUserToDispositionsEmployees__(uid))
+          .then(() => __addUserToDispoSendInfo__(uid))
+          .then(() => __addNewCycleToDispositionsEmployees__(uid))
+          .catch((error) => {
+            throw error;
+          });
+      }
+      return uid;
     });
-  return respond;
 };
 
 const sessionObserver = () => {
