@@ -58,7 +58,7 @@ const deleteUser = (id, dispoSendInfo) => {
 };
 
 const createUser = async (values, workplaces, adminRole, dispoSendInfo, appState) => {
-  const { users, dispositionsEmployees, stateApp } = firestoreConstants.paths;
+  const { users, dispositionsEmployees, stateApp, dispositionsCycles } = firestoreConstants.paths;
 
   const __checkAlias__ = () => {
     const alias = values.alias.toLowerCase();
@@ -99,7 +99,7 @@ const createUser = async (values, workplaces, adminRole, dispoSendInfo, appState
 
   const __addUserToDispositionsEmployees__ = (uid) => {
     return __handleSetDoc__(dispositionsEmployees, uid, {
-      alias: values.alias,
+      alias: values.alias.toLowerCase(),
     });
   };
 
@@ -129,6 +129,12 @@ const createUser = async (values, workplaces, adminRole, dispoSendInfo, appState
       data = {
         [date]: dispoPlaceholder,
       };
+      __handleUpdateDoc__(dispositionsCycles, date, {
+        [uid]: {
+          alias: values.alias.toLowerCase(),
+          disposition: dispoPlaceholder,
+        },
+      }).catch((error) => window.alert(error.code));
     } else if (appState.state === 'active') {
       data = {
         [date]: {},
