@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import heliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
 import { useHistory } from 'react-router-dom';
+import { usePrevious } from 'hooks/usePrevious';
 
 const GlobalStateContext = React.createContext({});
 
@@ -18,6 +19,7 @@ const GlobalStateProvider = ({ children }) => {
   const { logIn, logOut, resetPassword, sessionObserver } = heliosAppSdk.auth;
   const { changeStateApp, cycleStateObserver, dispoSendInfoObserver } = heliosAppSdk.appState;
   const history = useHistory();
+  const prevAppState = usePrevious(appState.state);
 
   const handleLogIn = (email, password) => {
     const { roles } = heliosAppSdk.firestoreConstants;
@@ -83,6 +85,15 @@ const GlobalStateProvider = ({ children }) => {
       unsub();
     };
   }, [authAdmin, authUser]);
+
+  useEffect(() => {
+    // When user is logged and admin change state app from nonActive to Active user has to be logout.
+    if (authUser) {
+      if (appState.state === 'active' && prevAppState === 'nonActive') {
+        handleLogOut();
+      }
+    }
+  }, [appState]);
 
   const values = {
     appState,
