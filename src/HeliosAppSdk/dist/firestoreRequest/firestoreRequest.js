@@ -16,8 +16,6 @@ const getEmployeesList = async () => {
 };
 
 const getEmployeeDisposition = (cycleId) => {
-  // w starej wersji funkcj zwracany byl respond.data(). teraz sam respond. !!!!!!!
-
   const { dispositionsEmployees } = firestoreConstants.paths;
   return __handleGetDoc__(dispositionsEmployees, cycleId);
 };
