@@ -8,7 +8,7 @@ const DispoFormWholeDayProperties = ({ checkBoxValues, handleSetCheckbox, dayNum
     <PropertiesWrapper>
       <span>
         <WrapperClickableEl>
-          całka + :
+          całka (C+/total) :
           <input
             className="clickable"
             checked={checkBoxValues.wholeDayPlus}

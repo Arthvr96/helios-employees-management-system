@@ -173,19 +173,38 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
     const obj2 = {
       ...rangeError,
     };
+
+    const obj3 = {
+      ...checkBoxValues,
+    };
+
     for (const key in radioValues) {
       if ({}.hasOwnProperty.call(radioValues, key)) {
         if (radioValues[key].freeDay === true) {
           obj[key] = {
-            from: '8',
-            to: '30',
+            from: 'disabled',
+            to: 'disabled',
           };
           obj2[key] = false;
+          obj3[key].wholeDayPlus = false;
+          obj3[key].marathon = false;
+        }
+        if (radioValues[key].wholeDay === true) {
+          obj[key] = {
+            from: 'disabled',
+            to: 'disabled',
+          };
+          obj2[key] = false;
+        }
+        if (radioValues[key].range === true) {
+          obj3[key].wholeDayPlus = false;
+          obj3[key].marathon = false;
         }
       }
     }
     setRangeValues({ ...obj });
     setRangeError({ ...obj2 });
+    setCheckBoxValues({ ...obj3 });
   }, [radioValues]);
 
   useEffect(() => {

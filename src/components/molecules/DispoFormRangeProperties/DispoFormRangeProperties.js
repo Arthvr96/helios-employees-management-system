@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { PropertiesWrapper } from 'components/atoms/PropertiesWrapper/PropertiesWrapper';
 import { ErrorMsg } from 'components/atoms/ErrorMsg/ErrorMsg';
@@ -44,50 +44,55 @@ const DispoFormRangeProperties = ({
   const [error, setError] = useState('');
 
   const validation = (rangeType, value) => {
-    if (rangeType === 'from') {
-      if (parseFloat(value) < parseFloat(rangeValues.to)) {
+    const handeSetError = (isError, errorMsg) => {
+      if (isError) {
+        setRangeError({
+          ...rangeError,
+          [dayNumber]: true,
+        });
+        setError(errorMsg);
+      } else if (!isError) {
         setError('');
         setRangeError({
           ...rangeError,
           [dayNumber]: false,
         });
-      } else {
-        setRangeError({
-          ...rangeError,
-          [dayNumber]: true,
-        });
-        setError(`'od' nie może być mniejsze niż 'do'`);
       }
-    } else if (rangeType === 'to') {
-      if (parseFloat(value) > parseFloat(rangeValues.from)) {
-        setError('');
-        setRangeError({
-          ...rangeError,
-          [dayNumber]: false,
-        });
-      } else {
-        setRangeError({
-          ...rangeError,
-          [dayNumber]: true,
-        });
-        setError(`'od' nie może być mniejsze niż 'do'`);
-      }
+    };
+    const from = document.querySelector('.fromInput').value;
+    const to = document.querySelector('.toInput').value;
+    if (from === 'disabled' || to === 'disabled') {
+      handeSetError(true, `Wybierz zakres`);
+    } else if (parseFloat(from) >= parseFloat(to)) {
+      handeSetError(true, `'od' nie może być mniejsze/równe niż 'do'`);
+    } else if (parseFloat(from) === 8 && parseFloat(to) === 30) {
+      handeSetError(true, `Obie wartości nie mogą być 'obojętnie'`);
+    } else {
+      handeSetError(false);
     }
   };
 
+  useEffect(() => {
+    setError('Wybierz zakres');
+  }, []);
+
   return (
-    <PropertiesWrapper>
+    <PropertiesWrapper flexDirection="column">
       {error ? <ErrorMsg>{error}</ErrorMsg> : null}
       <div>
         <span>
           od:
           <select
+            className="fromInput"
             value={rangeValues.from}
             onChange={(e) => {
               handleSetRange(dayNumber, 'from', e.target.value);
               validation('from', e.target.value);
             }}
           >
+            <option disabled value="disabled">
+              -
+            </option>
             <option value="8">obojetnie</option>
             {Options.map((option) => (
               <option key={option[1]} value={option[0]}>
@@ -99,12 +104,16 @@ const DispoFormRangeProperties = ({
         <span>
           do:
           <select
+            className="toInput"
             value={rangeValues.to}
             onChange={(e) => {
               handleSetRange(dayNumber, 'to', e.target.value);
               validation('to', e.target.value);
             }}
           >
+            <option disabled value="disabled">
+              -
+            </option>
             <option value="30">obojętnie</option>
             {Options.map((option) => (
               <option key={option[1]} value={option[0]}>
@@ -122,8 +131,8 @@ export default DispoFormRangeProperties;
 
 DispoFormRangeProperties.propTypes = {
   rangeValues: PropTypes.objectOf(PropTypes.string),
-  rangeError: PropTypes.objectOf(PropTypes.bool),
   handleSetRange: PropTypes.func.isRequired,
+  rangeError: PropTypes.objectOf(PropTypes.bool),
   setRangeError: PropTypes.func.isRequired,
   dayNumber: PropTypes.string.isRequired,
 };

@@ -6,11 +6,27 @@ import { Wrapper } from './DispoFormTypeSelect.style';
 
 const radioButtons = [
   ['wolne', 'freeDay'],
-  ['całka', 'wholeDay'],
+  ['C', 'wholeDay'],
   ['zakres', 'range'],
 ];
 
-const DispoFormTypeSelect = ({ radioValues, handleSetRadio, dayName, dayNumber, isError }) => {
+const DispoFormTypeSelect = ({
+  radioValues,
+  handleSetRadio,
+  dayName,
+  dayNumber,
+  isError,
+  rangeError,
+  setRangeError,
+}) => {
+  const handleSetError = (day, radioButton) => {
+    if (radioButton === 'range' && !radioValues.range) {
+      setRangeError({
+        ...rangeError,
+        [day]: true,
+      });
+    }
+  };
   return (
     <Wrapper isError={isError} freeDaySelected={radioValues.freeDay}>
       <h3>{dayName}</h3>
@@ -26,6 +42,7 @@ const DispoFormTypeSelect = ({ radioValues, handleSetRadio, dayName, dayNumber, 
                 onChange={() => {
                   handleSetRadio(dayNumber, radioButton[1]);
                 }}
+                onClick={() => handleSetError(dayNumber, radioButton[1])}
               />
             </WrapperClickableEl>
           </li>
@@ -43,4 +60,6 @@ DispoFormTypeSelect.propTypes = {
   dayName: PropTypes.string.isRequired,
   dayNumber: PropTypes.string.isRequired,
   isError: PropTypes.bool.isRequired,
+  rangeError: PropTypes.objectOf(PropTypes.bool),
+  setRangeError: PropTypes.func.isRequired,
 };
