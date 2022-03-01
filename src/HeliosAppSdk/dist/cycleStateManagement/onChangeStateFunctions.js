@@ -44,7 +44,8 @@ export const __archiveActualDispo__ = (date) => {
       const data = {};
       querySnapshot.forEach((el) => {
         data[el.id] = {
-          disposition: el.data()[date],
+          disposition: el.data()[date].disposition || {},
+          message: el.data()[date].message || '',
           alias: el.data().alias,
         };
       });

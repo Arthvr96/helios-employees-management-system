@@ -13,8 +13,8 @@ export const initRadio = {
   day7: { ...dayRadio },
 };
 export const dayRange = {
-  from: '8',
-  to: '30',
+  from: 'disabled',
+  to: 'disabled',
 };
 export const initRanges = {
   day1: { ...dayRange },

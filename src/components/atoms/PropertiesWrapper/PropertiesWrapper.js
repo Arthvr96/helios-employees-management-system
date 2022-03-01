@@ -2,10 +2,11 @@ import styled from 'styled-components';
 
 export const PropertiesWrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: ${({ flexDirection }) => flexDirection || 'row'};
   padding: 1rem 1rem 1.5rem 1rem;
 
   div {
+    width: 100%;
     margin-top: 0.5rem;
     display: flex;
     justify-content: space-around;

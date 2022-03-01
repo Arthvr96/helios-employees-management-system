@@ -25,6 +25,8 @@ const DispoFormDay = ({
         dayNumber={dayNumber}
         dayName={dayName}
         isError={rangeError[dayNumber]}
+        rangeError={rangeError}
+        setRangeError={setRangeError}
       />
       {radioValues.wholeDay ? (
         <DispoFormWholeDayProperties

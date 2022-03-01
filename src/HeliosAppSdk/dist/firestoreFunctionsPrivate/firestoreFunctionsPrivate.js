@@ -42,3 +42,12 @@ export const __handleDeleteDoc__ = (collectionName, documentName, data) => {
 export const __handleOnSnapshot__ = (collectionName, documentName, callback) => {
   return onSnapshot(doc(db, collectionName, documentName), callback);
 };
+
+export const __helpersFunctions__ = {
+  __handleGetDoc__,
+  __handleGetDocs__,
+  __handleSetDoc__,
+  __handleUpdateDoc__,
+  __handleDeleteDoc__,
+  __handleOnSnapshot__,
+};

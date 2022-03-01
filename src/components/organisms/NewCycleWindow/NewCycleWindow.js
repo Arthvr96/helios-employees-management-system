@@ -28,7 +28,14 @@ const NewCycleForm = ({ onSubmit }) => {
           }
           return null;
         },
-      ),
+      )
+      .test('is-friday', 'Początek okresu musi zacząć się od Piątku', (value) => {
+        if (value) {
+          const date1 = new Date(new Date(value).getTime() + 1000 * 60 * 60 * 2);
+          return date1.getDay() === 5;
+        }
+        return null;
+      }),
     date2: Yup.date()
       .required('Podaj date końcową')
       .test(
