@@ -6,13 +6,20 @@ import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import { Button } from 'components/atoms/Button/Button';
 import { collection, getDocs, query } from 'firebase/firestore';
 import { db } from 'api/firebase/firebase.config';
-import { WrapperWindows, Wrapper, Table } from './DispositionsArchive.style';
+import {
+  WrapperWindows,
+  Wrapper,
+  Table,
+  MsgButton,
+  StyledCardTitle,
+} from './DispositionsArchive.style';
 
 const DispositionsArchive = () => {
   const [selectedCycle, setSelectedCycle] = useState('selectCycle');
   const [dispoRespond, setDispoRespond] = useState(null);
   const [selectedDispo, setSelectedDispo] = useState(null);
   const [options, setOptions] = useState(null);
+  const [employeeMessage, setEmployeeMessage] = useState({ isOpen: false, alias: '', message: '' });
 
   const handleGetDisposition = () => {
     setSelectedDispo(Object.values(dispoRespond[selectedCycle]));
@@ -80,29 +87,57 @@ const DispositionsArchive = () => {
     return null;
   };
 
+  const handleShowMsg = (alias, message) => {
+    setEmployeeMessage({
+      isOpen: true,
+      alias,
+      message,
+    });
+  };
+  const handleCloseMsg = () => {
+    setEmployeeMessage({
+      isOpen: false,
+      alias: '',
+      message: '',
+    });
+  };
+
   return (
     <WrapperWindows>
-      <CardTemplate>
-        <CardTitle>Archiwum wysłanych dyspozycji</CardTitle>
-        <Wrapper>
-          <CardSubtitle fontWeight="regular" margin="0 1rem 0 0">
-            Wybierz dyspozycje z okresu:
-          </CardSubtitle>
-          <InputSelect
+      <Wrapper>
+        <CardTemplate minWidth="390px">
+          <CardTitle>Archiwum wysłanych dyspozycji</CardTitle>
+          <Wrapper>
+            <CardSubtitle fontWeight="regular" margin="0 1rem 0 0">
+              Wybierz dyspozycje z okresu:
+            </CardSubtitle>
+            <InputSelect
+              margin="1rem 0 0 0"
+              values={options}
+              value={selectedCycle}
+              handleChange={setSelectedCycle}
+            />
+          </Wrapper>
+          <Button
+            onClick={handleGetDisposition}
             margin="1rem 0 0 0"
-            values={options}
-            value={selectedCycle}
-            handleChange={setSelectedCycle}
-          />
-        </Wrapper>
-        <Button
-          onClick={handleGetDisposition}
-          margin="1rem 0 0 0"
-          disabled={selectedCycle === 'selectCycle'}
-        >
-          Wyświetl dyspozycje
-        </Button>
-      </CardTemplate>
+            disabled={selectedCycle === 'selectCycle'}
+          >
+            Wyświetl dyspozycje
+          </Button>
+        </CardTemplate>
+        {selectedDispo && employeeMessage.isOpen ? (
+          <CardTemplate minWidth="390px" margin="2.5rem 0">
+            <StyledCardTitle margin="0 0 1rem 0">
+              Wiadomość - <span>{employeeMessage.alias}</span>
+            </StyledCardTitle>
+            <p>{employeeMessage.message}</p>
+            <Button onClick={handleCloseMsg} margin="1rem 0 0 0">
+              Zamknij wiadomosć
+            </Button>
+          </CardTemplate>
+        ) : null}
+      </Wrapper>
       {selectedDispo ? (
         <CardTemplate margin="0 0 0 3rem">
           <CardTitle margin="0 0 2rem 0">{selectedCycle}</CardTitle>
@@ -117,6 +152,7 @@ const DispositionsArchive = () => {
                 <th>WT</th>
                 <th>SR</th>
                 <th>CZ</th>
+                <th>Msg?</th>
               </tr>
             </thead>
             <tbody>
@@ -132,6 +168,15 @@ const DispositionsArchive = () => {
                       <td>{getShiftName(dispo.disposition.day5)}</td>
                       <td>{getShiftName(dispo.disposition.day6)}</td>
                       <td>{getShiftName(dispo.disposition.day7)}</td>
+                      <td className={dispo.message && 'green'}>
+                        {dispo.message ? (
+                          <MsgButton onClick={() => handleShowMsg(dispo.alias, dispo.message)}>
+                            Tak
+                          </MsgButton>
+                        ) : (
+                          'Nie'
+                        )}
+                      </td>
                     </>
                   ) : (
                     <>
@@ -142,6 +187,7 @@ const DispositionsArchive = () => {
                       <td>C</td>
                       <td>C</td>
                       <td>C</td>
+                      <td>Nie</td>
                     </>
                   )}
                 </tr>

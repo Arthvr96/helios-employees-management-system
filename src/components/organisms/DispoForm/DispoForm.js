@@ -11,7 +11,8 @@ import { Button } from 'components/atoms/Button/Button';
 import PropTypes from 'prop-types';
 import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 import HeliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
-import { Wrapper, StyledForm } from './DispoForm.style';
+import { Textarea } from 'components/atoms/Textarea/Textarea';
+import { Wrapper, StyledForm, MessageButton } from './DispoForm.style';
 
 const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
   const { currentUser, appState } = useGlobalState();
@@ -21,6 +22,8 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
   const [checkBoxValues, setCheckBoxValues] = useState(initCheckbox);
   const [rangeValues, setRangeValues] = useState(initRanges);
   const [rangeError, setRangeError] = useState(initRangeErrors);
+  const [messageDisplay, setMessageDisplay] = useState(true);
+  const [messageValue, setMessageValue] = useState('');
   const [blockSubmitting, setBlockSubmitting] = useState(false);
   const { updateEmployeeDisposition } = HeliosAppSdk.firestore;
 
@@ -99,18 +102,26 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
       for (const key in values) {
         if ({}.hasOwnProperty.call(radioValues, key)) {
           values[key].forEach((value, i) => {
-            if (value !== cycleData[key][i]) {
+            if (value !== cycleData.disposition[key][i]) {
               comparison.status = false;
             }
           });
         }
       }
 
+      if (cycleData.message !== messageValue) {
+        comparison.status = false;
+      }
+
       if (!comparison.status) {
+        const obj = {
+          disposition: JSON.parse(JSON.stringify(values)),
+          message: messageValue,
+        };
         const cycleId = `${appState.date1}-${appState.date2}`;
-        updateEmployeeDisposition(currentUser.id, cycleId, values)
+        updateEmployeeDisposition(currentUser.id, cycleId, obj)
           .then(() => {
-            setCycleData(values);
+            setCycleData(obj);
             handleSwitchPage('toDispoDashboard');
           })
           .catch((error) => {
@@ -226,9 +237,9 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
   useEffect(() => {
     const syncRadioValues = () => {
       const obj = JSON.parse(JSON.stringify(radioValues));
-      for (const key in cycleData) {
-        if ({}.hasOwnProperty.call(cycleData, key)) {
-          const type = cycleData[key][0];
+      for (const key in cycleData.disposition) {
+        if ({}.hasOwnProperty.call(cycleData.disposition, key)) {
+          const type = cycleData.disposition[key][0];
           const newSet = {
             freeDay: false,
             wholeDay: false,
@@ -243,10 +254,10 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
 
     const syncRangeValues = () => {
       const obj = JSON.parse(JSON.stringify(rangeValues));
-      for (const key in cycleData) {
-        if ({}.hasOwnProperty.call(cycleData, key)) {
-          obj[key].from = `${cycleData[key][1]}`;
-          obj[key].to = `${cycleData[key][2]}`;
+      for (const key in cycleData.disposition) {
+        if ({}.hasOwnProperty.call(cycleData.disposition, key)) {
+          obj[key].from = `${cycleData.disposition[key][1]}`;
+          obj[key].to = `${cycleData.disposition[key][2]}`;
         }
       }
       setRangeValues(JSON.parse(JSON.stringify(obj)));
@@ -254,10 +265,10 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
 
     const syncCheckBoxValues = () => {
       const obj = JSON.parse(JSON.stringify(checkBoxValues));
-      for (const key in cycleData) {
-        if ({}.hasOwnProperty.call(cycleData, key)) {
-          const wholeDayPlus = cycleData[key][3];
-          const marathon = cycleData[key][4];
+      for (const key in cycleData.disposition) {
+        if ({}.hasOwnProperty.call(cycleData.disposition, key)) {
+          const wholeDayPlus = cycleData.disposition[key][3];
+          const marathon = cycleData.disposition[key][4];
           obj[key].wholeDayPlus = wholeDayPlus;
           obj[key].marathon = marathon;
         }
@@ -265,10 +276,13 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
       setCheckBoxValues(JSON.parse(JSON.stringify(obj)));
     };
 
-    if (cycleData) {
+    if (cycleData.disposition) {
       syncRadioValues();
       syncRangeValues();
       syncCheckBoxValues();
+    }
+    if (cycleData.message) {
+      setMessageValue(cycleData.message);
     }
   }, [cycleData]);
 
@@ -289,6 +303,21 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
           radioValues={radioValues[`day${i + 1}`]}
         />
       ))}
+      <MessageButton
+        isOpen={messageDisplay}
+        onClick={() => setMessageDisplay(!messageDisplay)}
+        type="button"
+        error={messageValue.length > 425}
+      >
+        Komentarz do dyspozycji<span>{` (${messageValue.length}/500)`}</span>
+      </MessageButton>
+      {messageDisplay ? (
+        <Textarea
+          maxLength={500}
+          value={messageValue}
+          onChange={(e) => setMessageValue(e.target.value)}
+        />
+      ) : null}
 
       {inProgress ? (
         <Wrapper>
@@ -318,7 +347,10 @@ export default DispoForm;
 DispoForm.propTypes = {
   setCycleData: PropTypes.func.isRequired,
   handleSwitchPage: PropTypes.func.isRequired,
-  cycleData: PropTypes.objectOf(
-    PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])),
-  ),
+  cycleData: PropTypes.shape({
+    message: PropTypes.string,
+    disposition: PropTypes.objectOf(
+      PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])),
+    ),
+  }),
 };

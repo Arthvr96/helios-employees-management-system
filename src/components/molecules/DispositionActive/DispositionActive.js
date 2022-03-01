@@ -11,7 +11,7 @@ import { dispoPlaceholder } from 'helpers/helpers';
 
 const DispositionActive = () => {
   const { appState, currentUser } = useGlobalState();
-  const [cycleData, setCycleData] = useState({});
+  const [cycleData, setCycleData] = useState({ message: {}, disposition: {} });
   const [dispoSent, setDispoSent] = useState(false);
   const [page, setPage] = useState('dispoDashboard');
   const { setDefaultEmployeeDisposition, getEmployeeDisposition, updateDispoSendInfo } =
@@ -26,7 +26,7 @@ const DispositionActive = () => {
   };
 
   const handleCreateNewCycle = () => {
-    if (!cycleData.day1) {
+    if (!cycleData.disposition.day1) {
       const cycleId = `${appState.date1}-${appState.date2}`;
       setDefaultEmployeeDisposition(currentUser.id, cycleId)
         .then(() => {
@@ -40,10 +40,10 @@ const DispositionActive = () => {
   };
 
   useEffect(() => {
-    if (cycleData) {
-      if (appState.state === 'active' && cycleData.day1) {
+    if (cycleData.disposition) {
+      if (appState.state === 'active' && cycleData.disposition.day1) {
         setDispoSent(true);
-      } else if (appState.state === 'active' && !cycleData.day1) {
+      } else if (appState.state === 'active' && !cycleData.disposition.day1) {
         setDispoSent(false);
       }
     }

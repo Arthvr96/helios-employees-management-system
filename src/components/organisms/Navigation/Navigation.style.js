@@ -5,6 +5,7 @@ export const NavigationWrapper = styled.nav`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  min-width: 1150px;
   height: 6rem;
   padding: 0 5rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.decors.white};

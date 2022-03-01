@@ -6,6 +6,7 @@ export const Wrapper = styled.section`
   justify-content: ${({ justifyContent }) => justifyContent || 'center'};
   align-items: ${({ alignItems }) => alignItems};
   width: ${({ widthSize }) => widthSize}px;
+  min-width: 1150px;
   height: ${({ heightSize, navMargin }) =>
     navMargin ? heightSize - navMargin : heightSize - 65}px;
   padding: ${({ padding }) => padding || '2.5rem 5rem'};

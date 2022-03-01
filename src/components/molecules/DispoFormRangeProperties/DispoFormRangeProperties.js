@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { PropertiesWrapper } from 'components/atoms/PropertiesWrapper/PropertiesWrapper';
 import { ErrorMsg } from 'components/atoms/ErrorMsg/ErrorMsg';
@@ -42,8 +42,10 @@ const DispoFormRangeProperties = ({
   rangeError,
 }) => {
   const [error, setError] = useState('');
+  const refFromInput = useRef(null);
+  const refToInput = useRef(null);
 
-  const validation = (rangeType, value) => {
+  const validation = () => {
     const handeSetError = (isError, errorMsg) => {
       if (isError) {
         setRangeError({
@@ -59,8 +61,9 @@ const DispoFormRangeProperties = ({
         });
       }
     };
-    const from = document.querySelector('.fromInput').value;
-    const to = document.querySelector('.toInput').value;
+    const from = refFromInput.current.value;
+    const to = refToInput.current.value;
+
     if (from === 'disabled' || to === 'disabled') {
       handeSetError(true, `Wybierz zakres`);
     } else if (parseFloat(from) >= parseFloat(to)) {
@@ -73,7 +76,7 @@ const DispoFormRangeProperties = ({
   };
 
   useEffect(() => {
-    setError('Wybierz zakres');
+    validation();
   }, []);
 
   return (
@@ -83,11 +86,12 @@ const DispoFormRangeProperties = ({
         <span>
           od:
           <select
+            ref={refFromInput}
             className="fromInput"
             value={rangeValues.from}
             onChange={(e) => {
               handleSetRange(dayNumber, 'from', e.target.value);
-              validation('from', e.target.value);
+              validation();
             }}
           >
             <option disabled value="disabled">
@@ -104,11 +108,12 @@ const DispoFormRangeProperties = ({
         <span>
           do:
           <select
+            ref={refToInput}
             className="toInput"
             value={rangeValues.to}
             onChange={(e) => {
               handleSetRange(dayNumber, 'to', e.target.value);
-              validation('to', e.target.value);
+              validation();
             }}
           >
             <option disabled value="disabled">
