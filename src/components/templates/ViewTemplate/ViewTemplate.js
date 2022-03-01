@@ -4,6 +4,7 @@ import { useWindowSize } from 'hooks/useWindowSize';
 import { Wrapper } from './ViewTemplate.style';
 
 const ViewTemplate = ({
+  minWidth,
   children,
   flexDirection,
   justifyContent,
@@ -21,6 +22,7 @@ const ViewTemplate = ({
       heightSize={height}
       navMargin={navMargin}
       padding={padding}
+      minWidth={minWidth}
     >
       {children}
     </Wrapper>
@@ -36,4 +38,5 @@ ViewTemplate.propTypes = {
   alignItems: PropTypes.string,
   navMargin: PropTypes.string,
   padding: PropTypes.string,
+  minWidth: PropTypes.string,
 };

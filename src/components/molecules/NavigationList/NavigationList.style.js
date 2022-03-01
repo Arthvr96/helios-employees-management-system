@@ -33,10 +33,10 @@ export const StyledLink = styled(NavLink).attrs({ activeClassName })`
   }
 
   ${media.desktop`
-   padding: 0.3rem 3rem;
+   padding: 0.3rem 2.5rem;
   `}
 
   ${media.desktopXL`
-   padding: 0.3rem 5rem;
+   padding: 0.3rem 4.5rem;
   `}
 `;

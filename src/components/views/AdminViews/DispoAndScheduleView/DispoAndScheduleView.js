@@ -20,7 +20,12 @@ const DispoAndScheduleView = () => {
   };
 
   return (
-    <ViewTemplate flexDirection="column" alignItems="center" justifyContent="flex-start">
+    <ViewTemplate
+      minWidth="1150px"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="flex-start"
+    >
       <MenuSelectVisiblePanel links={links} state={page} handleClick={handleSetPage} />
       {page === '1' ? <DispositionsArchive /> : null}
     </ViewTemplate>

@@ -21,7 +21,6 @@ body {
     font-size: 1.6rem;
     margin: 0;
     background: #002047;
-    min-width: 1150px;
 }
 
 a, button{
