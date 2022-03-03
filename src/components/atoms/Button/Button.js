@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const Button = styled.button`
-  width: 100px;
-  padding: 0.5rem 0.5rem;
+  width: ${({ width }) => width || 'fit-content'};
+  padding: 0.7rem 3rem;
   margin: ${({ margin }) => margin};
   border: 1px solid ${({ theme }) => theme.colors.decors.black};
   border-radius: 5px;

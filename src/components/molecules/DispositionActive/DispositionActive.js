@@ -7,7 +7,6 @@ import { Button } from 'components/atoms/Button/Button';
 import { StyledStrong } from 'components/atoms/StyledStrong/StyledStrong';
 import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 import HeliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
-import { dispoPlaceholder } from 'helpers/helpers';
 
 const DispositionActive = () => {
   const { appState, currentUser } = useGlobalState();
@@ -16,6 +15,7 @@ const DispositionActive = () => {
   const [page, setPage] = useState('dispoDashboard');
   const { setDefaultEmployeeDisposition, getEmployeeDisposition, updateDispoSendInfo } =
     HeliosAppSdk.firestore;
+  const { dispoPlaceholder } = HeliosAppSdk.__helpers__;
 
   const handleSwitchPage = (target) => {
     if (target === 'toDispoDashboard') {

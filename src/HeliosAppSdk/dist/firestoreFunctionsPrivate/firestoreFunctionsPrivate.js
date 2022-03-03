@@ -35,7 +35,7 @@ export const __handleSetDoc__ = (collectionName, documentName, data) => {
 export const __handleUpdateDoc__ = (collectionName, documentName, data) => {
   return updateDoc(doc(db, collectionName, documentName), data);
 };
-export const __handleDeleteDoc__ = (collectionName, documentName, data) => {
+export const __handleDeleteDoc__ = (collectionName, documentName) => {
   return deleteDoc(doc(db, collectionName, documentName));
 };
 
@@ -43,7 +43,7 @@ export const __handleOnSnapshot__ = (collectionName, documentName, callback) => 
   return onSnapshot(doc(db, collectionName, documentName), callback);
 };
 
-export const __helpersFunctions__ = {
+export const __firestoreFunctionsPrivate__ = {
   __handleGetDoc__,
   __handleGetDocs__,
   __handleSetDoc__,

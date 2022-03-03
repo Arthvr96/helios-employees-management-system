@@ -2,11 +2,11 @@ import styled from 'styled-components';
 
 export const SubmitButton = styled.button`
   width: 100%;
-  margin-top: 1.5rem;
+  margin: ${({ margin }) => margin || '1.5rem 0 0 0'};
   padding: 0.7rem 3rem;
   background-color: ${({ theme }) => theme.colors.bg.secondary};
   border: 1px solid ${({ theme }) => theme.colors.decors.darkGrey};
-  border-radius: 10px;
+  border-radius: 5px;
   font-size: ${({ theme }) => theme.fontSize.xs};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   color: ${({ theme }) => theme.colors.text.darkGrey};
@@ -24,5 +24,14 @@ export const SubmitButton = styled.button`
   }
   &:active {
     background-color: ${({ theme }) => theme.colors.bg.grey};
-  }
+  } 
+  &:disabled {
+background-color: ${({ theme }) => theme.colors.bg.grey};
+border-color: ${({ theme }) => theme.colors.decors.grey};
+color: ${({ theme }) => theme.colors.text.grey};
+cursor: not-allowed;
+
+&:hover {
+      border-color: ${({ theme }) => theme.colors.decors.grey};
+}
 `;
