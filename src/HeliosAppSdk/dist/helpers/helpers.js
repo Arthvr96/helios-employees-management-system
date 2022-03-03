@@ -11,7 +11,7 @@ export const dispoPlaceholder = {
   message: '',
 };
 
-const getShiftMark = (dispo) => {
+export const getShiftMark = (dispo) => {
   if (dispo[0] === 'freeDay') {
     return '-';
   }

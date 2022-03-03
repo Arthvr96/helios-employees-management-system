@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 import HeliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
 import { Textarea } from 'components/atoms/Textarea/Textarea';
+import LoadingScreen from 'components/molecules/LoadingScreen/LoadingScreen';
 import { Wrapper, StyledForm, MessageButton } from './DispoForm.style';
 
 const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
@@ -26,6 +27,7 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
   const [messageValue, setMessageValue] = useState('');
   const [blockSubmitting, setBlockSubmitting] = useState(false);
   const { updateEmployeeDisposition } = HeliosAppSdk.firestore;
+  const { handleSendEmail, generateBodyFromDispo } = HeliosAppSdk.emailProvider;
 
   const handleSetRadio = (day, nameRadio) => {
     setRadioValues({
@@ -60,7 +62,7 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-
+    setInProgress(true);
     if (!blockSubmitting) {
       setInProgress(true);
       const getValues = (day, selectedOption) => {
@@ -122,13 +124,24 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
         updateEmployeeDisposition(currentUser.id, cycleId, obj)
           .then(() => {
             setCycleData(obj);
+            const mail = generateBodyFromDispo(
+              currentUser,
+              appState,
+              obj.disposition,
+              obj.message,
+              days,
+            );
+            return handleSendEmail('arturchmiel96@gmail.com', mail.subject, mail.message);
+          })
+          .then(() => {
             handleSwitchPage('toDispoDashboard');
           })
           .catch((error) => {
+            handleSwitchPage('toDispoDashboard');
             window.alert(error.code);
           });
-        console.log(obj);
       } else {
+        setInProgress(false);
         handleSwitchPage('toDispoDashboard');
       }
     }
@@ -288,58 +301,61 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
   }, [cycleData]);
 
   return (
-    <StyledForm onSubmit={onSubmit}>
-      {days.map((day, i) => (
-        <DispoFormDay
-          key={day}
-          handleSetRange={handleSetRange}
-          handleSetCheckbox={handleSetCheckbox}
-          handleSetRadio={handleSetRadio}
-          setRangeError={setRangeError}
-          rangeError={rangeError}
-          dayName={day}
-          dayNumber={`day${i + 1}`}
-          rangeValues={rangeValues[`day${i + 1}`]}
-          checkBoxValues={checkBoxValues[`day${i + 1}`]}
-          radioValues={radioValues[`day${i + 1}`]}
-        />
-      ))}
-      <MessageButton
-        isOpen={messageDisplay}
-        onClick={() => setMessageDisplay(!messageDisplay)}
-        type="button"
-        error={messageValue.length > 425}
-      >
-        Komentarz do dyspozycji<span>{` (${messageValue.length}/500)`}</span>
-      </MessageButton>
-      {messageDisplay ? (
-        <Textarea
-          maxLength={500}
-          value={messageValue}
-          onChange={(e) => setMessageValue(e.target.value)}
-        />
-      ) : null}
+    <>
+      <LoadingScreen isVisible={inProgress} />
+      <StyledForm onSubmit={onSubmit}>
+        {days.map((day, i) => (
+          <DispoFormDay
+            key={day}
+            handleSetRange={handleSetRange}
+            handleSetCheckbox={handleSetCheckbox}
+            handleSetRadio={handleSetRadio}
+            setRangeError={setRangeError}
+            rangeError={rangeError}
+            dayName={day}
+            dayNumber={`day${i + 1}`}
+            rangeValues={rangeValues[`day${i + 1}`]}
+            checkBoxValues={checkBoxValues[`day${i + 1}`]}
+            radioValues={radioValues[`day${i + 1}`]}
+          />
+        ))}
+        <MessageButton
+          isOpen={messageDisplay}
+          onClick={() => setMessageDisplay(!messageDisplay)}
+          type="button"
+          error={messageValue.length > 425}
+        >
+          Komentarz do dyspozycji<span>{` (${messageValue.length}/500)`}</span>
+        </MessageButton>
+        {messageDisplay ? (
+          <Textarea
+            maxLength={500}
+            value={messageValue}
+            onChange={(e) => setMessageValue(e.target.value)}
+          />
+        ) : null}
 
-      {inProgress ? (
-        <Wrapper>
-          <LoaderRing colorVariant2 />
-        </Wrapper>
-      ) : (
-        <Wrapper margin="1.5rem 0 0 0">
-          <Button
-            className="first"
-            isCancel
-            type="button"
-            onClick={() => handleSwitchPage('toDispoDashboard')}
-          >
-            Anuluj
-          </Button>
-          <Button disabled={blockSubmitting} type="submit">
-            Zapisz
-          </Button>
-        </Wrapper>
-      )}
-    </StyledForm>
+        {inProgress ? (
+          <Wrapper>
+            <LoaderRing colorVariant2 />
+          </Wrapper>
+        ) : (
+          <Wrapper margin="1.5rem 0 0 0">
+            <Button
+              className="first"
+              isCancel
+              type="button"
+              onClick={() => handleSwitchPage('toDispoDashboard')}
+            >
+              Anuluj
+            </Button>
+            <Button disabled={blockSubmitting} type="submit">
+              Zapisz
+            </Button>
+          </Wrapper>
+        )}
+      </StyledForm>
+    </>
   );
 };
 
