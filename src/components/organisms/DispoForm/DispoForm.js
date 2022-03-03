@@ -127,6 +127,7 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
           .catch((error) => {
             window.alert(error.code);
           });
+        console.log(obj);
       } else {
         handleSwitchPage('toDispoDashboard');
       }
