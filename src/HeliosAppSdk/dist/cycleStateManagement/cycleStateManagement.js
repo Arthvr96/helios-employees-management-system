@@ -42,6 +42,12 @@ const changeStateApp = async (target, values, appState, dispoSendInfo) => {
       state: 'blocked',
     };
   }
+  if (target === 'backToActive') {
+    data = {
+      ...appState,
+      state: 'active',
+    };
+  }
   if (target === 'endCycle') {
     data = {
       date1: '',

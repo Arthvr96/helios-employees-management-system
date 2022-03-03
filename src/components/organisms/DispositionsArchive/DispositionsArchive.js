@@ -6,6 +6,12 @@ import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import { Button } from 'components/atoms/Button/Button';
 import { collection, getDocs, query } from 'firebase/firestore';
 import { db } from 'api/firebase/firebase.config';
+import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
+import PropTypes from 'prop-types';
+import HeliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
+import PopupConfirm from 'components/molecules/PopupConfirm/PopupConfirm';
+import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
+import LoadingScreen from 'components/molecules/LoadingScreen/LoadingScreen';
 import {
   WrapperWindows,
   Wrapper,
@@ -14,15 +20,128 @@ import {
   StyledCardTitle,
 } from './DispositionsArchive.style';
 
+const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
+  const [sortedDispo, setSortedDispo] = useState([]);
+  const { getShiftMark } = HeliosAppSdk.__helpers__;
+
+  useEffect(() => {
+    if (selectedDispo) {
+      const arr = [...selectedDispo];
+      arr.sort((a, b) => a.alias.localeCompare(b.alias));
+      setSortedDispo([...arr]);
+    }
+  }, []);
+
+  return (
+    <CardTemplate margin="0 0 0 3rem">
+      <CardTitle margin="0 0 2rem 0">{selectedCycle}</CardTitle>
+      <Table>
+        <thead>
+          <tr>
+            <th>Alias</th>
+            <th>PT</th>
+            <th>SB</th>
+            <th>ND</th>
+            <th>PN</th>
+            <th>WT</th>
+            <th>SR</th>
+            <th>CZ</th>
+            <th>Msg?</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sortedDispo &&
+            setSortedDispo &&
+            sortedDispo.map((dispo) => (
+              <tr key={dispo.alias} className={!dispo.disposition.day1 ? 'notSent' : 'sent'}>
+                <td className="alias">{dispo.alias}</td>
+                {dispo.disposition.day1 ? (
+                  <>
+                    <td>{getShiftMark(dispo.disposition.day1)}</td>
+                    <td>{getShiftMark(dispo.disposition.day2)}</td>
+                    <td>{getShiftMark(dispo.disposition.day3)}</td>
+                    <td>{getShiftMark(dispo.disposition.day4)}</td>
+                    <td>{getShiftMark(dispo.disposition.day5)}</td>
+                    <td>{getShiftMark(dispo.disposition.day6)}</td>
+                    <td>{getShiftMark(dispo.disposition.day7)}</td>
+                    <td className={dispo.message && 'green'}>
+                      {dispo.message ? (
+                        <MsgButton onClick={() => handleShowMsg(dispo.alias, dispo.message)}>
+                          Tak
+                        </MsgButton>
+                      ) : (
+                        'Nie'
+                      )}
+                    </td>
+                  </>
+                ) : (
+                  <>
+                    <td>C</td>
+                    <td>C</td>
+                    <td>C</td>
+                    <td>C</td>
+                    <td>C</td>
+                    <td>C</td>
+                    <td>C</td>
+                    <td>Nie</td>
+                  </>
+                )}
+              </tr>
+            ))}
+        </tbody>
+      </Table>
+    </CardTemplate>
+  );
+};
+
+TableWindow.propTypes = {
+  selectedCycle: PropTypes.string.isRequired,
+  selectedDispo: PropTypes.arrayOf(
+    PropTypes.shape({
+      message: PropTypes.string,
+      alias: PropTypes.string,
+      disposition: PropTypes.objectOf(PropTypes.array),
+    }),
+  ),
+
+  handleShowMsg: PropTypes.func.isRequired,
+};
+
 const DispositionsArchive = () => {
   const [selectedCycle, setSelectedCycle] = useState('selectCycle');
   const [dispoRespond, setDispoRespond] = useState(null);
   const [selectedDispo, setSelectedDispo] = useState(null);
   const [options, setOptions] = useState(null);
   const [employeeMessage, setEmployeeMessage] = useState({ isOpen: false, alias: '', message: '' });
+  const [deleteCyclePopup, setDeleteCyclePopup] = useState(false);
+  const [inProgress, setInProgress] = useState(false);
+  const { deleteCycle } = HeliosAppSdk.firestore;
+  const { appState } = useGlobalState();
 
   const handleGetDisposition = () => {
     setSelectedDispo(Object.values(dispoRespond[selectedCycle]));
+  };
+
+  const handleConfirm = () => {
+    setInProgress(true);
+    setDeleteCyclePopup(false);
+    deleteCycle(selectedCycle, appState)
+      .then(() => {
+        const arr = [...options];
+        arr.splice(arr.indexOf(selectedCycle), 1);
+        setOptions(arr);
+        setSelectedCycle('selectCycle');
+        localStorage.setItem('options', JSON.stringify(arr));
+        setInProgress(false);
+      })
+      .catch((error) => {
+        if (error.message === 'error-cycles-count') {
+          window.alert('Pozostało za mało cykli aby usunąć ten cykl');
+        } else {
+          window.alert(error.code);
+        }
+        setInProgress(false);
+      });
   };
 
   useEffect(() => {
@@ -58,34 +177,8 @@ const DispositionsArchive = () => {
 
   useEffect(() => {
     setSelectedDispo(null);
+    handleCloseMsg();
   }, [selectedCycle]);
-
-  const getShiftName = (dispo) => {
-    if (dispo[0] === 'freeDay') {
-      return '-';
-    }
-    if (dispo[0] === 'wholeDay') {
-      if (dispo[3]) {
-        return 'C+';
-      }
-      return 'C';
-    }
-    if (dispo[0] === 'range') {
-      if (dispo[1] === '8') {
-        return `do ${dispo[2]}`;
-      }
-      if (dispo[2] === '30') {
-        return `od ${dispo[1]}`;
-      }
-      if (dispo[1] === '8' && dispo[2] === '30') {
-        return 'C';
-      }
-      if (dispo[1] !== '8' && dispo[2] !== '30') {
-        return `${dispo[1]}-${dispo[2]}`;
-      }
-    }
-    return null;
-  };
 
   const handleShowMsg = (alias, message) => {
     setEmployeeMessage({
@@ -103,100 +196,74 @@ const DispositionsArchive = () => {
   };
 
   return (
-    <WrapperWindows>
-      <Wrapper>
-        <CardTemplate minWidth="390px">
-          <CardTitle>Archiwum wysłanych dyspozycji</CardTitle>
-          <Wrapper>
-            <CardSubtitle fontWeight="regular" margin="0 1rem 0 0">
-              Wybierz dyspozycje z okresu:
-            </CardSubtitle>
-            <InputSelect
+    <>
+      <LoadingScreen isVisible={inProgress} />
+      <WrapperWindows>
+        <PopupConfirm
+          isVisible={deleteCyclePopup}
+          handleConfirm={handleConfirm}
+          handleCancel={() => setDeleteCyclePopup(false)}
+          title={`Czy napewno chcesz usunąć wybrany okres (${selectedCycle}) ?`}
+          subtitle="Czynności nie da sie odwrócić"
+        />
+        <Wrapper>
+          <CardTemplate minWidth="390px">
+            <CardTitle>Archiwum wysłanych dyspozycji</CardTitle>
+            <Wrapper>
+              <CardSubtitle fontWeight="regular" margin="0 1rem 0 0">
+                Wybierz dyspozycje z okresu:
+              </CardSubtitle>
+              <InputSelect
+                margin="1rem 0 0 0"
+                values={options}
+                value={selectedCycle}
+                handleChange={setSelectedCycle}
+              />
+            </Wrapper>
+            <Button
+              width="100%"
+              type="button"
+              onClick={handleGetDisposition}
               margin="1rem 0 0 0"
-              values={options}
-              value={selectedCycle}
-              handleChange={setSelectedCycle}
-            />
-          </Wrapper>
-          <Button
-            onClick={handleGetDisposition}
-            margin="1rem 0 0 0"
-            disabled={selectedCycle === 'selectCycle'}
-          >
-            Wyświetl dyspozycje
-          </Button>
-        </CardTemplate>
-        {selectedDispo && employeeMessage.isOpen ? (
-          <CardTemplate minWidth="390px" margin="2.5rem 0">
-            <StyledCardTitle margin="0 0 1rem 0">
-              Wiadomość - <span>{employeeMessage.alias}</span>
-            </StyledCardTitle>
-            <p>{employeeMessage.message}</p>
-            <Button onClick={handleCloseMsg} margin="1rem 0 0 0">
-              Zamknij wiadomosć
+              disabled={selectedCycle === 'selectCycle'}
+            >
+              Wyświetl dyspozycje
             </Button>
+            <SubmitButton
+              disabled={selectedCycle === 'selectCycle' || appState.state !== 'nonActive'}
+              onClick={() => {
+                setDeleteCyclePopup(true);
+                handleCloseMsg();
+                setSelectedDispo(null);
+              }}
+              margin="1rem 0 0 0"
+              type="button"
+              isDangerous
+            >
+              Usuń okres
+            </SubmitButton>
           </CardTemplate>
+          {selectedDispo && employeeMessage.isOpen ? (
+            <CardTemplate minWidth="390px" margin="2.5rem 0">
+              <StyledCardTitle margin="0 0 1rem 0">
+                Wiadomość - <span>{employeeMessage.alias}</span>
+              </StyledCardTitle>
+              <p>{employeeMessage.message}</p>
+              <Button onClick={handleCloseMsg} margin="1rem 0 0 0">
+                Zamknij wiadomosć
+              </Button>
+            </CardTemplate>
+          ) : null}
+        </Wrapper>
+        {selectedDispo ? (
+          <TableWindow
+            selectedCycle={selectedCycle}
+            selectedDispo={selectedDispo}
+            handleShowMsg={handleShowMsg}
+          />
         ) : null}
-      </Wrapper>
-      {selectedDispo ? (
-        <CardTemplate margin="0 0 0 3rem">
-          <CardTitle margin="0 0 2rem 0">{selectedCycle}</CardTitle>
-          <Table>
-            <thead>
-              <tr>
-                <th>Alias</th>
-                <th>PT</th>
-                <th>SB</th>
-                <th>ND</th>
-                <th>PN</th>
-                <th>WT</th>
-                <th>SR</th>
-                <th>CZ</th>
-                <th>Msg?</th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedDispo.map((dispo) => (
-                <tr key={dispo.alias} className={!dispo.disposition.day1 ? 'notSent' : 'sent'}>
-                  <td className="alias">{dispo.alias}</td>
-                  {dispo.disposition.day1 ? (
-                    <>
-                      <td>{getShiftName(dispo.disposition.day1)}</td>
-                      <td>{getShiftName(dispo.disposition.day2)}</td>
-                      <td>{getShiftName(dispo.disposition.day3)}</td>
-                      <td>{getShiftName(dispo.disposition.day4)}</td>
-                      <td>{getShiftName(dispo.disposition.day5)}</td>
-                      <td>{getShiftName(dispo.disposition.day6)}</td>
-                      <td>{getShiftName(dispo.disposition.day7)}</td>
-                      <td className={dispo.message && 'green'}>
-                        {dispo.message ? (
-                          <MsgButton onClick={() => handleShowMsg(dispo.alias, dispo.message)}>
-                            Tak
-                          </MsgButton>
-                        ) : (
-                          'Nie'
-                        )}
-                      </td>
-                    </>
-                  ) : (
-                    <>
-                      <td>C</td>
-                      <td>C</td>
-                      <td>C</td>
-                      <td>C</td>
-                      <td>C</td>
-                      <td>C</td>
-                      <td>C</td>
-                      <td>Nie</td>
-                    </>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </CardTemplate>
-      ) : null}
-    </WrapperWindows>
+      </WrapperWindows>
+    </>
   );
 };
 

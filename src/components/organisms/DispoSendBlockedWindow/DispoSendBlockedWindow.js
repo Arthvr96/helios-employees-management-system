@@ -35,6 +35,9 @@ const DispoSendBlockedWindow = () => {
         <StyledSubTitle>
           Wysyłanie dyspozycji zostało zablokowane, dodaj szablon grafiku aby móc wygenerować grafik
         </StyledSubTitle>
+        <SubmitButton onClick={() => handleChangeStateApp('backToActive')}>
+          Odblokuj wysyłanie dyspozycji
+        </SubmitButton>
         <SubmitButton isDangerous onClick={toggleVisible}>
           Zakończ okres
         </SubmitButton>
