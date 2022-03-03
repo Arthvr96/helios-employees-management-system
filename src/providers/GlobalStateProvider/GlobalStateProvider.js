@@ -41,6 +41,7 @@ const GlobalStateProvider = ({ children }) => {
         setAuthUser(false);
         localStorage.clear();
         history.push('/login');
+        window.location.replace('index.html');
       })
       .catch((error) => {
         window.alert(`Wylogowanie nie powiodło się | Error-code : ${error.code}`);

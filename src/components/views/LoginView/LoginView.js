@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ViewTemplate from 'components/templates/ViewTemplate/ViewTemplate';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import LoginPanelForm from 'components/organisms/LoginPanelForm/LoginPanelForm';
 import PopupInfo from 'components/molecules/PopupInfo/PopupInfo';
+import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 import { StyledTitle, Version, Copyrights, Wrapper } from './LoginPanel.style';
 
 const LoginView = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isResetPassword, setResetPassword] = useState(false);
+  const { authAdmin, authUser, handleLogOut } = useGlobalState();
 
   const handleChangePage = () => {
     setResetPassword(!isResetPassword);
@@ -16,6 +18,12 @@ const LoginView = () => {
   const handleConfirm = () => {
     setIsVisible(false);
   };
+
+  useEffect(() => {
+    if (authAdmin || authUser) {
+      handleLogOut();
+    }
+  }, []);
 
   return (
     <ViewTemplate navMargin="0" alignItems="center">
