@@ -132,7 +132,11 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
               obj.message,
               days,
             );
-            return handleSendEmail('arturchmiel96@gmail.com', mail.subject, mail.message);
+            return handleSendEmail(
+              process.env.REACT_APP_EMAIL_PROVIDER_TARGET,
+              mail.subject,
+              mail.message,
+            );
           })
           .then(() => {
             handleSwitchPage('toDispoDashboard');
