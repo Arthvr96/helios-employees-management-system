@@ -30,7 +30,7 @@ const generateBodyFromDispo = (currentUser, appState, disposition, message, days
   const br = '<br>';
   const title = `Dyspozycja na okres ${appState.date1}-${appState.date2}`;
   const body = daysRespond.join(br);
-  const sign = `Imie i naziwsko: ${firstName} ${lastName}${br}Alias:${alias}${br}Email:${email}`;
+  const sign = `${br}${br}${br}${br}Imie i naziwsko: ${firstName} ${lastName}${br}Alias: ${alias}${br}Email: ${email}`;
 
   const respond = {
     subject: `Dyspo ${appState.date1}-${appState.date2}`,

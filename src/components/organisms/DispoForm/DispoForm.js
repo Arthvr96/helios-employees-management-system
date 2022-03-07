@@ -28,6 +28,7 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
   const [blockSubmitting, setBlockSubmitting] = useState(false);
   const { updateEmployeeDisposition } = HeliosAppSdk.firestore;
   const { handleSendEmail, generateBodyFromDispo } = HeliosAppSdk.emailProvider;
+  const { getArrDays } = HeliosAppSdk.__helpers__;
 
   const handleSetRadio = (day, nameRadio) => {
     setRadioValues({
@@ -145,49 +146,6 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
         handleSwitchPage('toDispoDashboard');
       }
     }
-  };
-
-  const getArrDays = (date1, date2) => {
-    const getDaysArray = (s, e) => {
-      // returns arrays with dates between date 's' and date 'e'.
-      const a = [];
-      const xe = e;
-      if (e.getTimezoneOffset() > s.getTimezoneOffset()) {
-        // if date 's' is Summer-time and date 'e' is Standard-time then you need to do this:
-        const t = -(s.getTimezoneOffset() - e.getTimezoneOffset()) / 60;
-        xe.setDate(xe.getDate() + t);
-        // I have no idea what is going on here, but it works
-      }
-      for (let d = new Date(s); d <= xe; d.setDate(d.getDate() + 1)) {
-        a.push(new Date(d));
-      }
-      return a;
-    };
-
-    function getDayName(dateStr, locale) {
-      const date = new Date(dateStr);
-      return date.toLocaleDateString(locale, { weekday: 'long' });
-    }
-
-    const dayListString = getDaysArray(new Date(date1), new Date(date2));
-
-    dayListString.forEach((el, i) => {
-      dayListString[i] = new Date(dayListString[i].getTime() + 1000 * 60 * 60);
-    });
-
-    const dayListArr = dayListString.map((v) => v.toISOString().slice(0, 10));
-
-    const daysName = [];
-    dayListArr.forEach((day) => {
-      daysName.push(getDayName(day, 'pl-PL'));
-    });
-
-    const completeArr = [];
-    dayListArr.forEach((dayDate, i) => {
-      const text = `${daysName[i]} ${dayDate.slice(5, 10).replace('-', '.')}`;
-      completeArr.push(text);
-    });
-    return completeArr;
   };
 
   useEffect(() => {

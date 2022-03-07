@@ -1,8 +1,10 @@
 import styled from 'styled-components';
+import arrow from 'assets/arrowWhite.svg';
 
 export const Button = styled.button`
+  position: relative;
   width: ${({ width }) => width || 'fit-content'};
-  padding: 0.7rem 3rem;
+  padding: ${({ padding }) => padding || '0.7rem 3rem'};
   margin: ${({ margin }) => margin};
   border: 1px solid ${({ theme }) => theme.colors.decors.black};
   border-radius: 5px;
@@ -14,6 +16,20 @@ export const Button = styled.button`
   color: ${({ theme, isCancel }) => (isCancel ? theme.colors.text.black : theme.colors.text.white)};
   cursor: pointer;
   transition: background-color 0.3s ease-in;
+
+  &:after {
+    content: '';
+    display: ${({ withArrow }) => (withArrow ? 'block' : 'none')};
+    width: 2rem;
+    height: 2rem;
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: ${({ isOpen }) =>
+      isOpen ? 'translateY(-50%) rotate(0deg)' : 'translateY(-50%) rotate(180deg)'};
+    background: url(${arrow}) no-repeat;
+    background-size: 100% 100%;
+  }
 
   &:hover {
     background-color: ${({ isCancel }) =>
@@ -32,5 +48,6 @@ export const Button = styled.button`
 
     &:hover {
       border-color: ${({ theme }) => theme.colors.decors.grey};
+    }
   }
 `;

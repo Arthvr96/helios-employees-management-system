@@ -33,6 +33,7 @@ const changeStateApp = async (target, values, appState, dispoSendInfo) => {
       ...appState,
       date1: values.date1,
       date2: values.date2,
+      marathon: values.marathon,
       state: 'active',
     };
   }
@@ -54,6 +55,7 @@ const changeStateApp = async (target, values, appState, dispoSendInfo) => {
       date2: '',
       lastDate1: appState.date1,
       lastDate2: appState.date2,
+      marathon: {},
       state: 'nonActive',
     };
   }

@@ -2,8 +2,10 @@ import React from 'react';
 import WrapperClickableEl from 'components/atoms/WrapperClickableEl/WrapperClickableEl';
 import { PropertiesWrapper } from 'components/atoms/PropertiesWrapper/PropertiesWrapper';
 import PropTypes from 'prop-types';
+import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 
 const DispoFormWholeDayProperties = ({ checkBoxValues, handleSetCheckbox, dayNumber }) => {
+  const { appState } = useGlobalState();
   return (
     <PropertiesWrapper>
       <span>
@@ -19,14 +21,14 @@ const DispoFormWholeDayProperties = ({ checkBoxValues, handleSetCheckbox, dayNum
       </span>
 
       <span>
-        <WrapperClickableEl isDisabled>
+        <WrapperClickableEl isDisabled={!appState.marathon[dayNumber]}>
           maraton :
           <input
             className="clickable"
             checked={checkBoxValues.marathon}
             onChange={() => handleSetCheckbox(dayNumber, 'marathon')}
             type="checkbox"
-            disabled
+            disabled={!appState.marathon[dayNumber]}
           />
         </WrapperClickableEl>
       </span>
