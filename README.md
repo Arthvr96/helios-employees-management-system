@@ -12,7 +12,7 @@
 
 ## General info
 Branch with a demonstration version of the application. <br>
-The application has been developed to facilitate the collection of employees dispositions. (In the past, proposals for days they <br>could work were sent via email )<br>
+The application has been developed to facilitate the collection of employees dispositions. (In the past, proposals for days they could work were sent via email )<br>
 The application grew very quickly. The list of current and future features can be found here [List of features](#list-of-features)<br>
 The application supports only the <strong>Polish language</strong>. I recommend using google chrome translator if you don't know this language
 
