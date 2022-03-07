@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -9,10 +9,25 @@ import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
 import PopupConfirm from 'components/molecules/PopupConfirm/PopupConfirm';
 import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
+import MarathonPicker from 'components/molecules/MarathonPicker/MarathonPicker';
+import { Button } from 'components/atoms/Button/Button';
 import { StyledForm, ErrorMessages } from './NewCycleWindow.style';
 
-const NewCycleForm = ({ onSubmit }) => {
+const initValues = {
+  day1: false,
+  day2: false,
+  day3: false,
+  day4: false,
+  day5: false,
+  day6: false,
+  day7: false,
+};
+
+const NewCycleForm = ({ onSubmit, checkboxValues, setCheckboxValues }) => {
   const { appState } = useGlobalState();
+
+  const [marathonPicker, setMarathonPicker] = useState(false);
+  const [counter, setCounter] = useState(0);
 
   const handleValidation = Yup.object().shape({
     date1: Yup.date()
@@ -62,6 +77,11 @@ const NewCycleForm = ({ onSubmit }) => {
       }),
   });
 
+  useEffect(() => {
+    const arr = Object.values(checkboxValues).filter((v) => v);
+    setCounter(arr.length);
+  }, [checkboxValues]);
+
   return (
     <Formik
       initialValues={{
@@ -103,6 +123,29 @@ const NewCycleForm = ({ onSubmit }) => {
                 : null}
             </ErrorMessages>
           </label>
+          {!errors.date1 && !errors.date2 && values.date1 !== values.date2 ? (
+            <>
+              <Button
+                onClick={() => setMarathonPicker(!marathonPicker)}
+                isOpen={marathonPicker}
+                withArrow
+                padding="0.7rem 5rem 0.7rem 3rem"
+                margin={marathonPicker ? '0 0 2rem 0' : '0'}
+                type="button"
+              >
+                {`Dni maratonowe: ${counter}/7`}
+              </Button>
+              {marathonPicker ? (
+                <MarathonPicker
+                  checkboxValues={checkboxValues}
+                  setCheckboxValues={setCheckboxValues}
+                  date1={values.date1}
+                  date2={values.date2}
+                />
+              ) : null}
+            </>
+          ) : null}
+
           <SubmitButton type="submit" disabled={isSubmitting}>
             Zapisz
           </SubmitButton>
@@ -114,6 +157,8 @@ const NewCycleForm = ({ onSubmit }) => {
 
 NewCycleForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  checkboxValues: PropTypes.objectOf(PropTypes.bool).isRequired,
+  setCheckboxValues: PropTypes.func.isRequired,
 };
 
 const TITLE = 'Rozpocznij nowy okres grafiku !';
@@ -126,6 +171,7 @@ const NewCycleWindow = () => {
   const { handleChangeStateApp } = useGlobalState();
   const [isVisible, setVisible] = useState(false);
   const [valuesForm, setValuesForm] = useState({ date1: '', date2: '' });
+  const [checkboxValues, setCheckboxValues] = useState(initValues);
 
   const toggleVisible = () => {
     setVisible(!isVisible);
@@ -139,7 +185,7 @@ const NewCycleWindow = () => {
 
   const handleConfirm = () => {
     toggleVisible();
-    handleChangeStateApp('newCycle', valuesForm);
+    handleChangeStateApp('newCycle', { ...valuesForm, marathon: checkboxValues });
   };
 
   return (
@@ -155,7 +201,12 @@ const NewCycleWindow = () => {
         <CardTitle>{TITLE}</CardTitle>
         <CardSubtitle>{SUBTITLE}</CardSubtitle>
         <CardSubtitle>{`Ostatni wybrany okres: ${appState.lastDate1} - ${appState.lastDate2}`}</CardSubtitle>
-        <NewCycleForm toggleVisible={toggleVisible} onSubmit={handleSubmit} />
+        <NewCycleForm
+          toggleVisible={toggleVisible}
+          onSubmit={handleSubmit}
+          checkboxValues={checkboxValues}
+          setCheckboxValues={setCheckboxValues}
+        />
       </CardTemplate>
     </>
   );

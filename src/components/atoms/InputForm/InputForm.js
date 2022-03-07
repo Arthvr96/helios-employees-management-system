@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 
 export const InputForm = styled.input`
+  width: ${({ width }) => width};
+  height: ${({ height }) => height};
   padding: 0.5rem 1rem;
-  margin: 0.5rem 0 2rem 0;
+  margin: ${({ margin }) => (margin ? `${margin} !important` : '0.5rem 0 2rem 0')};
   border-radius: 5px;
   text-align: left;
   font-size: ${({ theme }) => theme.fontSize.xs};
