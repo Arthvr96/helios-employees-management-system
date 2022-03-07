@@ -84,7 +84,8 @@ pass: zaq1@WSX
 ## Note
 
 This is the first demo version. The application has still a lot of optimization to do. Many bugs have been fixed but many more will appear. <br>
-Due to the fact that the application is on the frontend I could not use the firebase admin SDK which would facilitate many things<br> but at the moment I can not node.js to such an extent to take on this task.
+Due to the fact that the application is on the frontend I could not use the firebase admin SDK which would facilitate many things<br> 
+but at the moment I don't know Node.js well enough to do this task
 
 The problem is also a mess in styles. A couple of commits ago I did some cleanup with the styles but there is still a lot to do.<br>
 The lack of react-storybook is noticeable. The choice of styled-components was also rather unsuccessful.
