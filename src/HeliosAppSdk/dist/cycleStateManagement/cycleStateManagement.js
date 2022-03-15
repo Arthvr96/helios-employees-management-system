@@ -2,6 +2,7 @@ import firestoreConstants from 'HeliosAppSdk/dist/firestoreConstatns/firestoreCo
 import {
   __handleOnSnapshot__,
   __handleSetDoc__,
+  __handleUpdateDoc__,
 } from 'HeliosAppSdk/dist/firestoreFunctionsPrivate/firestoreFunctionsPrivate';
 import {
   __resetDispoSendList__,
@@ -76,6 +77,11 @@ const changeStateApp = async (target, values, appState, dispoSendInfo) => {
   return null;
 };
 
+const updateSettings = (data) => {
+  const { pathName, segments } = firestoreConstants.paths.stateApp;
+  return __handleUpdateDoc__(pathName, segments.settings, data);
+};
+
 const cycleStateObserver = (setAppState) => {
   const { pathName, segments } = firestoreConstants.paths.stateApp;
   return __handleOnSnapshot__(pathName, segments.cycleState, (item) => {
@@ -95,8 +101,17 @@ const dispoSendInfoObserver = (setDispoSendInfo) => {
   });
 };
 
+const settingsObserver = (setSettings) => {
+  const { pathName, segments } = firestoreConstants.paths.stateApp;
+  return __handleOnSnapshot__(pathName, segments.settings, (item) => {
+    setSettings({ ...item.data() });
+  });
+};
+
 export const cycleStateManagement = {
   dispoSendInfoObserver,
   cycleStateObserver,
+  settingsObserver,
   changeStateApp,
+  updateSettings,
 };
