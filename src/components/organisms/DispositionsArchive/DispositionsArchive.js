@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import TableToExcel from '@linways/table-to-excel';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import InputSelect from 'components/atoms/InputSelect/InputSelect';
@@ -22,9 +23,14 @@ import {
 } from './DispositionsArchive.style';
 
 const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
+  const tableRef = useRef(null);
   const [sortedDispo, setSortedDispo] = useState([]);
   const [msgVisible, setMsgVisible] = useState(true);
   const { getShiftMark } = HeliosAppSdk.__helpers__;
+
+  const handleDownloadTable = () => {
+    TableToExcel.convert(tableRef.current);
+  };
 
   useEffect(() => {
     if (selectedDispo) {
@@ -37,18 +43,23 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
   return (
     <CardTemplate margin="0 0 0 3rem">
       <WindowTitleWrapper>
-        <CardTitle margin="0 0 2rem 0">{selectedCycle}</CardTitle>
-        <Button
-          onClick={() => setMsgVisible(!msgVisible)}
-          isCancel={!msgVisible}
-          margin="0 1rem"
-          padding="0.5rem"
-          type="button"
-        >
-          {msgVisible ? `msg on` : `msg off`}
-        </Button>
+        <CardTitle margin="0 0 1rem 0">{selectedCycle}</CardTitle>
+        <div>
+          <Button
+            onClick={() => setMsgVisible(!msgVisible)}
+            isCancel={!msgVisible}
+            margin="0 1rem"
+            padding="0.5rem"
+            type="button"
+          >
+            {msgVisible ? `msg on` : `msg off`}
+          </Button>
+          <Button onClick={handleDownloadTable} margin="0 1rem" padding="0.5rem" type="button">
+            pobierz tabele
+          </Button>
+        </div>
       </WindowTitleWrapper>
-      <Table>
+      <Table ref={tableRef}>
         <thead>
           <tr>
             <th>Alias</th>

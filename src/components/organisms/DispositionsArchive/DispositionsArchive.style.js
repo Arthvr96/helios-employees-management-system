@@ -15,6 +15,13 @@ export const Wrapper = styled.div`
 
 export const WindowTitleWrapper = styled.div`
   display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+
+  div {
+    display: flex;
+    justify-content: center;
+  }
 
   button {
     height: fit-content;
