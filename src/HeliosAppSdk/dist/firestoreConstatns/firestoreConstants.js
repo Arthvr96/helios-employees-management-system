@@ -8,6 +8,7 @@ const firestoreConstants = {
       segments: {
         dispoSendInfo: 'dispoSendInfo',
         cycleState: 'cycleState',
+        settings: 'settings',
       },
     },
   },

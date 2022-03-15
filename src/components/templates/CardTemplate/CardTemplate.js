@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 export const CardTemplate = styled.div`
   display: flex;
+  position: ${({ position }) => position || 'static'};
   flex-direction: ${({ flexDirection }) => flexDirection || 'column'};
   align-items: ${({ alignItems }) => alignItems || 'center'};
   justify-content: ${({ justifyContent }) => justifyContent || 'unset'};

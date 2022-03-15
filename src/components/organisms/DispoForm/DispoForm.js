@@ -16,7 +16,7 @@ import LoadingScreen from 'components/molecules/LoadingScreen/LoadingScreen';
 import { Wrapper, StyledForm, MessageButton } from './DispoForm.style';
 
 const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
-  const { currentUser, appState } = useGlobalState();
+  const { currentUser, appState, settings } = useGlobalState();
   const [days, setDays] = useState([]);
   const [inProgress, setInProgress] = useState(false);
   const [radioValues, setRadioValues] = useState(initRadio);
@@ -132,7 +132,7 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
               obj.message,
               days,
             );
-            return handleSendEmail('arturchmiel96@gmail.com', mail.subject, mail.message);
+            return handleSendEmail(settings.dispoCopy, mail.subject, mail.message);
           })
           .then(() => {
             handleSwitchPage('toDispoDashboard');

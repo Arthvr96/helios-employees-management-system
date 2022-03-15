@@ -16,8 +16,10 @@ const GlobalStateProvider = ({ children }) => {
   const [authAdmin, setAuthAdmin] = useState(false);
   const [authUser, setAuthUser] = useState(false);
   const [dispoSendInfo, setDispoSendInfo] = useState({});
+  const [settings, setSettings] = useState({});
   const { logIn, logOut, resetPassword, sessionObserver } = heliosAppSdk.auth;
-  const { changeStateApp, cycleStateObserver, dispoSendInfoObserver } = heliosAppSdk.appState;
+  const { changeStateApp, cycleStateObserver, dispoSendInfoObserver, settingsObserver } =
+    heliosAppSdk.appState;
   const history = useHistory();
   const prevAppState = usePrevious(appState.state);
 
@@ -88,6 +90,16 @@ const GlobalStateProvider = ({ children }) => {
   }, [authAdmin, authUser]);
 
   useEffect(() => {
+    let unsub = () => {};
+
+    unsub = settingsObserver(setSettings);
+
+    return () => {
+      unsub();
+    };
+  }, []);
+
+  useEffect(() => {
     // When user is logged and admin change state app from nonActive to Active user has to be logout.
     if (authUser) {
       if (appState.state === 'active' && prevAppState === 'nonActive') {
@@ -102,6 +114,7 @@ const GlobalStateProvider = ({ children }) => {
     authAdmin,
     authUser,
     dispoSendInfo,
+    settings,
     handleLogIn,
     handleLogOut,
     handleResetPassword,
