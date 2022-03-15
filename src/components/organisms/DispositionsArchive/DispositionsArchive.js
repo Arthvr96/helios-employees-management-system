@@ -18,10 +18,12 @@ import {
   Table,
   MsgButton,
   StyledCardTitle,
+  WindowTitleWrapper,
 } from './DispositionsArchive.style';
 
 const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
   const [sortedDispo, setSortedDispo] = useState([]);
+  const [msgVisible, setMsgVisible] = useState(true);
   const { getShiftMark } = HeliosAppSdk.__helpers__;
 
   useEffect(() => {
@@ -34,7 +36,18 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
 
   return (
     <CardTemplate margin="0 0 0 3rem">
-      <CardTitle margin="0 0 2rem 0">{selectedCycle}</CardTitle>
+      <WindowTitleWrapper>
+        <CardTitle margin="0 0 2rem 0">{selectedCycle}</CardTitle>
+        <Button
+          onClick={() => setMsgVisible(!msgVisible)}
+          isCancel={!msgVisible}
+          margin="0 1rem"
+          padding="0.5rem"
+          type="button"
+        >
+          {msgVisible ? `msg on` : `msg off`}
+        </Button>
+      </WindowTitleWrapper>
       <Table>
         <thead>
           <tr>
@@ -46,7 +59,7 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
             <th>WT</th>
             <th>SR</th>
             <th>CZ</th>
-            <th>Msg?</th>
+            {msgVisible ? <th>Msg?</th> : null}
           </tr>
         </thead>
         <tbody>
@@ -64,15 +77,17 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
                     <td>{getShiftMark(dispo.disposition.day5)}</td>
                     <td>{getShiftMark(dispo.disposition.day6)}</td>
                     <td>{getShiftMark(dispo.disposition.day7)}</td>
-                    <td className={dispo.message && 'green'}>
-                      {dispo.message ? (
-                        <MsgButton onClick={() => handleShowMsg(dispo.alias, dispo.message)}>
-                          Tak
-                        </MsgButton>
-                      ) : (
-                        'Nie'
-                      )}
-                    </td>
+                    {msgVisible ? (
+                      <td className={dispo.message && 'green'}>
+                        {dispo.message ? (
+                          <MsgButton onClick={() => handleShowMsg(dispo.alias, dispo.message)}>
+                            Tak
+                          </MsgButton>
+                        ) : (
+                          'Nie'
+                        )}
+                      </td>
+                    ) : null}
                   </>
                 ) : (
                   <>
@@ -83,7 +98,7 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
                     <td>C</td>
                     <td>C</td>
                     <td>C</td>
-                    <td>Nie</td>
+                    {msgVisible ? <td>Nie</td> : null}
                   </>
                 )}
               </tr>
