@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import TableToExcel from '@linways/table-to-excel';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import InputSelect from 'components/atoms/InputSelect/InputSelect';
@@ -18,11 +19,18 @@ import {
   Table,
   MsgButton,
   StyledCardTitle,
+  WindowTitleWrapper,
 } from './DispositionsArchive.style';
 
 const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
+  const tableRef = useRef(null);
   const [sortedDispo, setSortedDispo] = useState([]);
+  const [msgVisible, setMsgVisible] = useState(true);
   const { getShiftMark } = HeliosAppSdk.__helpers__;
+
+  const handleDownloadTable = () => {
+    TableToExcel.convert(tableRef.current);
+  };
 
   useEffect(() => {
     if (selectedDispo) {
@@ -34,8 +42,24 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
 
   return (
     <CardTemplate margin="0 0 0 3rem">
-      <CardTitle margin="0 0 2rem 0">{selectedCycle}</CardTitle>
-      <Table>
+      <WindowTitleWrapper>
+        <CardTitle margin="0 0 1rem 0">{selectedCycle}</CardTitle>
+        <div>
+          <Button
+            onClick={() => setMsgVisible(!msgVisible)}
+            isCancel={!msgVisible}
+            margin="0 1rem"
+            padding="0.5rem"
+            type="button"
+          >
+            {msgVisible ? `msg on` : `msg off`}
+          </Button>
+          <Button onClick={handleDownloadTable} margin="0 1rem" padding="0.5rem" type="button">
+            pobierz tabele
+          </Button>
+        </div>
+      </WindowTitleWrapper>
+      <Table ref={tableRef}>
         <thead>
           <tr>
             <th>Alias</th>
@@ -46,7 +70,7 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
             <th>WT</th>
             <th>SR</th>
             <th>CZ</th>
-            <th>Msg?</th>
+            {msgVisible ? <th>Msg?</th> : null}
           </tr>
         </thead>
         <tbody>
@@ -64,15 +88,17 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
                     <td>{getShiftMark(dispo.disposition.day5)}</td>
                     <td>{getShiftMark(dispo.disposition.day6)}</td>
                     <td>{getShiftMark(dispo.disposition.day7)}</td>
-                    <td className={dispo.message && 'green'}>
-                      {dispo.message ? (
-                        <MsgButton onClick={() => handleShowMsg(dispo.alias, dispo.message)}>
-                          Tak
-                        </MsgButton>
-                      ) : (
-                        'Nie'
-                      )}
-                    </td>
+                    {msgVisible ? (
+                      <td className={dispo.message && 'green'}>
+                        {dispo.message ? (
+                          <MsgButton onClick={() => handleShowMsg(dispo.alias, dispo.message)}>
+                            Tak
+                          </MsgButton>
+                        ) : (
+                          'Nie'
+                        )}
+                      </td>
+                    ) : null}
                   </>
                 ) : (
                   <>
@@ -83,7 +109,7 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
                     <td>C</td>
                     <td>C</td>
                     <td>C</td>
-                    <td>Nie</td>
+                    {msgVisible ? <td>Nie</td> : null}
                   </>
                 )}
               </tr>

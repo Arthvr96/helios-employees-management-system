@@ -13,6 +13,28 @@ export const Wrapper = styled.div`
   margin-top: 1rem;
 `;
 
+export const WindowTitleWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+
+  div {
+    display: flex;
+    justify-content: center;
+  }
+
+  button {
+    height: fit-content;
+
+    span.visible {
+      color: ${({ theme }) => theme.colors.success};
+    }
+    span.nonVisible {
+      color: ${({ theme }) => theme.colors.error};
+    }
+  }
+`;
+
 export const Table = styled.table`
   margin-bottom: 2rem;
   td.alias {
