@@ -11,15 +11,16 @@ export const useGlobalState = () => {
 };
 
 const GlobalStateProvider = ({ children }) => {
+  const { logIn, logOut, resetPassword, sessionObserver } = heliosAppSdk.auth;
+  const { changeStateApp, cycleStateObserver, dispoSendInfoObserver, settingsObserver } =
+    heliosAppSdk.appState;
+  const { appInfo } = heliosAppSdk;
   const [appState, setAppState] = useState({});
   const [currentUser, setCurrentUser] = useState(null);
   const [authAdmin, setAuthAdmin] = useState(false);
   const [authUser, setAuthUser] = useState(false);
   const [dispoSendInfo, setDispoSendInfo] = useState({});
-  const [settings, setSettings] = useState({});
-  const { logIn, logOut, resetPassword, sessionObserver } = heliosAppSdk.auth;
-  const { changeStateApp, cycleStateObserver, dispoSendInfoObserver, settingsObserver } =
-    heliosAppSdk.appState;
+  const [settings, setSettings] = useState({ ...appInfo });
   const history = useHistory();
   const prevAppState = usePrevious(appState.state);
 
@@ -107,6 +108,27 @@ const GlobalStateProvider = ({ children }) => {
       }
     }
   }, [appState]);
+
+  useEffect(() => {
+    if (settings.version !== appInfo.version) {
+      if (authUser || authAdmin) {
+        window.alert(
+          'Aplikacja nie jest akutalna. Karta z aplikacją zostanie odswieżona po zamknieciu tego okna',
+        );
+        handleLogOut();
+      } else {
+        window.alert(
+          'Aplikacja nie jest akutalna. Karta z aplikacją zostanie odswieżona po zamknieciu tego okna',
+        );
+        setCurrentUser(null);
+        setAuthAdmin(false);
+        setAuthUser(false);
+        localStorage.clear();
+        history.push('/login');
+        window.location.replace('index.html');
+      }
+    }
+  }, [settings]);
 
   const values = {
     appState,

@@ -4,12 +4,14 @@ import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import LoginPanelForm from 'components/organisms/LoginPanelForm/LoginPanelForm';
 import PopupInfo from 'components/molecules/PopupInfo/PopupInfo';
 import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
+import HeliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
 import { StyledTitle, Version, Copyrights, Wrapper } from './LoginPanel.style';
 
 const LoginView = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isResetPassword, setResetPassword] = useState(false);
   const { authAdmin, authUser, handleLogOut } = useGlobalState();
+  const { version } = HeliosAppSdk.appInfo;
 
   const handleChangePage = () => {
     setResetPassword(!isResetPassword);
@@ -31,7 +33,7 @@ const LoginView = () => {
         <Wrapper>
           <StyledTitle>{isResetPassword ? 'Zresetuj hasło' : 'Logowanie'}</StyledTitle>
           <LoginPanelForm isResetPassword={isResetPassword} handleChangePage={handleChangePage} />
-          <Version>v0.1</Version>
+          <Version>{`v${version}`}</Version>
         </Wrapper>
       </CardTemplate>
       <Copyrights>
