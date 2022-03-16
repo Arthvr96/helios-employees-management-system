@@ -38,8 +38,8 @@ const SignInForm = ({ handleChangePage }) => {
           setError('Zły login lub/i hasło');
         } else {
           setError('Błąd logowania');
+          window.alert(`Błąd krytyczny logowania : ${error.code}`);
         }
-        window.alert(`Błąd krytyczny logowania : ${error.code}`);
         setInProgress(false);
         resetForm();
       });
