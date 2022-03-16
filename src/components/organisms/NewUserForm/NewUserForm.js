@@ -43,7 +43,7 @@ const NewUserForm = () => {
           role: adminRole ? 'admin' : 'user',
           workplaces: { ...workplaces },
         };
-        if (localStorage.usersList) {
+        if (localStorage.usersList && !adminRole) {
           const usersList = JSON.parse(localStorage.usersList);
           usersList.push(obj);
           localStorage.setItem('usersList', JSON.stringify(usersList));
