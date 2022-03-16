@@ -8,7 +8,12 @@ const DispositionUserView = () => {
   const { appState } = useGlobalState();
 
   return (
-    <ViewTemplate justifyContent="center" navMargin="40">
+    <ViewTemplate
+      customHeight="fit-content"
+      padding="0 0 4rem 0"
+      justifyContent="center"
+      navMargin="40"
+    >
       {appState.state === 'nonActive' || appState.state === 'blocked' ? (
         <DispositionBlocked />
       ) : null}

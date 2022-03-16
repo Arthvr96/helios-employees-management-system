@@ -53,11 +53,14 @@ export const StyledList = styled.ul`
         transition: fill 0.2s ease-in;
       }
     }
+
+    button {
+      cursor: pointer;
+    }
   }
 
   li:nth-child(odd) {
     margin-bottom: 1rem;
-    cursor: pointer;
   }
 
   li:nth-child(odd):hover svg {
@@ -71,5 +74,8 @@ export const StyledList = styled.ul`
 
   li:nth-child(even) {
     margin-bottom: 2.5rem;
+    background-color: ${({ theme }) => theme.colors.decors.lightGrey};
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
   }
 `;
