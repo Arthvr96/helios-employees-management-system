@@ -27,6 +27,7 @@ export const theme = {
     decors: {
       white: '#ffffff',
       black: '#000000',
+      lightGrey: '#e3e3e3',
       grey: '#ACACAC',
       darkGrey: '#4A4A4A',
       hoverError: '#F13535',

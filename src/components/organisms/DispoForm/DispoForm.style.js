@@ -17,6 +17,7 @@ export const StyledForm = styled.form`
   flex-direction: column;
   align-items: center;
   width: 90vw;
+  max-width: 800px;
 `;
 
 export const MessageButton = styled.button`

@@ -282,6 +282,7 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
           onClick={() => setMessageDisplay(!messageDisplay)}
           type="button"
           error={messageValue.length > 425}
+          className="msgButton"
         >
           Komentarz do dyspozycji<span>{` (${messageValue.length}/500)`}</span>
         </MessageButton>

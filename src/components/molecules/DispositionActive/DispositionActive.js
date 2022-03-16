@@ -7,12 +7,15 @@ import { Button } from 'components/atoms/Button/Button';
 import { StyledStrong } from 'components/atoms/StyledStrong/StyledStrong';
 import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 import HeliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
+import DispositionFormTutorial from 'components/organisms/DispositionFormTutorial/DispositionFormTutorial';
+import { getCookie, setCookie } from 'utliltes/cookies';
 
 const DispositionActive = () => {
   const { appState, currentUser } = useGlobalState();
   const [cycleData, setCycleData] = useState({ message: '', disposition: {} });
   const [dispoSent, setDispoSent] = useState(false);
   const [page, setPage] = useState('dispoDashboard');
+  const [dispoTut, setDispoTut] = useState(true);
   const { setDefaultEmployeeDisposition, getEmployeeDisposition, updateDispoSendInfo } =
     HeliosAppSdk.firestore;
   const { dispoPlaceholder } = HeliosAppSdk.__helpers__;
@@ -39,6 +42,19 @@ const DispositionActive = () => {
     }
   };
 
+  const handleClose = () => {
+    setCookie('dispoTut', 'false', 9999);
+    setDispoTut(false);
+  };
+
+  useEffect(() => {
+    const x = getCookie('dispoTut');
+
+    if (x === 'false') {
+      setDispoTut(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (cycleData.disposition) {
       if (appState.state === 'active' && cycleData.disposition.day1) {
@@ -63,38 +79,44 @@ const DispositionActive = () => {
   }, [appState]);
 
   return (
-    <CardTemplate padding="2rem 1rem">
-      {page === 'formDispo' ? (
-        <DispoForm
-          cycleData={cycleData}
-          handleSwitchPage={handleSwitchPage}
-          setCycleData={setCycleData}
-        />
+    <>
+      {page === 'formDispo' && dispoTut ? (
+        <DispositionFormTutorial handleClose={handleClose} />
       ) : null}
-      {page === 'dispoDashboard' ? (
-        <>
-          <CardTitle>Wysyłanie dyspo aktywne!</CardTitle>
-          <CardSubtitle fontSize="s">
-            Wysyłanie dyspozycji na okres <br />
-            <StyledStrong>
-              {appState.date1} - {appState.date2}
-            </StyledStrong>
-            <br />
-            jest aktywne
-          </CardSubtitle>
-          <Button
-            margin="1rem 0 0 0"
-            type="button"
-            onClick={() => {
-              handleSwitchPage('toFormDispo');
-              handleCreateNewCycle();
-            }}
-          >
-            {dispoSent ? 'Edytuj dyspozycje' : 'Wyślij dyspozycje'}
-          </Button>
-        </>
-      ) : null}
-    </CardTemplate>
+
+      <CardTemplate padding="2rem 1rem">
+        {page === 'formDispo' ? (
+          <DispoForm
+            cycleData={cycleData}
+            handleSwitchPage={handleSwitchPage}
+            setCycleData={setCycleData}
+          />
+        ) : null}
+        {page === 'dispoDashboard' ? (
+          <>
+            <CardTitle>Wysyłanie dyspo aktywne!</CardTitle>
+            <CardSubtitle fontSize="s">
+              Wysyłanie dyspozycji na okres <br />
+              <StyledStrong>
+                {appState.date1} - {appState.date2}
+              </StyledStrong>
+              <br />
+              jest aktywne
+            </CardSubtitle>
+            <Button
+              margin="1rem 0 0 0"
+              type="button"
+              onClick={() => {
+                handleSwitchPage('toFormDispo');
+                handleCreateNewCycle();
+              }}
+            >
+              {dispoSent ? 'Edytuj dyspozycje' : 'Wyślij dyspozycje'}
+            </Button>
+          </>
+        ) : null}
+      </CardTemplate>
+    </>
   );
 };
 
