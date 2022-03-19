@@ -162,6 +162,10 @@ const createUser = async (values, workplaces, adminRole, dispoSendInfo, appState
           .catch((error) => {
             throw error;
           });
+      } else {
+        __addUserInfo__(uid).catch((error) => {
+          throw error;
+        });
       }
       return uid;
     });

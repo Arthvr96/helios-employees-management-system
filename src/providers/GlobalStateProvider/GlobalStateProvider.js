@@ -21,6 +21,7 @@ const GlobalStateProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState(false);
   const [dispoSendInfo, setDispoSendInfo] = useState({});
   const [settings, setSettings] = useState({ ...appInfo });
+  const [isProcessingState, setProcessingState] = useState(false);
   const history = useHistory();
   const prevAppState = usePrevious(appState.state);
 
@@ -57,9 +58,17 @@ const GlobalStateProvider = ({ children }) => {
   };
 
   const handleChangeStateApp = (target, values) => {
-    changeStateApp(target, values, appState, dispoSendInfo).catch((error) =>
-      window.alert(error.code),
-    );
+    setProcessingState(true);
+    changeStateApp(target, values, appState, dispoSendInfo)
+      .then(() => {
+        window.setTimeout(() => {
+          setProcessingState(false);
+        }, 300);
+      })
+      .catch((error) => {
+        window.alert(error.code);
+        handleLogOut();
+      });
   };
 
   useEffect(() => {
@@ -137,6 +146,7 @@ const GlobalStateProvider = ({ children }) => {
     authUser,
     dispoSendInfo,
     settings,
+    isProcessingState,
     handleLogIn,
     handleLogOut,
     handleResetPassword,
