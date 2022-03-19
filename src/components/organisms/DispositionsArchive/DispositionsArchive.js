@@ -270,7 +270,7 @@ const DispositionsArchive = () => {
             </SubmitButton>
           </CardTemplate>
           {selectedDispo && employeeMessage.isOpen ? (
-            <CardTemplate minWidth="390px" margin="2.5rem 0">
+            <CardTemplate width="390px" margin="2.5rem 0">
               <StyledCardTitle margin="0 0 1rem 0">
                 Wiadomość - <span>{employeeMessage.alias}</span>
               </StyledCardTitle>
