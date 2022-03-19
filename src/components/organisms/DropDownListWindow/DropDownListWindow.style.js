@@ -47,7 +47,6 @@ export const EmployeeWrapper = styled.div`
   margin-left: 0.5rem;
   border-radius: 7px;
   cursor: pointer;
-  transform: background-color 0.3s ease-in-out;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.bg.grey};
@@ -69,6 +68,7 @@ export const EmployeeAvatar = styled.div`
     color: ${({ theme }) => theme.colors.text.white};
     text-align: center;
     letter-spacing: 0px;
+    text-transform: capitalize;
   }
 `;
 export const EmployeeInfo = styled.div`
@@ -78,6 +78,7 @@ export const EmployeeName = styled.p`
   font-size: ${({ theme }) => theme.fontSize.xs};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   color: ${({ theme }) => theme.colors.text.black};
+  text-transform: capitalize;
 `;
 export const EmployeeMail = styled.p`
   max-width: 25rem;

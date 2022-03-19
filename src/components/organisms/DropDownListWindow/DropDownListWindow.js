@@ -37,7 +37,7 @@ const Employee = ({ firstName, lastName, email }) => {
     <EmployeeWrapper>
       <EmployeeAvatar>
         <span>{firstName.slice(0, 3)}</span>
-        <span>{firstName.slice(0, 3)}</span>
+        <span>{lastName.slice(0, 3)}</span>
       </EmployeeAvatar>
       <EmployeeInfo>
         <EmployeeName>{`${lastName} ${firstName}`}</EmployeeName>

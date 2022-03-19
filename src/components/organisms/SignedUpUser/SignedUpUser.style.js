@@ -4,8 +4,10 @@ export const UserNavWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  width: 23rem;
+  min-width: 23rem;
+  max-width: 33rem;
   height: 6rem;
+  padding-left: 1rem;
   border-left: 1px solid ${({ theme }) => theme.colors.decors.white};
 `;
 
@@ -30,6 +32,8 @@ export const UserInfoWrapper = styled.div`
 `;
 
 export const UserName = styled.h3`
+  max-width: 26rem;
+  overflow-wrap: anywhere;
   text-align: right;
   font-size: ${({ theme }) => theme.fontSize.xs};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
