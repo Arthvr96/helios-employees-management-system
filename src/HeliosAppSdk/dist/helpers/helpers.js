@@ -31,17 +31,31 @@ export const getShiftMark = (dispo) => {
     return 'C';
   }
   if (dispo[0] === 'range') {
-    if (dispo[1] === '8') {
-      return `do ${dispo[2]}`;
+    let from = parseFloat(dispo[1]);
+    let to = parseFloat(dispo[2]);
+
+    if (from % 1 > 0) {
+      from = `${parseInt(dispo[1], 10)}:30`;
+    } else {
+      from = `${from}`;
     }
-    if (dispo[2] === '30') {
-      return `od ${dispo[1]}`;
+    if (to % 1 > 0) {
+      to = `${parseInt(dispo[2], 10)}:30`;
+    } else {
+      to = `${to}`;
     }
-    if (dispo[1] === '8' && dispo[2] === '30') {
+
+    if (from === '8') {
+      return `do ${to}`;
+    }
+    if (to === '30') {
+      return `od ${from}`;
+    }
+    if (from === '8' && to === '30') {
       return 'C';
     }
-    if (dispo[1] !== '8' && dispo[2] !== '30') {
-      return `${dispo[1]}-${dispo[2]}`;
+    if (from !== '8' && to !== '30') {
+      return `od ${from} do ${to}`;
     }
   }
   return null;
