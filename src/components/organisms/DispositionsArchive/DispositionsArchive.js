@@ -26,11 +26,39 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
   const tableRef = useRef(null);
   const [sortedDispo, setSortedDispo] = useState([]);
   const [msgVisible, setMsgVisible] = useState(true);
-  const { getShiftMark } = HeliosAppSdk.__helpers__;
+  const { getShiftMark, getArrDays } = HeliosAppSdk.__helpers__;
+  const [arrDates, setArrDates] = useState([]);
+  const date1 = `${selectedCycle.slice(8, 10)}.${selectedCycle.slice(5, 7)}.${selectedCycle.slice(
+    0,
+    4,
+  )}`;
+  const date2 = `${selectedCycle.slice(19, 21)}.${selectedCycle.slice(
+    16,
+    18,
+  )}.${selectedCycle.slice(11, 15)}`;
 
   const handleDownloadTable = () => {
     TableToExcel.convert(tableRef.current);
   };
+
+  useEffect(() => {
+    const d1 = selectedCycle.slice(0, 10);
+    const d2 = selectedCycle.slice(11, 21);
+    const arr = getArrDays(d1, d2);
+
+    const arr2 = [];
+    arr.forEach((el) => {
+      arr2.push(el.split(' '));
+    });
+
+    const result = [];
+
+    arr2.forEach((el) => {
+      result.push(`${el[0].slice(0, 2)} ${el[1].slice(3, 5)}.${el[1].slice(0, 2)}`);
+    });
+
+    setArrDates(result);
+  }, []);
 
   useEffect(() => {
     if (selectedDispo) {
@@ -62,14 +90,16 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
       <Table ref={tableRef}>
         <thead>
           <tr>
-            <th>Alias</th>
-            <th>PT</th>
-            <th>SB</th>
-            <th>ND</th>
-            <th>PN</th>
-            <th>WT</th>
-            <th>SR</th>
-            <th>CZ</th>
+            <th className="tabTitle" colSpan={msgVisible ? 9 : 8}>{`"${date1}-${date2}"`}</th>
+          </tr>
+          <tr>
+            <th>Imię i nazwisko</th>
+            {arrDates.map((el) => (
+              <th className="day" key={el}>
+                {el}
+              </th>
+            ))}
+
             {msgVisible ? <th>Msg?</th> : null}
           </tr>
         </thead>
@@ -270,7 +300,7 @@ const DispositionsArchive = () => {
             </SubmitButton>
           </CardTemplate>
           {selectedDispo && employeeMessage.isOpen ? (
-            <CardTemplate minWidth="390px" margin="2.5rem 0">
+            <CardTemplate width="390px" margin="2.5rem 0">
               <StyledCardTitle margin="0 0 1rem 0">
                 Wiadomość - <span>{employeeMessage.alias}</span>
               </StyledCardTitle>

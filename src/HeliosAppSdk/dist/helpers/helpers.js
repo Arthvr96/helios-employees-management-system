@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const dispoPlaceholder = {
   disposition: {
     day1: ['freeDay', '8', '30', false, false],
@@ -12,23 +14,26 @@ export const dispoPlaceholder = {
 };
 
 export const getShiftMark = (dispo) => {
+  let result = '';
+  const br = React.createElement('br', {});
+
   if (dispo[0] === 'freeDay') {
-    return '-';
+    result = React.createElement('span', {}, '-');
   }
   if (dispo[0] === 'wholeDay') {
     const cPlus = dispo[3];
     const marathon = dispo[4];
     if (cPlus && marathon) {
-      return 'M+';
+      result = React.createElement('span', {}, 'M+');
     }
     if (marathon) {
-      return 'M';
+      result = React.createElement('span', {}, 'M');
     }
     if (cPlus) {
-      return 'C+';
+      result = React.createElement('span', {}, 'C+');
     }
 
-    return 'C';
+    result = React.createElement('span', {}, 'C');
   }
   if (dispo[0] === 'range') {
     let from = parseFloat(dispo[1]);
@@ -46,19 +51,21 @@ export const getShiftMark = (dispo) => {
     }
 
     if (from === '8') {
-      return `do ${to}`;
+      result = React.createElement('span', {}, `do ${to}`);
     }
     if (to === '30') {
-      return `od ${from}`;
+      result = React.createElement('span', {}, `od ${from}`);
     }
     if (from === '8' && to === '30') {
-      return 'C';
+      result = React.createElement('span', {}, `C`);
     }
     if (from !== '8' && to !== '30') {
-      return `od ${from} do ${to}`;
+      result = React.createElement('span', {}, `od ${from}\n`, br, ` do ${to}`);
     }
   }
-  return null;
+  // e.innerHTML = result;
+
+  return result;
 };
 
 const getArrDays = (date1, date2) => {

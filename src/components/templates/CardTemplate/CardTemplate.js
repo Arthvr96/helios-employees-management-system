@@ -7,7 +7,7 @@ export const CardTemplate = styled.div`
   flex-direction: ${({ flexDirection }) => flexDirection || 'column'};
   align-items: ${({ alignItems }) => alignItems || 'center'};
   justify-content: ${({ justifyContent }) => justifyContent || 'unset'};
-  width: fit-content;
+  width: ${({ width }) => width || 'fit-content'};
   min-width: ${({ minWidth }) => minWidth};
   height: fit-content;
   padding: ${({ padding }) => padding || '2.5rem 2rem'};

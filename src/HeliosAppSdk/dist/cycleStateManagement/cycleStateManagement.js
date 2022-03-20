@@ -14,16 +14,18 @@ import {
 
 const __runOnNewCycle__ = (values, dispoSendInfo) => {
   const cycleDate = `${values.date1}-${values.date2}`;
-  __resetDispoSendList__(dispoSendInfo);
-  __createNewCycleInDispoSortedEmployees__(cycleDate);
+  return __resetDispoSendList__(dispoSendInfo).then(() =>
+    __createNewCycleInDispoSortedEmployees__(cycleDate),
+  );
 };
 const __runOnBlockSendingDispo__ = (appState) => {
   const date = `${appState.date1}-${appState.date2}`;
-  __archiveActualDispo__(date);
+  return __archiveActualDispo__(date);
 };
 const __runOnEndCycle__ = () => {
-  __cleanupDispoEmployees__();
-  __cleanupDispoCycles__();
+  return __cleanupDispoEmployees__().then((x) => {
+    return __cleanupDispoCycles__();
+  });
 };
 
 const changeStateApp = async (target, values, appState, dispoSendInfo) => {
@@ -64,17 +66,22 @@ const changeStateApp = async (target, values, appState, dispoSendInfo) => {
   if (data) {
     return __handleSetDoc__(pathName, segments.cycleState, data).then(() => {
       if (target === 'newCycle') {
-        __runOnNewCycle__(values, dispoSendInfo);
+        return __runOnNewCycle__(values, dispoSendInfo);
       }
       if (target === 'blockSendingDisposition') {
-        __runOnBlockSendingDispo__(appState);
+        return __runOnBlockSendingDispo__(appState);
       }
-      if (target === 'blockSendingDisposition') {
-        __runOnEndCycle__();
+      if (target === 'endCycle') {
+        return __runOnEndCycle__();
       }
+      return new Promise((resolve) => {
+        resolve();
+      });
     });
   }
-  return null;
+  return new Promise((resolve) => {
+    resolve();
+  });
 };
 
 const updateSettings = (data) => {

@@ -43,11 +43,24 @@ export const Table = styled.table`
   }
   td {
     min-width: 45px;
-    padding: 0.2rem 0.3rem;
+    padding: 0.4rem 0.2rem;
     text-align: center;
-    font-size: ${({ theme }) => theme.fontSize.s};
+    font-size: ${({ theme }) => theme.fontSize.xs};
     font-weight: ${({ theme }) => theme.fontWeight.light};
     color: ${({ theme }) => theme.colors.text.black};
+  }
+
+  tr th {
+    font-size: ${({ theme }) => theme.fontSize.xs};
+    padding: 0.3rem;
+  }
+
+  .tabTitle {
+    font-size: ${({ theme }) => theme.fontSize.m};
+  }
+
+  .day {
+    text-transform: uppercase;
   }
 
   tr.notSent {
