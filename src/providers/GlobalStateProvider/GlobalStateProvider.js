@@ -61,9 +61,7 @@ const GlobalStateProvider = ({ children }) => {
     setProcessingState(true);
     changeStateApp(target, values, appState, dispoSendInfo)
       .then(() => {
-        window.setTimeout(() => {
-          setProcessingState(false);
-        }, 300);
+        setProcessingState(false);
       })
       .catch((error) => {
         window.alert(error.code);
