@@ -13,27 +13,26 @@ export const dispoPlaceholder = {
   message: '',
 };
 
-export const getShiftMark = (dispo) => {
+export const getShiftMark = (dispo, stringMark) => {
   let result = '';
   const br = React.createElement('br', {});
 
   if (dispo[0] === 'freeDay') {
-    result = React.createElement('span', {}, '-');
+    result = stringMark ? '-' : React.createElement('span', {}, '-');
   }
   if (dispo[0] === 'wholeDay') {
     const cPlus = dispo[3];
     const marathon = dispo[4];
-    if (cPlus && marathon) {
-      result = React.createElement('span', {}, 'M+');
-    }
-    if (marathon) {
-      result = React.createElement('span', {}, 'M');
-    }
-    if (cPlus) {
-      result = React.createElement('span', {}, 'C+');
-    }
 
-    result = React.createElement('span', {}, 'C');
+    if (cPlus && marathon) {
+      result = stringMark ? 'M+' : React.createElement('span', {}, 'M+');
+    } else if (marathon) {
+      result = stringMark ? 'M' : React.createElement('span', {}, 'M');
+    } else if (cPlus) {
+      result = stringMark ? 'C+' : React.createElement('span', {}, 'C+');
+    } else if (!cPlus && !marathon) {
+      result = stringMark ? 'C' : React.createElement('span', {}, 'C');
+    }
   }
   if (dispo[0] === 'range') {
     let from = parseFloat(dispo[1]);
@@ -51,19 +50,15 @@ export const getShiftMark = (dispo) => {
     }
 
     if (from === '8') {
-      result = React.createElement('span', {}, `do ${to}`);
-    }
-    if (to === '30') {
-      result = React.createElement('span', {}, `od ${from}`);
-    }
-    if (from === '8' && to === '30') {
-      result = React.createElement('span', {}, `C`);
-    }
-    if (from !== '8' && to !== '30') {
-      result = React.createElement('span', {}, `od ${from}\n`, br, ` do ${to}`);
+      result = stringMark ? `do ${to}` : React.createElement('span', {}, `do ${to}`);
+    } else if (to === '30') {
+      result = stringMark ? `od ${from}` : React.createElement('span', {}, `od ${from}`);
+    } else if (from !== '8' && to !== '30') {
+      result = stringMark
+        ? `od ${from} do ${to}`
+        : React.createElement('span', {}, `od ${from}\n`, br, ` do ${to}`);
     }
   }
-  // e.innerHTML = result;
 
   return result;
 };
