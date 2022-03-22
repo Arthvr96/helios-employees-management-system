@@ -16,6 +16,7 @@ const DispoFormDay = ({
   setRangeError,
   rangeValues,
   rangeError,
+  isMarathon,
 }) => {
   return (
     <StyledLabel isError={rangeError[dayNumber]} htmlFor={dayNumber}>
@@ -27,12 +28,14 @@ const DispoFormDay = ({
         isError={rangeError[dayNumber]}
         rangeError={rangeError}
         setRangeError={setRangeError}
+        isMarathon={isMarathon}
       />
       {radioValues.wholeDay ? (
         <DispoFormWholeDayProperties
           dayNumber={dayNumber}
           handleSetCheckbox={handleSetCheckbox}
           checkBoxValues={checkBoxValues}
+          isMarathon={isMarathon}
         />
       ) : null}
       {radioValues.range ? (
@@ -61,4 +64,5 @@ DispoFormDay.propTypes = {
   rangeError: PropTypes.objectOf(PropTypes.bool),
   checkBoxValues: PropTypes.objectOf(PropTypes.bool),
   rangeValues: PropTypes.objectOf(PropTypes.string),
+  isMarathon: PropTypes.bool.isRequired,
 };
