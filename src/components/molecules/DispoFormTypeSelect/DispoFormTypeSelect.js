@@ -18,6 +18,7 @@ const DispoFormTypeSelect = ({
   isError,
   rangeError,
   setRangeError,
+  isMarathon,
 }) => {
   const handleSetError = (day, radioButton) => {
     if (radioButton === 'range' && !radioValues.range) {
@@ -29,7 +30,7 @@ const DispoFormTypeSelect = ({
   };
   return (
     <Wrapper isError={isError} freeDaySelected={radioValues.freeDay}>
-      <h3>{dayName}</h3>
+      <h3>{isMarathon ? `${dayName} (M)` : dayName}</h3>
       <ul>
         {radioButtons.map((radioButton) => (
           <li key={uniqid()}>
@@ -62,4 +63,5 @@ DispoFormTypeSelect.propTypes = {
   isError: PropTypes.bool.isRequired,
   rangeError: PropTypes.objectOf(PropTypes.bool),
   setRangeError: PropTypes.func.isRequired,
+  isMarathon: PropTypes.bool.isRequired,
 };

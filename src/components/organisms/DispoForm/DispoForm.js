@@ -275,6 +275,7 @@ const DispoForm = ({ handleSwitchPage, cycleData, setCycleData }) => {
             rangeValues={rangeValues[`day${i + 1}`]}
             checkBoxValues={checkBoxValues[`day${i + 1}`]}
             radioValues={radioValues[`day${i + 1}`]}
+            isMarathon={appState.marathon[`day${i + 1}`]}
           />
         ))}
         <MessageButton
