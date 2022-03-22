@@ -111,13 +111,13 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
                 <td className="alias">{dispo.alias}</td>
                 {dispo.disposition.day1 ? (
                   <>
-                    <td>{getShiftMark(dispo.disposition.day1)}</td>
-                    <td>{getShiftMark(dispo.disposition.day2)}</td>
-                    <td>{getShiftMark(dispo.disposition.day3)}</td>
-                    <td>{getShiftMark(dispo.disposition.day4)}</td>
-                    <td>{getShiftMark(dispo.disposition.day5)}</td>
-                    <td>{getShiftMark(dispo.disposition.day6)}</td>
-                    <td>{getShiftMark(dispo.disposition.day7)}</td>
+                    <td>{getShiftMark(dispo.disposition.day1, false)}</td>
+                    <td>{getShiftMark(dispo.disposition.day2, false)}</td>
+                    <td>{getShiftMark(dispo.disposition.day3, false)}</td>
+                    <td>{getShiftMark(dispo.disposition.day4, false)}</td>
+                    <td>{getShiftMark(dispo.disposition.day5, false)}</td>
+                    <td>{getShiftMark(dispo.disposition.day6, false)}</td>
+                    <td>{getShiftMark(dispo.disposition.day7, false)}</td>
                     {msgVisible ? (
                       <td className={dispo.message && 'green'}>
                         {dispo.message ? (
