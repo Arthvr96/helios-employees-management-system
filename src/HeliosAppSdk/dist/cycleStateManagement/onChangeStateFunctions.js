@@ -48,17 +48,27 @@ export const __createNewCycleInDispoSortedEmployees__ = (dateCycle) => {
 };
 
 export const __archiveActualDispo__ = (date) => {
-  const { dispositionsEmployees, dispositionsCycles } = firestoreConstants.paths;
-  return __handleGetDocs__(dispositionsEmployees).then((querySnapshot) => {
-    const data = {};
-    querySnapshot.forEach((el) => {
-      data[el.id] = {
-        disposition: el.data()[date].disposition || {},
-        message: el.data()[date].message || '',
-        alias: el.data().alias,
+  const { dispositionsEmployees, dispositionsCycles, users } = firestoreConstants.paths;
+  return __handleGetDocs__(users, 'role', '==', 'user').then((respond) => {
+    const usersList = {};
+    respond.forEach((user) => {
+      usersList[user.id] = {
+        ...user.data(),
       };
     });
-    return __handleSetDoc__(dispositionsCycles, date, data);
+    return __handleGetDocs__(dispositionsEmployees).then((querySnapshot) => {
+      const data = {};
+
+      querySnapshot.forEach((el) => {
+        data[el.id] = {
+          disposition: el.data()[date].disposition || {},
+          message: el.data()[date].message || '',
+          alias: el.data().alias,
+          coffee: usersList[el.id].workplaces.coffee,
+        };
+      });
+      return __handleSetDoc__(dispositionsCycles, date, data);
+    });
   });
 };
 

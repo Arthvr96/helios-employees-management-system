@@ -111,7 +111,12 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
           {sortedDispo &&
             setSortedDispo &&
             sortedDispo.map((dispo) => (
-              <tr key={dispo.alias} className={!dispo.disposition.day1 && 'notSent'}>
+              <tr
+                key={dispo.alias}
+                className={`${dispo.coffee ? 'coffee' : ''} ${
+                  !dispo.disposition.day1 && 'notSent'
+                }`}
+              >
                 <td className="alias">{dispo.alias}</td>
                 {dispo.disposition.day1 ? (
                   <>

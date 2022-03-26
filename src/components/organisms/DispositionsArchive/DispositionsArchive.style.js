@@ -71,6 +71,10 @@ export const Table = styled.table`
     background-color: ${({ theme }) => theme.colors.bg.grey};
   }
 
+  tr.coffee td {
+    background-color: ${({ theme }) => theme.colors.bg.coffeeGrey};
+  }
+
   tr.notSent .alias {
     background-color: ${({ theme }) => theme.colors.error};
   }
