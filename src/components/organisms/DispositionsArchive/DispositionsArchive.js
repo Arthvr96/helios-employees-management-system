@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import TableToExcel from '@linways/table-to-excel';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import InputSelect from 'components/atoms/InputSelect/InputSelect';
@@ -26,7 +25,7 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
   const tableRef = useRef(null);
   const [sortedDispo, setSortedDispo] = useState([]);
   const [msgVisible, setMsgVisible] = useState(true);
-  const { getShiftMark, getArrDays, getDayShortName } = HeliosAppSdk.__helpers__;
+  const { getShiftMark, getArrDays, getDayShortName, exportToExcel } = HeliosAppSdk.__helpers__;
   const [arrDates, setArrDates] = useState([]);
   const date1 = `${selectedCycle.slice(8, 10)}.${selectedCycle.slice(5, 7)}.${selectedCycle.slice(
     0,
@@ -38,7 +37,7 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
   )}.${selectedCycle.slice(11, 15)}`;
 
   const handleDownloadTable = () => {
-    TableToExcel.convert(tableRef.current);
+    exportToExcel(tableRef.current, 'xlsx');
   };
 
   useEffect(() => {

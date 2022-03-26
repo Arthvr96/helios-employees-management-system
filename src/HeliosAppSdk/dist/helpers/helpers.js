@@ -1,3 +1,5 @@
+import * as XLSX from 'xlsx/xlsx.mjs';
+
 export const dispoPlaceholder = {
   disposition: {
     day1: ['freeDay', '8', '30', false, false],
@@ -129,9 +131,17 @@ const getDayShortName = (day) => {
   }
 };
 
+const exportToExcel = (ref, type, fn, dl) => {
+  const wb = XLSX.utils.table_to_book(ref, { sheet: 'sheet1' });
+  return dl
+    ? XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' })
+    : XLSX.writeFile(wb, fn || `MySheetName.${type || 'xlsx'}`);
+};
+
 export const __helpers__ = {
   dispoPlaceholder,
   getShiftMark,
   getArrDays,
   getDayShortName,
+  exportToExcel,
 };
