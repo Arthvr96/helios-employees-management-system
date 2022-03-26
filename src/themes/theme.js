@@ -20,6 +20,7 @@ export const theme = {
       primary: '#002047',
       secondary: '#ffffff',
       grey: '#DDDDDD',
+      coffeeGrey: '#7e7e7e',
       darkGrey: '#4A4A4A',
       success: '#05a500',
       error: '#db0000',

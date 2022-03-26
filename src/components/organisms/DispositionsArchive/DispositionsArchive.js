@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import TableToExcel from '@linways/table-to-excel';
 import { CardTemplate } from 'components/templates/CardTemplate/CardTemplate';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import InputSelect from 'components/atoms/InputSelect/InputSelect';
@@ -26,7 +25,7 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
   const tableRef = useRef(null);
   const [sortedDispo, setSortedDispo] = useState([]);
   const [msgVisible, setMsgVisible] = useState(true);
-  const { getShiftMark, getArrDays } = HeliosAppSdk.__helpers__;
+  const { getShiftMark, getArrDays, getDayShortName, exportToExcel } = HeliosAppSdk.__helpers__;
   const [arrDates, setArrDates] = useState([]);
   const date1 = `${selectedCycle.slice(8, 10)}.${selectedCycle.slice(5, 7)}.${selectedCycle.slice(
     0,
@@ -38,7 +37,7 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
   )}.${selectedCycle.slice(11, 15)}`;
 
   const handleDownloadTable = () => {
-    TableToExcel.convert(tableRef.current);
+    exportToExcel(tableRef.current, 'xlsx');
   };
 
   useEffect(() => {
@@ -54,7 +53,9 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
     const result = [];
 
     arr2.forEach((el) => {
-      result.push(`${el[0].slice(0, 2)} ${el[1].slice(3, 5)}.${el[1].slice(0, 2)}`);
+      result.push(
+        `${getDayShortName(el[0].slice(0, 2))} ${el[1].slice(3, 5)}.${el[1].slice(0, 2)}`,
+      );
     });
 
     setArrDates(result);
@@ -71,7 +72,6 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
   return (
     <CardTemplate margin="0 0 0 3rem">
       <WindowTitleWrapper>
-        <CardTitle margin="0 0 1rem 0">{selectedCycle}</CardTitle>
         <div>
           <Button
             onClick={() => setMsgVisible(!msgVisible)}
@@ -90,16 +90,19 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
       <Table ref={tableRef}>
         <thead>
           <tr>
-            <th className="tabTitle" colSpan={msgVisible ? 9 : 8}>{`"${date1}-${date2}"`}</th>
+            <th className="tabTitle" colSpan={msgVisible ? 10 : 9}>{`"${date1}-${date2}"`}</th>
           </tr>
           <tr>
-            <th>Imię i nazwisko</th>
+            <th className="name">Imię i nazwisko</th>
             {arrDates.map((el) => (
-              <th className="day" key={el}>
+              <th
+                className={`day ${el.includes('sb') || el.includes('nd') ? 'weekend' : ''}`}
+                key={el}
+              >
                 {el}
               </th>
             ))}
-
+            <th className="name">Podpis</th>
             {msgVisible ? <th>Msg?</th> : null}
           </tr>
         </thead>
@@ -107,17 +110,23 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
           {sortedDispo &&
             setSortedDispo &&
             sortedDispo.map((dispo) => (
-              <tr key={dispo.alias} className={!dispo.disposition.day1 ? 'notSent' : 'sent'}>
+              <tr
+                key={dispo.alias}
+                className={`${dispo.coffee ? 'coffee' : ''} ${
+                  !dispo.disposition.day1 && 'notSent'
+                }`}
+              >
                 <td className="alias">{dispo.alias}</td>
                 {dispo.disposition.day1 ? (
                   <>
-                    <td>{getShiftMark(dispo.disposition.day1, false)}</td>
-                    <td>{getShiftMark(dispo.disposition.day2, false)}</td>
-                    <td>{getShiftMark(dispo.disposition.day3, false)}</td>
-                    <td>{getShiftMark(dispo.disposition.day4, false)}</td>
-                    <td>{getShiftMark(dispo.disposition.day5, false)}</td>
-                    <td>{getShiftMark(dispo.disposition.day6, false)}</td>
-                    <td>{getShiftMark(dispo.disposition.day7, false)}</td>
+                    <td>{getShiftMark(dispo.disposition.day1)}</td>
+                    <td>{getShiftMark(dispo.disposition.day2)}</td>
+                    <td>{getShiftMark(dispo.disposition.day3)}</td>
+                    <td>{getShiftMark(dispo.disposition.day4)}</td>
+                    <td>{getShiftMark(dispo.disposition.day5)}</td>
+                    <td>{getShiftMark(dispo.disposition.day6)}</td>
+                    <td>{getShiftMark(dispo.disposition.day7)}</td>
+                    <td />
                     {msgVisible ? (
                       <td className={dispo.message && 'green'}>
                         {dispo.message ? (
@@ -132,13 +141,14 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
                   </>
                 ) : (
                   <>
-                    <td>C</td>
-                    <td>C</td>
-                    <td>C</td>
-                    <td>C</td>
-                    <td>C</td>
-                    <td>C</td>
-                    <td>C</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td />
                     {msgVisible ? <td>Nie</td> : null}
                   </>
                 )}

@@ -59,14 +59,24 @@ export const Table = styled.table`
     font-size: ${({ theme }) => theme.fontSize.m};
   }
 
+  .name {
+    min-width: 10.5rem;
+  }
   .day {
+    min-width: 7rem;
+    font-size: ${({ theme }) => theme.fontSize.xxs};
     text-transform: uppercase;
   }
+  .weekend {
+    background-color: ${({ theme }) => theme.colors.bg.grey};
+  }
 
-  tr.notSent {
-    td {
-      background-color: ${({ theme }) => theme.colors.error};
-    }
+  tr.coffee td {
+    background-color: ${({ theme }) => theme.colors.bg.coffeeGrey};
+  }
+
+  tr.notSent .alias {
+    background-color: ${({ theme }) => theme.colors.error};
   }
 
   td.green {

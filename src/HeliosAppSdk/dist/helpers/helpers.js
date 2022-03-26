@@ -1,4 +1,4 @@
-import React from 'react';
+import * as XLSX from 'xlsx/xlsx.mjs';
 
 export const dispoPlaceholder = {
   disposition: {
@@ -13,25 +13,24 @@ export const dispoPlaceholder = {
   message: '',
 };
 
-export const getShiftMark = (dispo, stringMark) => {
+export const getShiftMark = (dispo) => {
   let result = '';
-  const br = React.createElement('br', {});
 
   if (dispo[0] === 'freeDay') {
-    result = stringMark ? '-' : React.createElement('span', {}, '-');
+    result = '-';
   }
   if (dispo[0] === 'wholeDay') {
     const cPlus = dispo[3];
     const marathon = dispo[4];
 
     if (cPlus && marathon) {
-      result = stringMark ? 'M+' : React.createElement('span', {}, 'M+');
+      result = 'M+';
     } else if (marathon) {
-      result = stringMark ? 'M' : React.createElement('span', {}, 'M');
+      result = 'M';
     } else if (cPlus) {
-      result = stringMark ? 'C+' : React.createElement('span', {}, 'C+');
+      result = 'C+';
     } else if (!cPlus && !marathon) {
-      result = stringMark ? 'C' : React.createElement('span', {}, 'C');
+      result = 'C';
     }
   }
   if (dispo[0] === 'range') {
@@ -50,13 +49,11 @@ export const getShiftMark = (dispo, stringMark) => {
     }
 
     if (from === '8') {
-      result = stringMark ? `do ${to}` : React.createElement('span', {}, `do ${to}`);
+      result = `do ${to}`;
     } else if (to === '30') {
-      result = stringMark ? `od ${from}` : React.createElement('span', {}, `od ${from}`);
+      result = `od ${from}`;
     } else if (from !== '8' && to !== '30') {
-      result = stringMark
-        ? `od ${from} do ${to}`
-        : React.createElement('span', {}, `od ${from}\n`, br, ` do ${to}`);
+      result = `${from}~${to}`;
     }
   }
 
@@ -106,8 +103,45 @@ const getArrDays = (date1, date2) => {
   return completeArr;
 };
 
+const getDayShortName = (day) => {
+  switch (day) {
+    case 'pi':
+      return 'pt';
+
+    case 'so':
+      return 'sb';
+
+    case 'ni':
+      return 'nd';
+
+    case 'po':
+      return 'pn';
+
+    case 'wt':
+      return 'wt';
+
+    case 'śr':
+      return 'śr';
+
+    case 'cz':
+      return 'czw';
+
+    default:
+      return null;
+  }
+};
+
+const exportToExcel = (ref, type, fn, dl) => {
+  const wb = XLSX.utils.table_to_book(ref, { sheet: 'sheet1' });
+  return dl
+    ? XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' })
+    : XLSX.writeFile(wb, fn || `MySheetName.${type || 'xlsx'}`);
+};
+
 export const __helpers__ = {
   dispoPlaceholder,
   getShiftMark,
   getArrDays,
+  getDayShortName,
+  exportToExcel,
 };

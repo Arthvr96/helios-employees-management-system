@@ -23,7 +23,6 @@ const generateBodyFromDispo = (currentUser, appState, disposition, message, days
     const x = days[i].split(' ');
     const day = `(${x[0].slice(0, 2)}) ${x[1].slice(3, 5)}.${x[1].slice(0, 2)} : ${getShiftMark(
       dispo,
-      true,
     )}`;
     daysRespond.push(day);
   });
