@@ -14,13 +14,13 @@ import {
 
 const __runOnNewCycle__ = (values, dispoSendInfo) => {
   const cycleDate = `${values.date1}-${values.date2}`;
-  return __resetDispoSendList__(dispoSendInfo).then(() =>
-    __createNewCycleInDispoSortedEmployees__(cycleDate),
-  );
+  return __resetDispoSendList__(dispoSendInfo)
+    .then(() => __createNewCycleInDispoSortedEmployees__(cycleDate))
+    .then(() => __archiveActualDispo__(cycleDate, values.workDays));
 };
 const __runOnBlockSendingDispo__ = (appState) => {
   const date = `${appState.date1}-${appState.date2}`;
-  return __archiveActualDispo__(date);
+  return __archiveActualDispo__(date, appState.workDays);
 };
 const __runOnEndCycle__ = () => {
   return __cleanupDispoEmployees__().then((x) => {
@@ -37,6 +37,7 @@ const changeStateApp = async (target, values, appState, dispoSendInfo) => {
       date1: values.date1,
       date2: values.date2,
       marathon: values.marathon,
+      workDays: values.workDays,
       state: 'active',
     };
   }
@@ -54,11 +55,13 @@ const changeStateApp = async (target, values, appState, dispoSendInfo) => {
   }
   if (target === 'endCycle') {
     data = {
+      ...appState,
       date1: '',
       date2: '',
       lastDate1: appState.date1,
       lastDate2: appState.date2,
       marathon: {},
+      workDays: {},
       state: 'nonActive',
     };
   }

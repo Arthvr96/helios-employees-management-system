@@ -47,7 +47,17 @@ export const __createNewCycleInDispoSortedEmployees__ = (dateCycle) => {
   });
 };
 
-export const __archiveActualDispo__ = (date) => {
+const workDaysDefault = {
+  day1: true,
+  day2: true,
+  day3: true,
+  day4: true,
+  day5: true,
+  day6: true,
+  day7: true,
+};
+
+export const __archiveActualDispo__ = (date, workDays = workDaysDefault) => {
   const { dispositionsEmployees, dispositionsCycles, users } = firestoreConstants.paths;
   return __handleGetDocs__(users, 'role', '==', 'user').then((respond) => {
     const usersList = {};
@@ -57,10 +67,14 @@ export const __archiveActualDispo__ = (date) => {
       };
     });
     return __handleGetDocs__(dispositionsEmployees).then((querySnapshot) => {
-      const data = {};
+      const data = {
+        data: {},
+        workDays,
+        newType: true,
+      };
 
       querySnapshot.forEach((el) => {
-        data[el.id] = {
+        data.data[el.id] = {
           disposition: el.data()[date].disposition || {},
           message: el.data()[date].message || '',
           alias: el.data().alias,
@@ -132,7 +146,7 @@ export const __cleanupDispoCycles__ = () => {
   };
   return __handleGetDocs__(dispositionsCycles).then((querySnapshot) => {
     return new Promise((resolve) => {
-      if (querySnapshot.size > 14) {
+      if (querySnapshot.size > 10) {
         resolve(asyncFunc(querySnapshot));
       } else {
         resolve();
