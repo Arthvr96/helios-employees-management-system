@@ -9,7 +9,7 @@ import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvide
 const AdminPanel = lazy(() => import('components/views/Panels/AdminPanel/AdminPanel'));
 const UserPanel = lazy(() => import('components/views/Panels/UserPanel/UserPanel'));
 
-const PanelsWrapper = () => {
+const ViewsWrapper = () => {
   const { authUser, authAdmin, currentUser } = useGlobalState();
   const history = useHistory();
 
@@ -41,8 +41,8 @@ const PanelsWrapper = () => {
         <Route exact path="/login">
           <LoginView />
         </Route>
-        {authAdmin && currentUser ? <AdminPanel /> : null}
-        {authUser && currentUser ? <UserPanel /> : null}
+        {authAdmin && currentUser && <AdminPanel />}
+        {authUser && currentUser && <UserPanel />}
         <Route exact path="/">
           <Redirect to="/login" />
         </Route>
@@ -56,4 +56,4 @@ const PanelsWrapper = () => {
   );
 };
 
-export default PanelsWrapper;
+export default ViewsWrapper;

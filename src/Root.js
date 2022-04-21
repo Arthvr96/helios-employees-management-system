@@ -1,11 +1,11 @@
 import React from 'react';
 import Providers from 'components/templates/Providers/Providers';
-import PanelsWrapper from 'components/views/Panels/PanelsWrapper/PanelsWrapper';
+import ViewsWrapper from 'components/views/ViewsWrapper/ViewsWrapper';
 
 const Root = () => {
   return (
     <Providers>
-      <PanelsWrapper />
+      <ViewsWrapper />
     </Providers>
   );
 };
