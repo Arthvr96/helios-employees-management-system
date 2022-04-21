@@ -59,8 +59,10 @@ const SignInForm = ({ handleChangePage }) => {
               <LabelError labelName="Email" touched={touched.email} errors={errors.email} />
               <InputForm
                 id="email"
+                name="email"
                 placeholder="Podaj swój email"
                 type="text"
+                autoComplete="email"
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -73,6 +75,8 @@ const SignInForm = ({ handleChangePage }) => {
               <InputForm
                 id="password"
                 type="password"
+                name="password"
+                autoComplete="current-password"
                 value={values.password}
                 onChange={handleChange}
                 onBlur={handleBlur}

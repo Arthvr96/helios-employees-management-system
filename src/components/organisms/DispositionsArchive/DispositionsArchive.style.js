@@ -71,6 +71,10 @@ export const Table = styled.table`
     background-color: ${({ theme }) => theme.colors.bg.grey};
   }
 
+  .dayFree {
+    background-color: ${({ theme }) => theme.colors.bg.darkGrey} !important;
+  }
+
   tr.coffee td {
     background-color: ${({ theme }) => theme.colors.bg.coffeeGrey};
   }
@@ -80,7 +84,7 @@ export const Table = styled.table`
   }
 
   td.green {
-    background-color: ${({ theme }) => theme.colors.success};
+    background-color: ${({ theme }) => theme.colors.success} !important;
   }
 `;
 

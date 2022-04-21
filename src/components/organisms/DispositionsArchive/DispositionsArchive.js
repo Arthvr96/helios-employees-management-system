@@ -21,8 +21,9 @@ import {
   WindowTitleWrapper,
 } from './DispositionsArchive.style';
 
-const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
+const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg, workDaysValues }) => {
   const tableRef = useRef(null);
+  const [workDays, setWorkDays] = useState([]);
   const [sortedDispo, setSortedDispo] = useState([]);
   const [msgVisible, setMsgVisible] = useState(true);
   const { getShiftMark, getArrDays, getDayShortName, exportToExcel } = HeliosAppSdk.__helpers__;
@@ -69,6 +70,11 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
     }
   }, []);
 
+  useEffect(() => {
+    const { day1, day2, day3, day4, day5, day6, day7 } = workDaysValues;
+    setWorkDays([day1, day2, day3, day4, day5, day6, day7]);
+  }, []);
+
   return (
     <CardTemplate margin="0 0 0 3rem">
       <WindowTitleWrapper>
@@ -94,9 +100,11 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
           </tr>
           <tr>
             <th className="name">Imię i nazwisko</th>
-            {arrDates.map((el) => (
+            {arrDates.map((el, i) => (
               <th
-                className={`day ${el.includes('sb') || el.includes('nd') ? 'weekend' : ''}`}
+                className={`day ${el.includes('sb') || el.includes('nd') ? 'weekend' : ''} ${
+                  !workDays[i] ? 'dayFree' : ''
+                }`}
                 key={el}
               >
                 {el}
@@ -119,13 +127,27 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
                 <td className="alias">{dispo.alias}</td>
                 {dispo.disposition.day1 ? (
                   <>
-                    <td>{getShiftMark(dispo.disposition.day1)}</td>
-                    <td>{getShiftMark(dispo.disposition.day2)}</td>
-                    <td>{getShiftMark(dispo.disposition.day3)}</td>
-                    <td>{getShiftMark(dispo.disposition.day4)}</td>
-                    <td>{getShiftMark(dispo.disposition.day5)}</td>
-                    <td>{getShiftMark(dispo.disposition.day6)}</td>
-                    <td>{getShiftMark(dispo.disposition.day7)}</td>
+                    <td className={`${!workDays[0] ? 'dayFree' : ''}`}>
+                      {getShiftMark(dispo.disposition.day1)}
+                    </td>
+                    <td className={`${!workDays[1] ? 'dayFree' : ''}`}>
+                      {getShiftMark(dispo.disposition.day2)}
+                    </td>
+                    <td className={`${!workDays[2] ? 'dayFree' : ''}`}>
+                      {getShiftMark(dispo.disposition.day3)}
+                    </td>
+                    <td className={`${!workDays[3] ? 'dayFree' : ''}`}>
+                      {getShiftMark(dispo.disposition.day4)}
+                    </td>
+                    <td className={`${!workDays[4] ? 'dayFree' : ''}`}>
+                      {getShiftMark(dispo.disposition.day5)}
+                    </td>
+                    <td className={`${!workDays[5] ? 'dayFree' : ''}`}>
+                      {getShiftMark(dispo.disposition.day6)}
+                    </td>
+                    <td className={`${!workDays[6] ? 'dayFree' : ''}`}>
+                      {getShiftMark(dispo.disposition.day7)}
+                    </td>
                     <td />
                     {msgVisible ? (
                       <td className={dispo.message && 'green'}>
@@ -141,13 +163,13 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
                   </>
                 ) : (
                   <>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
+                    <td className={`${!workDays[0] ? 'dayFree' : ''}`}>-</td>
+                    <td className={`${!workDays[1] ? 'dayFree' : ''}`}>-</td>
+                    <td className={`${!workDays[2] ? 'dayFree' : ''}`}>-</td>
+                    <td className={`${!workDays[3] ? 'dayFree' : ''}`}>-</td>
+                    <td className={`${!workDays[4] ? 'dayFree' : ''}`}>-</td>
+                    <td className={`${!workDays[5] ? 'dayFree' : ''}`}>-</td>
+                    <td className={`${!workDays[6] ? 'dayFree' : ''}`}>-</td>
                     <td />
                     {msgVisible ? <td>Nie</td> : null}
                   </>
@@ -162,6 +184,7 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg }) => {
 
 TableWindow.propTypes = {
   selectedCycle: PropTypes.string.isRequired,
+  workDaysValues: PropTypes.objectOf(PropTypes.bool),
   selectedDispo: PropTypes.arrayOf(
     PropTypes.shape({
       message: PropTypes.string,
@@ -171,6 +194,16 @@ TableWindow.propTypes = {
   ),
 
   handleShowMsg: PropTypes.func.isRequired,
+};
+
+const workDaysDefault = {
+  day1: true,
+  day2: true,
+  day3: true,
+  day4: true,
+  day5: true,
+  day6: true,
+  day7: true,
 };
 
 const DispositionsArchive = () => {
@@ -185,7 +218,17 @@ const DispositionsArchive = () => {
   const { appState } = useGlobalState();
 
   const handleGetDisposition = () => {
-    setSelectedDispo(Object.values(dispoRespond[selectedCycle]));
+    if (dispoRespond[selectedCycle].newType) {
+      setSelectedDispo({
+        data: Object.values(dispoRespond[selectedCycle].data),
+        workDays: dispoRespond[selectedCycle].workDays,
+      });
+    } else {
+      setSelectedDispo({
+        data: Object.values(dispoRespond[selectedCycle]),
+        workDays: workDaysDefault,
+      });
+    }
   };
 
   const handleConfirm = () => {
@@ -324,7 +367,8 @@ const DispositionsArchive = () => {
         {selectedDispo ? (
           <TableWindow
             selectedCycle={selectedCycle}
-            selectedDispo={selectedDispo}
+            selectedDispo={selectedDispo.data}
+            workDaysValues={selectedDispo.workDays}
             handleShowMsg={handleShowMsg}
           />
         ) : null}
