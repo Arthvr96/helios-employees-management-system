@@ -8,6 +8,7 @@ export const Wrapper = styled.div`
 
 export const StyledCardTemplate = styled(CardTemplate)`
   width: 50vw;
+  min-width: 350px;
   max-height: 80vh;
   overflow-y: scroll;
 `;

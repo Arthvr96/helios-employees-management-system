@@ -3,7 +3,6 @@ import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
 import PopupWrapper from 'components/atoms/PopupWrapper/PopupWrapper';
 import { Button } from 'components/atoms/Button/Button';
 import { getCookie, setCookie } from 'utliltes/cookies';
-import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 import PropTypes from 'prop-types';
 import { CardSubtitle } from 'components/atoms/CardSubtitle/CardSubtitle';
 import {
@@ -14,8 +13,7 @@ import {
   Paragraph,
 } from './UpdateinfoPopup.style';
 
-const UpdateInfoPopup = ({ info }) => {
-  const { appState } = useGlobalState();
+const UpdateInfoPopup = ({ info, cookieName, lastUpdate }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const actualUpdate = info[0];
@@ -24,7 +22,7 @@ const UpdateInfoPopup = ({ info }) => {
 
   const handleClose = () => {
     setIsVisible(false);
-    setCookie('lastUpdate', appState.lastUpdate, 9999);
+    setCookie(cookieName, lastUpdate, 9999);
   };
 
   const handleOpenRestChanges = () => {
@@ -32,13 +30,13 @@ const UpdateInfoPopup = ({ info }) => {
   };
 
   useEffect(() => {
-    const lastUpdate = getCookie('lastUpdate');
-    if (appState.lastUpdate && lastUpdate !== appState.lastUpdate) {
+    const cookieValue = getCookie(cookieName);
+    if (lastUpdate && cookieValue !== lastUpdate) {
       setIsVisible(true);
     } else {
       setIsVisible(false);
     }
-  }, [appState.lastUpdate]);
+  }, [lastUpdate]);
 
   return (
     <PopupWrapper isVisible={isVisible}>
@@ -82,6 +80,8 @@ const UpdateInfoPopup = ({ info }) => {
 export default UpdateInfoPopup;
 
 UpdateInfoPopup.propTypes = {
+  cookieName: PropTypes.string.isRequired,
+  lastUpdate: PropTypes.string,
   info: PropTypes.arrayOf(
     PropTypes.objectOf(
       PropTypes.oneOfType([

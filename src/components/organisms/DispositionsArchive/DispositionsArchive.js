@@ -206,7 +206,7 @@ const workDaysDefault = {
 };
 
 const DispositionsArchive = () => {
-  const [selectedCycle, setSelectedCycle] = useState('selectCycle');
+  const [selectedCycle, setSelectedCycle] = useState('default');
   const [dispoRespond, setDispoRespond] = useState(null);
   const [selectedDispo, setSelectedDispo] = useState(null);
   const [options, setOptions] = useState(null);
@@ -239,7 +239,7 @@ const DispositionsArchive = () => {
         const arr = [...options];
         arr.splice(arr.indexOf(selectedCycle), 1);
         setOptions(arr);
-        setSelectedCycle('selectCycle');
+        setSelectedCycle('default');
         localStorage.setItem('options', JSON.stringify(arr));
         setInProgress(false);
       })
@@ -329,12 +329,12 @@ const DispositionsArchive = () => {
               type="button"
               onClick={handleGetDisposition}
               margin="1rem 0 0 0"
-              disabled={selectedCycle === 'selectCycle'}
+              disabled={selectedCycle === 'default'}
             >
               Wyświetl dyspozycje
             </Button>
             <SubmitButton
-              disabled={selectedCycle === 'selectCycle' || appState.state !== 'nonActive'}
+              disabled={selectedCycle === 'default' || appState.state !== 'nonActive'}
               onClick={() => {
                 setDeleteCyclePopup(true);
                 handleCloseMsg();
