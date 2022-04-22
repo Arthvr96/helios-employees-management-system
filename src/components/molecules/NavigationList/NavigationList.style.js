@@ -26,10 +26,10 @@ export const StyledLink = styled(NavLink).attrs({ activeClassName })`
   transition: color 0.2s ease-out, padding 0.3s ease-out;
 
   &.${activeClassName} {
-    color: ${({ theme }) => theme.colors.textTertiary};
+    color: ${({ theme }) => theme.colors.text.routeSelected};
   }
   &:hover {
-    color: ${({ theme }) => theme.colors.text.routeSelected};
+    color: ${({ theme }) => theme.colors.error};
   }
 
   ${media.desktop`

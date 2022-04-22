@@ -13,7 +13,11 @@ const DashBoard = () => {
 
   return (
     <>
-      <UpdateInfoPopup info={adminUpdatesAppInfo} />
+      <UpdateInfoPopup
+        info={adminUpdatesAppInfo}
+        lastUpdate={appState.lastUpdate}
+        cookieName="lastUpdate"
+      />
       <ViewTemplate>
         <LoadingScreen isVisible={isProcessingState} />
         {appState.state === 'nonActive' ? <NewCycleWindow /> : null}

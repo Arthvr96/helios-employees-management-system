@@ -8,6 +8,8 @@ export const NavLinks = styled.ul`
   list-style: none;
 
   li {
+    display: flex;
+    justify-content: center;
     margin-bottom: 8rem;
   }
 
@@ -23,6 +25,7 @@ export const StyledLink = styled(NavLink).attrs({ activeClassName })`
   color: ${({ theme }) => theme.colors.text.white};
   text-transform: uppercase;
   transition: color 0.2s ease-out, padding 0.3s ease-out;
+  text-align: center;
 
   &.${activeClassName} {
     color: ${({ theme }) => theme.colors.textTertiary};

@@ -25,3 +25,28 @@ export const adminUpdatesAppInfo = [
     ],
   },
 ];
+
+export const userUpdatesAppInfo = [
+  {
+    ver: '1.3',
+    date: '23.04.2022',
+    changeLog: [
+      {
+        title: 'Dodano "Widok powitalny dla pracownika"',
+        description: `Domylsnie teraz po zalogowaniu pojawi sie panel z powitaniem a nie widok z dyspozycja`,
+      },
+      {
+        title: 'Dodano podglad ostataniej wyslanej dyspozycji',
+        description: `W panelu wysylania dyspo gdy wysylanie zostanie zablokowane bedzie mozna podejrzec wyslana dyspozycje`,
+      },
+      {
+        title: 'Dodano "archiwalne dyspozycje',
+        description: `W menu pojawil sie nowy link prowadzacy do widoku z archiwalnymi dyspozycjami. Przechowywane jest 5 archiwalnych dyspozycji`,
+      },
+      {
+        title: 'Zmiany w formularzu do wysylania dyspozycji',
+        description: `1)Data jest od teraz w PL formacie (tj. dd-mm). 2)Dla dni na ktore przewidziany jest maraton dostaja specjalnie oznaczenie w postaci literki "M" przy dacie.`,
+      },
+    ],
+  },
+];

@@ -1,6 +1,6 @@
 import React from 'react';
 import ViewTemplate from 'components/templates/ViewTemplate/ViewTemplate';
-import DispositionBlocked from 'components/molecules/DispositionBlocked/DispositionBlocked';
+import DispositionBlocked from 'components/organisms/DispositionBlocked/DispositionBlocked';
 import DispositionActive from 'components/molecules/DispositionActive/DispositionActive';
 import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 

@@ -26,7 +26,8 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg, workDaysValu
   const [workDays, setWorkDays] = useState([]);
   const [sortedDispo, setSortedDispo] = useState([]);
   const [msgVisible, setMsgVisible] = useState(true);
-  const { getShiftMark, getArrDays, getDayShortName, exportToExcel } = HeliosAppSdk.__helpers__;
+  const { getShiftMark, getArrDays, getDayShortName, exportToExcel, convertFormatDate } =
+    HeliosAppSdk.__helpers__;
   const [arrDates, setArrDates] = useState([]);
   const date1 = `${selectedCycle.slice(8, 10)}.${selectedCycle.slice(5, 7)}.${selectedCycle.slice(
     0,
@@ -54,9 +55,7 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg, workDaysValu
     const result = [];
 
     arr2.forEach((el) => {
-      result.push(
-        `${getDayShortName(el[0].slice(0, 2))} ${el[1].slice(3, 5)}.${el[1].slice(0, 2)}`,
-      );
+      result.push(`${getDayShortName(el[0])} ${convertFormatDate(el[1])}`);
     });
 
     setArrDates(result);
@@ -207,7 +206,7 @@ const workDaysDefault = {
 };
 
 const DispositionsArchive = () => {
-  const [selectedCycle, setSelectedCycle] = useState('selectCycle');
+  const [selectedCycle, setSelectedCycle] = useState('default');
   const [dispoRespond, setDispoRespond] = useState(null);
   const [selectedDispo, setSelectedDispo] = useState(null);
   const [options, setOptions] = useState(null);
@@ -215,6 +214,7 @@ const DispositionsArchive = () => {
   const [deleteCyclePopup, setDeleteCyclePopup] = useState(false);
   const [inProgress, setInProgress] = useState(false);
   const { deleteCycle } = HeliosAppSdk.firestore;
+  const { sortDateCycles } = HeliosAppSdk.__helpers__;
   const { appState } = useGlobalState();
 
   const handleGetDisposition = () => {
@@ -239,7 +239,7 @@ const DispositionsArchive = () => {
         const arr = [...options];
         arr.splice(arr.indexOf(selectedCycle), 1);
         setOptions(arr);
-        setSelectedCycle('selectCycle');
+        setSelectedCycle('default');
         localStorage.setItem('options', JSON.stringify(arr));
         setInProgress(false);
       })
@@ -264,12 +264,7 @@ const DispositionsArchive = () => {
             dispoObj[el.id] = el.data();
             optionsArr.push(el.id);
           });
-          optionsArr.sort((a, b) => {
-            const date1 = new Date(a.slice(0, 10));
-            const date2 = new Date(b.slice(0, 10));
-
-            return date2 - date1;
-          });
+          optionsArr.sort(sortDateCycles);
           setOptions(optionsArr);
           setDispoRespond(dispoObj);
           localStorage.setItem('options', JSON.stringify(optionsArr));
@@ -324,9 +319,9 @@ const DispositionsArchive = () => {
               </CardSubtitle>
               <InputSelect
                 margin="1rem 0 0 0"
-                values={options}
                 value={selectedCycle}
                 handleChange={setSelectedCycle}
+                options={options}
               />
             </Wrapper>
             <Button
@@ -334,12 +329,12 @@ const DispositionsArchive = () => {
               type="button"
               onClick={handleGetDisposition}
               margin="1rem 0 0 0"
-              disabled={selectedCycle === 'selectCycle'}
+              disabled={selectedCycle === 'default'}
             >
               Wyświetl dyspozycje
             </Button>
             <SubmitButton
-              disabled={selectedCycle === 'selectCycle' || appState.state !== 'nonActive'}
+              disabled={selectedCycle === 'default' || appState.state !== 'nonActive'}
               onClick={() => {
                 setDeleteCyclePopup(true);
                 handleCloseMsg();

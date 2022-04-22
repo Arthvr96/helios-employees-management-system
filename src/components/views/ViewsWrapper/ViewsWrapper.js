@@ -22,7 +22,7 @@ const ViewsWrapper = () => {
       goToRoute('/admin/dashboard');
     }
     if (authUser && currentUser) {
-      goToRoute('/user/disposition');
+      goToRoute('/user');
     }
     if (!authUser && !authAdmin && !currentUser) {
       goToRoute('/login');
