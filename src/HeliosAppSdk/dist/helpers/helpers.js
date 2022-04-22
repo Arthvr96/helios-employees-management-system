@@ -104,7 +104,8 @@ const getArrDays = (date1, date2) => {
 };
 
 const getDayShortName = (day) => {
-  switch (day) {
+  const dayName = day.length > 2 ? day.slice(0, 2) : day;
+  switch (dayName) {
     case 'pi':
       return 'pt';
 
@@ -131,6 +132,8 @@ const getDayShortName = (day) => {
   }
 };
 
+const convertFormatDate = (date) => `${date.slice(3, 5)}.${date.slice(0, 2)}`;
+
 const exportToExcel = (ref, type, fn, dl) => {
   const wb = XLSX.utils.table_to_book(ref, { sheet: 'sheet1' });
   return dl
@@ -144,4 +147,5 @@ export const __helpers__ = {
   getArrDays,
   getDayShortName,
   exportToExcel,
+  convertFormatDate,
 };

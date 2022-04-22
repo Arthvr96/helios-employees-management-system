@@ -26,7 +26,8 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg, workDaysValu
   const [workDays, setWorkDays] = useState([]);
   const [sortedDispo, setSortedDispo] = useState([]);
   const [msgVisible, setMsgVisible] = useState(true);
-  const { getShiftMark, getArrDays, getDayShortName, exportToExcel } = HeliosAppSdk.__helpers__;
+  const { getShiftMark, getArrDays, getDayShortName, exportToExcel, convertFormatDate } =
+    HeliosAppSdk.__helpers__;
   const [arrDates, setArrDates] = useState([]);
   const date1 = `${selectedCycle.slice(8, 10)}.${selectedCycle.slice(5, 7)}.${selectedCycle.slice(
     0,
@@ -54,9 +55,7 @@ const TableWindow = ({ selectedCycle, selectedDispo, handleShowMsg, workDaysValu
     const result = [];
 
     arr2.forEach((el) => {
-      result.push(
-        `${getDayShortName(el[0].slice(0, 2))} ${el[1].slice(3, 5)}.${el[1].slice(0, 2)}`,
-      );
+      result.push(`${getDayShortName(el[0])} ${convertFormatDate(el[1])}`);
     });
 
     setArrDates(result);
