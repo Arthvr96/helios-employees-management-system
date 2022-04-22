@@ -4,8 +4,8 @@ import { NavLinks, StyledLink } from './NavigationListUser.style';
 
 const LINKS = [
   ['Dyspozycja', '/user/disposition'],
+  ['Archiwalne dyspozycje', '/user/archive'],
   ['Grafik', '/user/schedule'],
-  ['Moje godziny', '/user/hours'],
 ];
 
 const NavigationListUser = ({ handleCloseHamburger }) => {

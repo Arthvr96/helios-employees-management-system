@@ -17,9 +17,9 @@ const getEmployeesList = async () => {
   return await __handleGetDocs__(paths.users, 'role', '==', roles.user);
 };
 
-const getEmployeeDisposition = (cycleId) => {
+const getEmployeeDisposition = (userId) => {
   const { dispositionsEmployees } = firestoreConstants.paths;
-  return __handleGetDoc__(dispositionsEmployees, cycleId);
+  return __handleGetDoc__(dispositionsEmployees, userId);
 };
 
 const setDefaultEmployeeDisposition = (id, date) => {

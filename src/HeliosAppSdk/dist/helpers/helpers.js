@@ -132,6 +132,13 @@ const getDayShortName = (day) => {
   }
 };
 
+const sortDateCycles = (a, b) => {
+  const date1 = new Date(a.slice(0, 10));
+  const date2 = new Date(b.slice(0, 10));
+
+  return date2 - date1;
+};
+
 const convertFormatDate = (date) => `${date.slice(3, 5)}.${date.slice(0, 2)}`;
 
 const exportToExcel = (ref, type, fn, dl) => {
@@ -148,4 +155,5 @@ export const __helpers__ = {
   getDayShortName,
   exportToExcel,
   convertFormatDate,
+  sortDateCycles,
 };

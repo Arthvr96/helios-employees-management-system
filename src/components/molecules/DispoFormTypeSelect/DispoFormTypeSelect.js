@@ -3,6 +3,7 @@ import uniqid from 'uniqid';
 import PropTypes from 'prop-types';
 import WrapperClickableEl from 'components/atoms/WrapperClickableEl/WrapperClickableEl';
 import { CardTitle } from 'components/atoms/CardTitle/CardTitle';
+import HeliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
 import { Wrapper } from './DispoFormTypeSelect.style';
 
 const radioButtons = [
@@ -22,6 +23,7 @@ const DispoFormTypeSelect = ({
   isMarathon,
   isDisabled,
 }) => {
+  const { convertFormatDate } = HeliosAppSdk.__helpers__;
   const handleSetError = (day, radioButton) => {
     if (radioButton === 'range' && !radioValues.range) {
       setRangeError({
@@ -30,9 +32,15 @@ const DispoFormTypeSelect = ({
       });
     }
   };
+  const day = dayName.split(' ');
+
   return (
     <Wrapper isError={isError} freeDaySelected={radioValues.freeDay}>
-      <h3>{isMarathon ? `${dayName} (M)` : dayName}</h3>
+      <h3>
+        {isMarathon
+          ? `${day[0]} ${convertFormatDate(day[1])} (M)`
+          : `${day[0]} ${convertFormatDate(day[1])}`}
+      </h3>
       {isDisabled ? (
         <CardTitle fontSize="m" margin="0.3rem 0">
           Dzien wolny od pracy

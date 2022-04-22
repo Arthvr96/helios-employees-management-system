@@ -7,7 +7,8 @@ import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvide
 import HeliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
 import { Button } from 'components/atoms/Button/Button';
 import LoaderRing from 'components/atoms/LoaderRing/LoaderRing';
-import { Wrapper, Message, List, StyledTitle } from './DispositionBlocked.style';
+import DispoPreview from 'components/molecules/DispoPreview/DispoPreview';
+import { StyledTitle } from './DispositionBlocked.style';
 
 const Blocked = () => {
   const [inProgress, setInProgress] = useState(false);
@@ -17,7 +18,7 @@ const Blocked = () => {
   const [days, setDays] = useState([]);
   const { appState, currentUser } = useGlobalState();
   const { getEmployeeDisposition } = HeliosAppSdk.firestore;
-  const { getShiftMark, getArrDays, getDayShortName, convertFormatDate } = HeliosAppSdk.__helpers__;
+  const { getArrDays } = HeliosAppSdk.__helpers__;
 
   useEffect(() => {
     setInProgress(true);
@@ -73,19 +74,7 @@ const Blocked = () => {
       {!inProgress && error ? <StyledTitle as="p">{error}</StyledTitle> : null}
 
       {!inProgress && !error ? (
-        <Wrapper isVisible={isVisible}>
-          <List>
-            {days &&
-              days.map((el, i) => (
-                <li key={el[0]}>
-                  {`${getDayShortName(el[0])} ${convertFormatDate(el[1])} - `}
-                  <span>{getShiftMark(lastDispo.dispo[i])}</span>
-                </li>
-              ))}
-          </List>
-          <StyledTitle as="p">Wiadomość:</StyledTitle>
-          <Message>{lastDispo.message ? lastDispo.message : 'Brak wiadomości'}</Message>
-        </Wrapper>
+        <DispoPreview isVisible={isVisible} days={days} dispo={lastDispo} />
       ) : null}
     </CardSubtitle>
   );

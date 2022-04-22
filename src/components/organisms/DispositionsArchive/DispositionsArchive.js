@@ -214,6 +214,7 @@ const DispositionsArchive = () => {
   const [deleteCyclePopup, setDeleteCyclePopup] = useState(false);
   const [inProgress, setInProgress] = useState(false);
   const { deleteCycle } = HeliosAppSdk.firestore;
+  const { sortDateCycles } = HeliosAppSdk.__helpers__;
   const { appState } = useGlobalState();
 
   const handleGetDisposition = () => {
@@ -263,12 +264,7 @@ const DispositionsArchive = () => {
             dispoObj[el.id] = el.data();
             optionsArr.push(el.id);
           });
-          optionsArr.sort((a, b) => {
-            const date1 = new Date(a.slice(0, 10));
-            const date2 = new Date(b.slice(0, 10));
-
-            return date2 - date1;
-          });
+          optionsArr.sort(sortDateCycles);
           setOptions(optionsArr);
           setDispoRespond(dispoObj);
           localStorage.setItem('options', JSON.stringify(optionsArr));
@@ -323,9 +319,9 @@ const DispositionsArchive = () => {
               </CardSubtitle>
               <InputSelect
                 margin="1rem 0 0 0"
-                values={options}
                 value={selectedCycle}
                 handleChange={setSelectedCycle}
+                options={options}
               />
             </Wrapper>
             <Button

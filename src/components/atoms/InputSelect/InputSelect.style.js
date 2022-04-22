@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const Select = styled.select`
+  width: ${({ width }) => width};
   margin: ${({ margin }) => margin};
   padding: 0.3rem 1rem;
   border: 1px solid ${({ theme }) => theme.colors.decors.grey};
