@@ -7,10 +7,10 @@ export const Wrapper = styled.div`
   padding: 1rem;
   background-color: ${({ isError, freeDaySelected, theme }) => {
     if (isError) {
-      return theme.colors.bg.error;
+      return theme.colors.error;
     }
     if (!freeDaySelected) {
-      return theme.colors.bg.success;
+      return theme.colors.success;
     }
     return theme.colors.bg.grey;
   }};

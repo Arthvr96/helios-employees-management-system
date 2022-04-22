@@ -18,7 +18,7 @@ export const RestUpdates = styled.div`
 
 export const StyledSubTitle = styled(CardSubtitle)`
   font-weight: ${({ theme }) => theme.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.black};
+  color: ${({ theme }) => theme.colors.text.black};
   width: 100%;
   margin-bottom: 1rem;
   text-align: left;

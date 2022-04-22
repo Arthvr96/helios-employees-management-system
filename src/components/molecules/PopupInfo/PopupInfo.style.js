@@ -28,14 +28,13 @@ export const StyledSubmitButton = styled(SubmitButton)`
 
   &:hover {
     border: 1px solid
-      ${({ isAccept, theme }) =>
-        isAccept ? theme.colors.decors.hoverSuccess : theme.colors.decors.hoverError};
+      ${({ isAccept, theme }) => (isAccept ? theme.colors.success : theme.colors.error)};
     background-color: ${({ isAccept, theme }) =>
-      isAccept ? theme.colors.decors.hoverSuccess : theme.colors.decors.hoverError};
+      isAccept ? theme.colors.success : theme.colors.error};
   }
   &:active {
     border: 1px solid ${({ theme }) => theme.colors.decors.black};
-    background-color: ${({ theme }) => theme.colors.white};
+    background-color: ${({ theme }) => theme.colors.bg.secondary};
     color: ${({ theme }) => theme.colors.text.black};
   }
 `;

@@ -9,7 +9,7 @@ export const Employee = styled.div`
   transition: background-color 0.3s ease-in;
 
   &:hover {
-    background: ${({ theme }) => theme.colors.lightGrey};
+    background: ${({ theme }) => theme.colors.bg.lightGrey};
   }
 `;
 
@@ -20,13 +20,13 @@ export const Avatar = styled.div`
   width: 4rem;
   height: 4rem;
   border-radius: 100%;
-  background: ${({ theme }) => theme.colors.primary};
+  background: ${({ theme }) => theme.colors.bg.primary};
 
   span {
     width: 50%;
     text-align: center;
     font-size: ${({ theme }) => theme.fontSize.xxs};
-    color: ${({ theme }) => theme.colors.textPrimary};
+    color: ${({ theme }) => theme.colors.text.white};
   }
 `;
 
@@ -39,12 +39,12 @@ export const Wrapper = styled.div`
 export const AvatarFullName = styled.h3`
   font-size: ${({ theme }) => theme.fontSize.xs};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.textSecondary};
+  color: ${({ theme }) => theme.colors.text.black};
   margin-bottom: 0.1rem;
 `;
 export const AvatarMail = styled.p`
   font-size: ${({ theme }) => theme.fontSize.xs};
-  font-weight: ${({ theme }) => theme.fontWeight.normal};
-  color: ${({ theme }) => theme.colors.grey};
+  font-weight: ${({ theme }) => theme.fontWeight.regular};
+  color: ${({ theme }) => theme.colors.text.grey};
   text-transform: lowercase;
 `;
