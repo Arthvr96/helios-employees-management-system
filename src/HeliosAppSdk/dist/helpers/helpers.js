@@ -132,6 +132,28 @@ const getDayShortName = (day) => {
   }
 };
 
+const getDisplayTime = (time) => {
+  let h = parseInt(time, 10);
+  let m = time - h;
+  h = h >= 24 ? `${h - 24}` : `${h}`;
+  switch (m) {
+    case 0:
+      m = '00';
+      break;
+    case 0.25:
+      m = '15';
+      break;
+    case 0.5:
+      m = '30';
+      break;
+    case 0.75:
+      m = '45';
+      break;
+    default:
+  }
+  return h.length === 1 ? `0${h}:${m}` : `${h}:${m}`;
+};
+
 const sortDateCycles = (a, b) => {
   const date1 = new Date(a.slice(0, 10));
   const date2 = new Date(b.slice(0, 10));
@@ -156,4 +178,5 @@ export const __helpers__ = {
   exportToExcel,
   convertFormatDate,
   sortDateCycles,
+  getDisplayTime,
 };

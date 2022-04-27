@@ -3,6 +3,7 @@ export const theme = {
     active: '#005EEB',
     error: '#db0000',
     success: '#05a500',
+    warn: '#ffcc00',
     bg: {
       primary: '#002047',
       secondary: '#ffffff',
