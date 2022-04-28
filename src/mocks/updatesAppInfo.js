@@ -1,5 +1,15 @@
 export const adminUpdatesAppInfo = [
   {
+    ver: '1.3.1',
+    date: '28.04.2022',
+    changeLog: [
+      {
+        title: 'Dodano "kreator kształtu grafiku"',
+        description: `Feature potrzebny w przyszłości do generowania grafiku`,
+      },
+    ],
+  },
+  {
     ver: '1.3',
     date: '21.04.2022',
     changeLog: [
