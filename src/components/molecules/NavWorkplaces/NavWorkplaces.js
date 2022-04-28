@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSchemaCreatorContext } from 'providers/SchemaCreatorProvider/SchemaCreatorProvider';
 import { Nav, StyledButton } from './NavWorkplaces.style';
 
@@ -13,7 +13,25 @@ const workplaces = [
 ];
 
 const NavWorkplaces = () => {
-  const { handleSetWorkplace, selectedWorkplace } = useSchemaCreatorContext();
+  const { handleSetWorkplace, selectedWorkplace, selectedDay, schemaData } =
+    useSchemaCreatorContext();
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.shiftKey && e.keyCode - 49 >= 0 && e.keyCode - 49 <= 6) {
+        handleSetWorkplace({
+          id: workplaces[e.keyCode - 49][0],
+          name: workplaces[e.keyCode - 49][1],
+        });
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, []);
 
   return (
     <Nav>
@@ -21,6 +39,7 @@ const NavWorkplaces = () => {
         <li key={workplace[0]}>
           <StyledButton
             type="button"
+            isActive={schemaData[selectedDay.id][workplace[0]].isActive}
             isSelected={workplace[0] === selectedWorkplace.id}
             onClick={() => handleSetWorkplace({ id: workplace[0], name: workplace[1] })}
           >

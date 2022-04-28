@@ -29,6 +29,37 @@ const WorkplaceContent = () => {
     }
   }, [isActive]);
 
+  useEffect(() => {
+    setShiftFormState(false);
+  }, [selectedWorkplace]);
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.keyCode === 84) {
+        handleToggle();
+      }
+      if (e.keyCode === 78) {
+        setShiftFormState(true);
+      }
+      if (e.keyCode === 27) {
+        setShiftFormState(false);
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [isActive, shiftFormIsOpen, selectedDay, selectedWorkplace, schemaData]);
+
+  useEffect(() => {
+    if (shiftFormIsOpen) {
+      const input = document.querySelector('#from');
+      input.focus();
+    }
+  }, [shiftFormIsOpen]);
+
   return (
     <Wrapper>
       <ToggleButton onClick={handleToggle} state={isActive} />
