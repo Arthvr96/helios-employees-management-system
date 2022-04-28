@@ -58,6 +58,11 @@ const changeStateApp = async (target, values, appState, dispoSendInfo) => {
       ...appState,
       date1: '',
       date2: '',
+      graphShape: {
+        id: '',
+        name: '',
+        schema: {},
+      },
       lastDate1: appState.date1,
       lastDate2: appState.date2,
       marathon: {},
@@ -85,6 +90,11 @@ const changeStateApp = async (target, values, appState, dispoSendInfo) => {
   return new Promise((resolve) => {
     resolve();
   });
+};
+
+const updateCycleState = (data) => {
+  const { pathName, segments } = firestoreConstants.paths.stateApp;
+  return __handleUpdateDoc__(pathName, segments.cycleState, data);
 };
 
 const updateSettings = (data) => {
@@ -124,4 +134,5 @@ export const cycleStateManagement = {
   settingsObserver,
   changeStateApp,
   updateSettings,
+  updateCycleState,
 };

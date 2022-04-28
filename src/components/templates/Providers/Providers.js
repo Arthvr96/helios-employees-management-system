@@ -6,6 +6,7 @@ import { ThemeProvider } from 'styled-components';
 import { theme } from 'themes/theme';
 import { GlobalStyle } from 'themes/GlobalStyles';
 import GlobalStateProvider from 'providers/GlobalStateProvider/GlobalStateProvider';
+import SchemaCreatorProvider from 'providers/SchemaCreatorProvider/SchemaCreatorProvider';
 
 const Providers = ({ children }) => {
   return (
@@ -13,7 +14,9 @@ const Providers = ({ children }) => {
       <Router>
         <ThemeProvider theme={theme}>
           <GlobalStyle />
-          <GlobalStateProvider>{children}</GlobalStateProvider>
+          <GlobalStateProvider>
+            <SchemaCreatorProvider>{children}</SchemaCreatorProvider>
+          </GlobalStateProvider>
         </ThemeProvider>
       </Router>
     </SEO>

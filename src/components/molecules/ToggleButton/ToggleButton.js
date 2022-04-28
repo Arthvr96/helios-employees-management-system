@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ButtonActive } from './ToggleButton.style';
 
-const ToggleButton = ({ type, state, onClick }) => {
+const ToggleButton = ({ type = 'button', state, onClick }) => {
   return (
     <ButtonActive type={type} state={state} onClick={onClick}>
       <span>{state ? 'ON' : 'OFF'}</span>
@@ -13,7 +13,7 @@ const ToggleButton = ({ type, state, onClick }) => {
 export default ToggleButton;
 
 ToggleButton.propTypes = {
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
   state: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
 };
