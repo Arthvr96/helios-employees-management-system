@@ -121,6 +121,26 @@ const deleteCycle = (idCycle, appState) => {
   return null;
 };
 
+const getGraphSchemaShapes = () => {
+  const { graphSchemaShapes } = firestoreConstants.paths;
+  return __handleGetDocs__(graphSchemaShapes);
+};
+
+const createGraphSchemaShape = (id, data) => {
+  const { graphSchemaShapes } = firestoreConstants.paths;
+  return __handleSetDoc__(graphSchemaShapes, id, data);
+};
+
+const deleteGraphSchemaShape = (id) => {
+  const { graphSchemaShapes } = firestoreConstants.paths;
+  return __handleDeleteDoc__(graphSchemaShapes, id);
+};
+
+const updateGraphSchemaShape = (id, data) => {
+  const { graphSchemaShapes } = firestoreConstants.paths;
+  return __handleUpdateDoc__(graphSchemaShapes, id, data);
+};
+
 export const firestoreRequest = {
   getUserInfo,
   getEmployeesList,
@@ -129,4 +149,8 @@ export const firestoreRequest = {
   updateDispoSendInfo,
   updateEmployeeDisposition,
   deleteCycle,
+  getGraphSchemaShapes,
+  createGraphSchemaShape,
+  deleteGraphSchemaShape,
+  updateGraphSchemaShape,
 };

@@ -5,19 +5,57 @@ import InputSelect from 'components/atoms/InputSelect/InputSelect';
 import { Button } from 'components/atoms/Button/Button';
 import { SubmitButton } from 'components/atoms/SubmitButton/SubmitButton';
 import { useSchemaCreatorContext } from 'providers/SchemaCreatorProvider/SchemaCreatorProvider';
+import HeliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
 import { Wrapper, SubTitle, StyledTitle } from './SchemaPageDefault.style';
 
-const options = ['Opcja nr 1', 'Opcja nr2'];
-
 const SchemaPageDefault = () => {
-  const { handleChangePage } = useSchemaCreatorContext();
+  const { appState } = useGlobalState();
+  const { handleChangePage, schemaShapesList, schemaShapesData, setInProgress } =
+    useSchemaCreatorContext();
   const [value, setValue] = useState('default');
   const [selectedSchema, setSchema] = useState('');
   const [isVisible, setIsVisible] = useState(false);
 
-  const handleSetSchema = () => {
+  const handleSetActualSelectedSchema = () => {
+    const { updateCycleState } = HeliosAppSdk.appState;
+    const schema = schemaShapesData.find((el) => el.id === value);
+    setInProgress(true);
+    updateCycleState({ graphShape: schema })
+      .then(() => {
+        setInProgress(false);
+      })
+      .catch((e) => {
+        setInProgress(false);
+        alert(e.code);
+      });
     setSchema(value);
     setIsVisible(false);
+  };
+
+  const handleResetActualSelectedSchema = () => {
+    const { updateCycleState } = HeliosAppSdk.appState;
+    setInProgress(true);
+    updateCycleState({ graphShape: { id: '', name: '', schema: {} } })
+      .then(() => {
+        setInProgress(false);
+      })
+      .catch((e) => {
+        setInProgress(false);
+        alert(e.code);
+      });
+    setSchema('');
+    setValue('default');
+    setIsVisible(false);
+  };
+
+  const getDefault = () => {
+    if (schemaShapesList.length && appState.state !== 'nonActive') {
+      return 'Wybierz jakis szablon';
+    }
+    if (schemaShapesList.length && appState.state === 'nonActive') {
+      return 'Rozpocznij nowy cykl';
+    }
+    return 'Nie utworzono jeszcze szablonu';
   };
 
   useEffect(() => {
@@ -28,16 +66,17 @@ const SchemaPageDefault = () => {
     }
   }, [value, selectedSchema]);
 
-  const { appState } = useGlobalState();
-  const getDefault = () => {
-    if (options.length && appState.state !== 'nonActive') {
-      return 'Wybierz jakis szablon';
+  useEffect(() => {
+    if (appState.graphShape.id) {
+      setValue(appState.graphShape.id);
+      setSchema(appState.graphShape.id);
+    } else {
+      setValue('default');
+      setSchema('');
+      setIsVisible(false);
     }
-    if (options.length && appState.state === 'nonActive') {
-      return 'Rozpocznij nowy cykl';
-    }
-    return 'Nie utworzono jeszcze szablonu';
-  };
+  }, []);
+
   return (
     <div>
       <CardTitle fontSize="m">Szablony</CardTitle>
@@ -54,13 +93,18 @@ const SchemaPageDefault = () => {
           value={value}
           handleChange={setValue}
           defaultOption={getDefault()}
-          options={options}
+          options2={schemaShapesList}
           width="100%"
           margin="0.5rem 0 0 0"
         />
         {isVisible && (
-          <Button margin="1rem 0 0 0" type="button" onClick={handleSetSchema}>
+          <Button margin="1rem 0 0 0" type="button" onClick={handleSetActualSelectedSchema}>
             Zapisz
+          </Button>
+        )}
+        {!isVisible && selectedSchema && (
+          <Button margin="1rem 0 0 0" type="button" onClick={handleResetActualSelectedSchema}>
+            Reset
           </Button>
         )}
       </Wrapper>

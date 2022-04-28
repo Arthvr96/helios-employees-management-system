@@ -5,11 +5,11 @@ import SchemaPageCreateShape from 'components/organisms/SchemaPageCreateShape/Sc
 import SchemaPageSchemaCreator from 'components/organisms/SchemaPageSchemaCreator/SchemaPageSchemaCreator';
 import ArrowButton from 'components/molecules/ArrowButton/ArrowButton';
 import { useSchemaCreatorContext } from 'providers/SchemaCreatorProvider/SchemaCreatorProvider';
+import LoadingScreen from 'components/molecules/LoadingScreen/LoadingScreen';
 import { StyledCard } from './SchemaPage.style';
 
 const SchemaPage = () => {
-  const { schemaPage, handleChangePage } = useSchemaCreatorContext();
-  // here fetch data from firestore
+  const { schemaPage, handleChangePage, inProgress } = useSchemaCreatorContext();
 
   useEffect(() => {
     handleChangePage('goToMenu');
@@ -17,6 +17,7 @@ const SchemaPage = () => {
 
   return (
     <>
+      <LoadingScreen isVisible={inProgress} />
       {schemaPage !== '3' ? (
         <StyledCard>
           {schemaPage !== '0' ? (

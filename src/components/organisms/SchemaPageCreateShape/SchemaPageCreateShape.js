@@ -8,18 +8,17 @@ import LabelError from 'components/molecules/LabelError/LabelError';
 import { useSchemaCreatorContext } from 'providers/SchemaCreatorProvider/SchemaCreatorProvider';
 import { Wrapper, StyledField } from './SchemaPageCreateShape.style';
 
-const shapes = [
-  // { id: 'fdfdf1', name: 'Shape1' },
-];
-
 const SchemaPageCreateShape = () => {
-  const { handleInitSchemaCreator } = useSchemaCreatorContext();
+  const { handleInitSchemaCreator, schemaShapesList, schemaShapesData } = useSchemaCreatorContext();
 
   const onSubmit = ({ shapeName, selectShape }) => {
     if (selectShape && selectShape === 'default') {
       handleInitSchemaCreator(shapeName);
     } else if (selectShape && selectShape !== 'default') {
-      // TODO: init schemaCreator with shape
+      if (schemaShapesData) {
+        const obj = schemaShapesData.find((el) => el.id === selectShape);
+        handleInitSchemaCreator(shapeName, obj.schema);
+      }
     }
   };
 
@@ -30,7 +29,7 @@ const SchemaPageCreateShape = () => {
 
   return (
     <Formik
-      initialValues={{ shapeName: '', selectShape: '' }}
+      initialValues={{ shapeName: '', selectShape: 'init' }}
       onSubmit={onSubmit}
       validationSchema={validationSchema}
     >
@@ -55,6 +54,7 @@ const SchemaPageCreateShape = () => {
                 placeholder="Podaj nazwe"
                 margin="0 0 1.5rem 0"
                 width="100%"
+                value={values.shapeName}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 isError={errors.shapeName && touched.shapeName}
@@ -73,24 +73,29 @@ const SchemaPageCreateShape = () => {
                 name="selectShape"
                 as="select"
                 width="100%"
+                value={values.selectShape}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 isError={errors.selectShape && touched.selectShape}
-                defaultValue="init"
               >
                 <option disabled value="init">
                   Wybierz coś
                 </option>
                 <option value="default">Od zera</option>
-                {shapes.map((shape) => (
+                {schemaShapesList.map((shape) => (
                   <option key={shape.id} value={shape.id}>
                     {shape.name}
                   </option>
                 ))}
               </StyledField>
             </label>
-            <Button width="100%" margin="2rem 0 0 0" type="submit">
-              Stworz nowy wzor
+            <Button
+              disabled={values.selectShape === 'init' || schemaShapesList.length >= 10}
+              width="100%"
+              margin="2rem 0 0 0"
+              type="submit"
+            >
+              {schemaShapesList.length < 10 ? 'Stworz nowy szablon' : 'Max ilość szablonów to 10'}
             </Button>
           </Wrapper>
         );

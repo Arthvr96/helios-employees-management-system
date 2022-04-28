@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ToggleButton from 'components/molecules/ToggleButton/ToggleButton';
 import ShiftsSlider from 'components/organisms/ShiftsSlider/ShiftsSlider';
 import NewShiftForm from 'components/molecules/NewShiftForm/NewShiftForm';
@@ -22,6 +22,12 @@ const WorkplaceContent = () => {
     }
     handleUpdateSchemaDate('changeToggle', { isActive: !isActive });
   };
+
+  useEffect(() => {
+    if (!isActive) {
+      handleUpdateSchemaDate('clearShifts');
+    }
+  }, [isActive]);
 
   return (
     <Wrapper>
