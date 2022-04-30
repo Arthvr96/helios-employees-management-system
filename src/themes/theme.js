@@ -9,6 +9,7 @@ export const theme = {
       secondary: '#ffffff',
       lightGrey: '#BEBEBE',
       grey: '#DDDDDD',
+      tableGrey: '#b4b4b4',
       coffeeGrey: '#7e7e7e',
       darkGrey: '#4A4A4A',
     },

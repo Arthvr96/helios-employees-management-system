@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ViewTemplate from 'components/templates/ViewTemplate/ViewTemplate';
 import MenuSelectVisiblePanel from 'components/molecules/EmployeesManagementMenu/MenuSelectVisiblePanel';
 import DispositionsArchive from 'components/organisms/DispositionsArchive/DispositionsArchive';
+import GraphsArchive from 'components/molecules/GraphsArchive/GraphsArchive';
 
 const links = [
   ['1', 'Wysłane dyspozycje'],
@@ -9,7 +10,7 @@ const links = [
 ];
 
 const DispoAndScheduleView = () => {
-  const [page, setPage] = useState('0');
+  const [page, setPage] = useState('2');
 
   const handleSetPage = (nrPage) => {
     if (page === nrPage) {
@@ -28,6 +29,7 @@ const DispoAndScheduleView = () => {
     >
       <MenuSelectVisiblePanel links={links} state={page} handleClick={handleSetPage} />
       {page === '1' ? <DispositionsArchive /> : null}
+      {page === '2' ? <GraphsArchive /> : null}
     </ViewTemplate>
   );
 };

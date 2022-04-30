@@ -56,7 +56,9 @@ const WorkplaceContent = () => {
   useEffect(() => {
     if (shiftFormIsOpen) {
       const input = document.querySelector('#from');
-      input.focus();
+      if (input) {
+        input.focus();
+      }
     }
   }, [shiftFormIsOpen]);
 

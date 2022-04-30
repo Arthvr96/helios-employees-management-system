@@ -11,6 +11,8 @@ const ViewTemplate = ({
   alignItems,
   navMargin,
   padding,
+  customWidth,
+  overflow,
 }) => {
   const { width, height } = useWindowSize();
   return (
@@ -18,11 +20,12 @@ const ViewTemplate = ({
       flexDirection={flexDirection}
       justifyContent={justifyContent}
       alignItems={alignItems}
-      widthSize={width}
+      widthSize={customWidth || width}
       heightSize={height}
       navMargin={navMargin}
       padding={padding}
       minWidth={minWidth}
+      overflow={overflow}
     >
       {children}
     </Wrapper>
@@ -39,4 +42,6 @@ ViewTemplate.propTypes = {
   navMargin: PropTypes.string,
   padding: PropTypes.string,
   minWidth: PropTypes.string,
+  customWidth: PropTypes.string,
+  overflow: PropTypes.string,
 };
