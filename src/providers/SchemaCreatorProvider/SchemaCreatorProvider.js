@@ -72,7 +72,7 @@ const SchemaCreatorProvider = ({ children }) => {
             docs.forEach((doc) => {
               arr2.push(doc.data());
               arr.push({ id: doc.id, name: doc.data().name });
-              console.log({ id: doc.id, name: doc.data().name });
+              console.log(doc.data());
             });
             setSchemaShapesList(arr);
             setSchemaShapesData(arr2);
