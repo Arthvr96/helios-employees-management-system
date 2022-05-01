@@ -6,6 +6,7 @@ import { emailProvider } from 'HeliosAppSdk/dist/emailProvider/emailProvider';
 import { __firestoreFunctionsPrivate__ } from 'HeliosAppSdk/dist/firestoreFunctionsPrivate/firestoreFunctionsPrivate';
 import { __helpers__ } from 'HeliosAppSdk/dist/helpers/helpers';
 import { info } from 'HeliosAppSdk/dist/appInfo';
+import { generator } from 'HeliosAppSdk/dist/generator/generator';
 
 const heliosAppSdk = {
   firestoreConstants,
@@ -16,6 +17,7 @@ const heliosAppSdk = {
   __firestoreFunctionsPrivate__,
   __helpers__,
   appInfo: info,
+  graphGenerator: generator,
 };
 
 export default heliosAppSdk;
