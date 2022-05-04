@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 
-export const Table = styled.table`
-  th,
-  td {
-    padding: 0.2rem 1rem;
+export const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  label {
+    margin-bottom: 1.5rem;
   }
 `;

@@ -1,12 +1,10 @@
-import { useGlobalState } from 'providers/GlobalStateProvider/GlobalStateProvider';
 import uniqid from 'uniqid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import GraphShift from 'components/molecules/GraphShift/GraphShift';
+import { schema1 } from 'mocks/schema';
 
-const GraphRowShifts = ({ className, workplace, shiftIndex }) => {
-  const { appState } = useGlobalState();
-  const { schema } = appState.graphShape;
+const GraphRowShifts = ({ className, workplace, shiftIndex, schema }) => {
   const arr = new Array(7);
   arr.fill('x');
 
@@ -42,6 +40,22 @@ GraphRowShifts.propTypes = {
   className: PropTypes.string,
   workplace: PropTypes.string,
   shiftIndex: PropTypes.number,
+  schema: PropTypes.objectOf(
+    PropTypes.objectOf(
+      PropTypes.objectOf(
+        PropTypes.oneOfType([
+          PropTypes.bool,
+          PropTypes.arrayOf(
+            PropTypes.shape({
+              from: PropTypes.number,
+              to: PropTypes.number,
+              id: PropTypes.string,
+            }),
+          ),
+        ]),
+      ),
+    ),
+  ),
 };
 
 export default GraphRowShifts;

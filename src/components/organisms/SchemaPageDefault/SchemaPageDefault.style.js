@@ -17,7 +17,7 @@ export const StyledTitle = styled(CardTitle)`
 `;
 
 export const SubTitle = styled.p`
-  margin: 0.5rem 0 2rem;
+  margin: 0.5rem 0 0;
   font-size: ${({ theme }) => theme.fontSize.xs};
   font-weight: ${({ theme }) => theme.fontWeight.light};
   color: ${({ theme }) => theme.colors.text.black};

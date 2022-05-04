@@ -1,5 +1,5 @@
-import { schema1 } from 'mocks/schema';
-import { dispo1 } from 'mocks/dispo';
+// import { schema1 } from 'mocks/schema';
+// import { dispo1 } from 'mocks/dispo';
 
 const init = () => {};
 

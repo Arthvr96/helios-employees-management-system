@@ -34,7 +34,7 @@ const DispoTableWindow = ({
   };
 
   useEffect(() => {
-    setMsgVisible(isShowCase);
+    setMsgVisible(!isShowCase);
   }, []);
 
   useEffect(() => {
@@ -106,7 +106,7 @@ const DispoTableWindow = ({
                 {el}
               </th>
             ))}
-            <th className="name">Podpis</th>
+            {!isShowCase && <th className="name">Podpis</th>}
             {msgVisible ? <th>Msg?</th> : null}
           </tr>
         </thead>
@@ -144,7 +144,7 @@ const DispoTableWindow = ({
                     <td className={`${!workDays[6] ? 'dayFree' : ''}`}>
                       {getShiftMark(dispo.disposition.day7)}
                     </td>
-                    <td />
+                    {!isShowCase && <td />}
                     {msgVisible ? (
                       <td className={dispo.message && 'green'}>
                         {dispo.message ? (
@@ -166,7 +166,7 @@ const DispoTableWindow = ({
                     <td className={`${!workDays[4] ? 'dayFree' : ''}`}>-</td>
                     <td className={`${!workDays[5] ? 'dayFree' : ''}`}>-</td>
                     <td className={`${!workDays[6] ? 'dayFree' : ''}`}>-</td>
-                    <td />
+                    {!isShowCase && <td />}
                     {msgVisible ? <td>Nie</td> : null}
                   </>
                 )}

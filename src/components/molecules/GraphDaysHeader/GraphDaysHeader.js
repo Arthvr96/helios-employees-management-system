@@ -1,7 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { GraphTh } from 'components/atoms/GraphTh/GraphTh';
+import PropTypes from 'prop-types';
+import HeliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
 
-const GraphDaysHeader = () => {
+const monthNames = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
+
+const GraphDaysHeader = ({ date }) => {
+  const { getArrDays } = HeliosAppSdk.__helpers__;
+  const [arrDates, setArrDates] = useState([]);
+
+  useEffect(() => {
+    const d1 = date.slice(0, 10);
+    const d2 = date.slice(11, 21);
+    const arr1 = getArrDays(d1, d2);
+    const arr2 = arr1.map((el) => el.split(' ')[1].split('.'));
+    const result = arr2.map((el) => `${el[1]} ${monthNames[el[0] - 1]}`);
+    setArrDates(result);
+  }, []);
+
   return (
     <thead>
       <tr>
@@ -18,30 +47,19 @@ const GraphDaysHeader = () => {
         <GraphTh colSpan={3}>Czwartek</GraphTh>
       </tr>
       <tr>
-        <GraphTh size="xs" colSpan={3}>
-          29 Apr
-        </GraphTh>
-        <GraphTh size="xs" colSpan={3}>
-          29 Apr
-        </GraphTh>
-        <GraphTh size="xs" colSpan={3}>
-          1 May
-        </GraphTh>
-        <GraphTh size="xs" colSpan={3}>
-          2 May
-        </GraphTh>
-        <GraphTh size="xs" colSpan={3}>
-          3 May
-        </GraphTh>
-        <GraphTh size="xs" colSpan={3}>
-          4 May
-        </GraphTh>
-        <GraphTh size="xs" colSpan={3}>
-          5 May
-        </GraphTh>
+        {arrDates &&
+          arrDates.map((el) => (
+            <GraphTh key={el} size="xs" colSpan={3}>
+              {el}
+            </GraphTh>
+          ))}
       </tr>
     </thead>
   );
 };
 
 export default GraphDaysHeader;
+
+GraphDaysHeader.propTypes = {
+  date: PropTypes.string.isRequired,
+};

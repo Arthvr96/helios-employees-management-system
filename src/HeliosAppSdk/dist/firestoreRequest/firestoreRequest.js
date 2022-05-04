@@ -22,6 +22,11 @@ const getEmployeeDisposition = (userId) => {
   return __handleGetDoc__(dispositionsEmployees, userId);
 };
 
+const getAllDispositions = () => {
+  const { dispositionsCycles } = firestoreConstants.paths;
+  return __handleGetDocs__(dispositionsCycles);
+};
+
 const setDefaultEmployeeDisposition = (id, date) => {
   const { dispositionsEmployees } = firestoreConstants.paths;
   return __handleUpdateDoc__(dispositionsEmployees, id, { [date]: dispoPlaceholder });
@@ -141,6 +146,11 @@ const updateGraphSchemaShape = (id, data) => {
   return __handleUpdateDoc__(graphSchemaShapes, id, data);
 };
 
+const getGraphArchive = () => {
+  const { graphArchive } = firestoreConstants.paths;
+  return __handleGetDocs__(graphArchive);
+};
+
 export const firestoreRequest = {
   getUserInfo,
   getEmployeesList,
@@ -153,4 +163,6 @@ export const firestoreRequest = {
   createGraphSchemaShape,
   deleteGraphSchemaShape,
   updateGraphSchemaShape,
+  getGraphArchive,
+  getAllDispositions,
 };
