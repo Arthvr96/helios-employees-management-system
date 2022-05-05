@@ -112,28 +112,28 @@ const selectEmployee = (shift, users) => {
     const divider = user.temporaryInfo.dispoCount > 5 ? 5 : user.temporaryInfo.dispoCount;
     const boost1 = (() => {
       if (user.temporaryInfo.dispoCount === 1) {
-        return 1;
+        return 0.7;
       }
       if (user.temporaryInfo.dispoCount === 2) {
-        return 0.25;
+        return 0.3;
       }
       return 0;
     })();
-    const boost2 = user.temporaryInfo.isDispoSkipped ? 1 : 0;
+    const boost2 = user.temporaryInfo.isDispoSkipped ? 1.5 : 0;
     const deboost1 = (() => {
       switch (user.temporaryInfo.shiftsCount) {
         case 0:
           return 0;
         case 1:
-          return 0.1;
-        case 2:
           return 0.15;
-        case 3:
+        case 2:
           return 0.2;
+        case 3:
+          return 0.3;
         case 4:
-          return 0.4;
+          return 0.45;
         case 5:
-          return 0.5;
+          return 0.7;
         case 6:
           return 1;
         default:

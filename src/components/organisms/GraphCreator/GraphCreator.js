@@ -32,6 +32,7 @@ const GraphCreator = ({
   const dispoRightRef = useRef(null);
 
   const handleCancel = () => {
+    setHidden(false);
     closeCreator();
   };
 
@@ -45,6 +46,7 @@ const GraphCreator = ({
     };
     createGraph(date, data)
       .then(() => {
+        setHidden(false);
         closeCreator();
       })
       .catch((e) => alert(e.code));
