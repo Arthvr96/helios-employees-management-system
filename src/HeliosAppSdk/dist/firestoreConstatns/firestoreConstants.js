@@ -2,6 +2,7 @@ const firestoreConstants = {
   paths: {
     users: 'users',
     graphSchemaShapes: 'graphSchemaShapes',
+    graphArchive: 'graphArchive',
     dispositionsCycles: 'dispositionsSortedByCycles',
     dispositionsEmployees: 'dispositionsSortedEmployees',
     stateApp: {

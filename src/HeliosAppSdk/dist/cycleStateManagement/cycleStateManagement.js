@@ -58,11 +58,6 @@ const changeStateApp = async (target, values, appState, dispoSendInfo) => {
       ...appState,
       date1: '',
       date2: '',
-      graphShape: {
-        id: '',
-        name: '',
-        schema: {},
-      },
       lastDate1: appState.date1,
       lastDate2: appState.date2,
       marathon: {},
