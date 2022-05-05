@@ -79,15 +79,49 @@ const GraphCreator = ({
   }, [graph]);
 
   useEffect(() => {
+    const percentFields1 = [...dispoLeftRef.current.querySelectorAll('.percentTarget')];
+    const percentFields2 = [...dispoRightRef.current.querySelectorAll('.percentTarget')];
+
+    const iterator = (el) => {
+      const x = el.classList[1].split('-');
+      const address = `.alias-row-${x[2]}`;
+      const alias = dispoLeftRef.current.querySelector(address).innerHTML;
+      const {
+        temporaryInfo: { shiftsCount, dispoCount },
+      } = users.find((u) => u.alias === alias);
+      const percentage = (shiftsCount / dispoCount).toFixed(2);
+      el.innerHTML = percentage;
+      if (percentage < 0.3) {
+        el.style.background = 'rgba(199,0,0,0.8)';
+      } else if (percentage < 0.5) {
+        el.style.background = 'rgba(246,236,46,0.8)';
+      } else if (percentage < 0.7) {
+        el.style.background = 'rgba(145,231,112,0.8)';
+      } else if (percentage >= 0.7) {
+        el.style.background = 'rgba(49,104,0,0.9)';
+      }
+    };
+
+    if (percentFields1.length) {
+      percentFields1.forEach(iterator);
+    }
+
+    if (percentFields2.length) {
+      percentFields2.forEach(iterator);
+    }
+
     users.forEach((user) => {
       const shifts = user.temporaryInfo.shiftTaken;
       const address = `.${user.alias.replace(' ', '')}`;
       const el1 = dispoLeftRef.current.querySelector(address);
       const el2 = dispoRightRef.current.querySelector(address);
+
       [...el1.children].forEach((el, index) => {
         if (index > 0 && index < 8) {
           if (shifts[days[index - 1]]) {
             el.classList.add('shift');
+          } else {
+            el.classList.remove('shift');
           }
         }
       });
@@ -95,6 +129,8 @@ const GraphCreator = ({
         if (index > 0 && index < 8) {
           if (shifts[days[index - 1]]) {
             el.classList.add('shift');
+          } else {
+            el.classList.remove('shift');
           }
         }
       });
