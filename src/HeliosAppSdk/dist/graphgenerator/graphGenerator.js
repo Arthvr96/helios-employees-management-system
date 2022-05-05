@@ -22,7 +22,12 @@ const getPeopleWhoCanWork = (schema, dispositions, users) => {
           dispositions.forEach((dispo) => {
             const userObj = users.find((user) => user.alias === dispo.alias);
             if (dispo.disposition[day] && userObj.workplaces[workplace]) {
-              if ((shift.isNight && userObj.workplaces.night) || !shift.isNight) {
+              // TODO: trzeba dodac przy tworzeniu schematow opcje isNight dla obs1 i obs2
+              // if ((shift.isNight && userObj.workplaces.night) || !shift.isNight) {
+              const c1 = workplace === 'obs1' || workplace === 'obs2';
+              const c2 = shift.to > 23.5 && shift.to < 26.5;
+              const c3 = shift.to <= 23;
+              if ((c1 && c2 && userObj.workplaces.night) || c3) {
                 if (dispo.disposition[day][0] !== 'freeDay') {
                   const endLastShift =
                     day !== 'day1' ? userObj.temporaryInfo.shiftTaken[days[dayIndex]] : null;
@@ -44,8 +49,8 @@ const getPeopleWhoCanWork = (schema, dispositions, users) => {
                     }
                     if (dispo.disposition[day][0] === 'range') {
                       if (
-                        shift.from + 0.5 >= parseInt(dispo.disposition[day][1], 10) &&
-                        shift.to - 0.5 <= parseInt(dispo.disposition[day][2], 10)
+                        shift.from + 0.75 >= parseInt(dispo.disposition[day][1], 10) &&
+                        shift.to - 0.75 <= parseInt(dispo.disposition[day][2], 10)
                       ) {
                         shiftArr.push(userObj.alias);
                       }
