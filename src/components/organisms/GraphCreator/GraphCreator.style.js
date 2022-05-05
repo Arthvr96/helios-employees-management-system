@@ -9,6 +9,10 @@ export const Table = styled.table`
   td.empty {
     background-color: ${({ theme }) => theme.colors.error};
   }
+
+  td.freeDay {
+    background-color: ${({ theme }) => theme.colors.bg.darkGrey} !important;
+  }
 `;
 
 export const ScrollWrapper = styled.div`

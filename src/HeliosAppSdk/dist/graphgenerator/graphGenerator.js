@@ -222,7 +222,7 @@ const addTemporaryInfo = (usersArr, dispoArr) => {
   return cloneDeep(users);
 };
 
-export const init = (schemaBody, dispoBody, usersInfo) => {
+export const init = (schemaBody, dispoBody, usersInfo, workdays) => {
   const schema = cloneDeep(schemaBody);
   const dispositions = convertObjToArray(dispoBody);
   const usersBody = convertObjToArray(usersInfo);
@@ -231,44 +231,46 @@ export const init = (schemaBody, dispoBody, usersInfo) => {
   const peopleWhoCanWork = getPeopleWhoCanWork(schema, dispositions, users);
 
   peopleWhoCanWork.forEach((day, dayIndex) => {
-    let dayCopy = cloneDeep(day);
-    let skippedDay = [];
+    if (workdays[days[dayIndex]]) {
+      let dayCopy = cloneDeep(day);
+      let skippedDay = [];
 
-    while (dayCopy.length) {
-      const firstShift = dayCopy[0];
-      const selectedEmployee = selectEmployee(firstShift, users);
-      graph[firstShift[0]][firstShift[1]][firstShift[2]] = selectedEmployee;
-      users.forEach((user, i) => {
-        if (user.alias === selectedEmployee) {
-          users[i].temporaryInfo.shiftsCount += 1;
-          users[i].temporaryInfo.isDispoSkipped = false;
-          users[i].temporaryInfo.shiftTaken[days[firstShift[0]]] = [
-            firstShift[0],
-            firstShift[1],
-            firstShift[2],
-            {
-              from: schema[days[firstShift[0]]][workplaces[firstShift[1]]].shifts[firstShift[2]]
-                .from,
-              to: schema[days[firstShift[0]]][workplaces[firstShift[1]]].shifts[firstShift[2]].to,
-            },
-          ];
-        }
+      while (dayCopy.length) {
+        const firstShift = dayCopy[0];
+        const selectedEmployee = selectEmployee(firstShift, users);
+        graph[firstShift[0]][firstShift[1]][firstShift[2]] = selectedEmployee;
+        users.forEach((user, i) => {
+          if (user.alias === selectedEmployee) {
+            users[i].temporaryInfo.shiftsCount += 1;
+            users[i].temporaryInfo.isDispoSkipped = false;
+            users[i].temporaryInfo.shiftTaken[days[firstShift[0]]] = [
+              firstShift[0],
+              firstShift[1],
+              firstShift[2],
+              {
+                from: schema[days[firstShift[0]]][workplaces[firstShift[1]]].shifts[firstShift[2]]
+                  .from,
+                to: schema[days[firstShift[0]]][workplaces[firstShift[1]]].shifts[firstShift[2]].to,
+              },
+            ];
+          }
+        });
+        dayCopy = deleteSelectedEmployee(dayCopy, selectedEmployee);
+        skippedDay.push(dayCopy.shift()[4]);
+
+        dayCopy = deepSort(dayCopy);
+      }
+      const graphDay = [...new Set(graph[dayIndex].reduce((a, b) => a.concat(b), []))];
+      skippedDay = [...new Set(skippedDay.reduce((a, b) => a.concat(b), []))];
+      const skipped = skippedDay.filter((el) => graphDay.indexOf(el) === -1);
+      skipped.forEach((alias) => {
+        users.forEach((user, i) => {
+          if (user.alias === alias) {
+            users[i].temporaryInfo.isDispoSkipped = true;
+          }
+        });
       });
-      dayCopy = deleteSelectedEmployee(dayCopy, selectedEmployee);
-      skippedDay.push(dayCopy.shift()[4]);
-
-      dayCopy = deepSort(dayCopy);
     }
-    const graphDay = [...new Set(graph[dayIndex].reduce((a, b) => a.concat(b), []))];
-    skippedDay = [...new Set(skippedDay.reduce((a, b) => a.concat(b), []))];
-    const skipped = skippedDay.filter((el) => graphDay.indexOf(el) === -1);
-    skipped.forEach((alias) => {
-      users.forEach((user, i) => {
-        if (user.alias === alias) {
-          users[i].temporaryInfo.isDispoSkipped = true;
-        }
-      });
-    });
   });
 
   return { graph, users };
