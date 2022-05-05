@@ -15,7 +15,7 @@ const convertTime = (x) => {
   return c(p(h) + r(m) / 60);
 };
 
-const NewShiftForm = ({ handleCancel, handleSave }) => {
+const NewShiftForm = ({ handleCancel, handleSave, initValues }) => {
   const onSubmit = ({ from, to }) => {
     handleSave({ from: convertTime(from), to: convertTime(to) });
     handleCancel();
@@ -34,7 +34,7 @@ const NewShiftForm = ({ handleCancel, handleSave }) => {
   });
   return (
     <Formik
-      initialValues={{ from: '', to: '' }}
+      initialValues={initValues || { from: '', to: '' }}
       onSubmit={onSubmit}
       validationSchema={validationSchema}
     >
@@ -95,6 +95,10 @@ const NewShiftForm = ({ handleCancel, handleSave }) => {
 export default NewShiftForm;
 
 NewShiftForm.propTypes = {
+  initValues: PropTypes.shape({
+    from: PropTypes.string,
+    to: PropTypes.string,
+  }),
   handleCancel: PropTypes.func.isRequired,
   handleSave: PropTypes.func.isRequired,
 };

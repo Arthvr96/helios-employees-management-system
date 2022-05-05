@@ -7,13 +7,8 @@ import PropTypes from 'prop-types';
 import { useGraphGenerator } from 'hooks/useGraphGenerator';
 import { Button } from 'components/atoms/Button/Button';
 import heliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
-import {
-  DispoWrapper,
-  HideNavButton,
-  ScrollWrapper,
-  StyledButton,
-  Table,
-} from './GraphCreator.style';
+import { GraphTable } from 'components/atoms/GraphTable/GraphTable';
+import { DispoWrapper, HideNavButton, ScrollWrapper, StyledButton } from './GraphCreator.style';
 
 const days = ['day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7'];
 const workplaces = ['obs1', 'obs2', 'bar1', 'bar2', 'coffee', 'tickets', 'help'];
@@ -140,10 +135,10 @@ const GraphCreator = ({
 
       <ScrollWrapper isHidden={isHidden}>
         <CardTemplate margin="0 auto">
-          <Table ref={tableRef}>
+          <GraphTable ref={tableRef}>
             <GraphDaysHeader date={date} />
             {schema && <GraphBody schema={schema} />}
-          </Table>
+          </GraphTable>
           <div>
             <Button onClick={handleSave} type="button">
               Zapisz grafik

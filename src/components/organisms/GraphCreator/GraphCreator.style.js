@@ -1,20 +1,5 @@
 import styled from 'styled-components';
 
-export const Table = styled.table`
-  th,
-  td {
-    padding: 0.2rem 1rem;
-  }
-
-  td.empty {
-    background-color: ${({ theme }) => theme.colors.error};
-  }
-
-  td.freeDay {
-    background-color: ${({ theme }) => theme.colors.bg.darkGrey} !important;
-  }
-`;
-
 export const ScrollWrapper = styled.div`
   width: 100vw;
   overflow-x: scroll;

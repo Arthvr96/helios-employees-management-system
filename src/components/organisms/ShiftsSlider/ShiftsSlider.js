@@ -3,6 +3,7 @@ import ShiftItem from 'components/molecules/ShiftItem/ShiftItem';
 import { ReactComponent as Arrow } from 'assets/arrowWhite.svg';
 import { useSchemaCreatorContext } from 'providers/SchemaCreatorProvider/SchemaCreatorProvider';
 import HeliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
+import PropTypes from 'prop-types';
 import {
   Slider,
   ShiftsSliderContent,
@@ -10,7 +11,7 @@ import {
   SliderButtonRight,
 } from './ShiftsSlider.style';
 
-const ShiftsSlider = () => {
+const ShiftsSlider = ({ onEdit }) => {
   const { getDisplayTime } = HeliosAppSdk.__helpers__;
   const { selectedDay, selectedWorkplace, schemaData, handleUpdateSchemaDate } =
     useSchemaCreatorContext();
@@ -61,6 +62,7 @@ const ShiftsSlider = () => {
             name={`Zmiana nr${i + 1}`}
             time={`${getDisplayTime(shift.from)}-${getDisplayTime(shift.to)}`}
             onDelete={() => handleDelete(shift.id)}
+            onEdit={() => onEdit(shift.id)}
           />
         ))}
       </ShiftsSliderContent>
@@ -69,3 +71,7 @@ const ShiftsSlider = () => {
 };
 
 export default ShiftsSlider;
+
+ShiftsSlider.propTypes = {
+  onEdit: PropTypes.func.isRequired,
+};

@@ -4,6 +4,7 @@ import ShiftsSlider from 'components/organisms/ShiftsSlider/ShiftsSlider';
 import NewShiftForm from 'components/molecules/NewShiftForm/NewShiftForm';
 import NewShiftButton from 'components/atoms/NewShiftButton/NewShiftButton';
 import { useSchemaCreatorContext } from 'providers/SchemaCreatorProvider/SchemaCreatorProvider';
+import heliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
 import { Wrapper } from './WorkplaceContent.style';
 
 const WorkplaceContent = () => {
@@ -11,9 +12,19 @@ const WorkplaceContent = () => {
     useSchemaCreatorContext();
   const { isActive } = schemaData[selectedDay.id][selectedWorkplace.id];
   const [shiftFormIsOpen, setShiftFormState] = useState(false);
+  const [editValues, setEditValues] = useState({ from: '', to: '' });
+  const { getDisplayTime } = heliosAppSdk.__helpers__;
+
+  const editShift = (shiftId) => {
+    const shift = schemaData[selectedDay.id][selectedWorkplace.id].shifts.find(
+      (el) => el.id === shiftId,
+    );
+    setShiftFormState(true);
+    setEditValues({ from: getDisplayTime(shift.from), to: getDisplayTime(shift.to), id: shift.id });
+  };
 
   const handleSave = (values) => {
-    handleUpdateSchemaDate('createShift', values);
+    handleUpdateSchemaDate('createShift', values, editValues.id);
   };
 
   const handleToggle = () => {
@@ -67,12 +78,16 @@ const WorkplaceContent = () => {
       <ToggleButton onClick={handleToggle} state={isActive} />
       {isActive && (
         <>
-          <ShiftsSlider />
+          <ShiftsSlider onEdit={editShift} />
           <NewShiftButton onClick={() => setShiftFormState(true)} />
         </>
       )}
       {isActive && shiftFormIsOpen && (
-        <NewShiftForm handleSave={handleSave} handleCancel={() => setShiftFormState(false)} />
+        <NewShiftForm
+          initValues={{ to: editValues.to, from: editValues.from }}
+          handleSave={handleSave}
+          handleCancel={() => setShiftFormState(false)}
+        />
       )}
     </Wrapper>
   );
