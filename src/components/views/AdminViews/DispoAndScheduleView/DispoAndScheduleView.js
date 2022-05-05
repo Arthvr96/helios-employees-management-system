@@ -10,7 +10,7 @@ const links = [
 ];
 
 const DispoAndScheduleView = () => {
-  const [page, setPage] = useState('2');
+  const [page, setPage] = useState('0');
 
   const handleSetPage = (nrPage) => {
     if (page === nrPage) {

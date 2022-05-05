@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Wrapper, ShiftWrapper, ShiftInfo, ShiftTitle, DeleteButton } from './ShiftItem.style';
 
-const ShiftItem = ({ name, time, onDelete }) => {
+const ShiftItem = ({ name, time, onDelete, onEdit }) => {
   return (
     <Wrapper>
-      <ShiftWrapper type="button">
+      <ShiftWrapper onClick={onEdit} type="button">
         <ShiftTitle>{name}</ShiftTitle>
         <ShiftInfo>{time}</ShiftInfo>
       </ShiftWrapper>
@@ -19,6 +19,7 @@ const ShiftItem = ({ name, time, onDelete }) => {
 export default ShiftItem;
 
 ShiftItem.propTypes = {
+  onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   time: PropTypes.string.isRequired,

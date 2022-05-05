@@ -156,14 +156,26 @@ const SchemaCreatorProvider = ({ children }) => {
     }
   };
 
-  const handleUpdateSchemaDate = (action, values) => {
+  const handleUpdateSchemaDate = (action, values, customId) => {
     const obj = { ...JSON.parse(JSON.stringify(schemaData)) };
     if (action === 'createShift') {
-      obj[selectedDay.id][selectedWorkplace.id].shifts.push({
-        id: uniqid(),
-        ...values,
-      });
-      obj[selectedDay.id][selectedWorkplace.id].shifts.sort(sort);
+      if (customId) {
+        const arr = [...obj[selectedDay.id][selectedWorkplace.id].shifts].filter(
+          (el) => el.id !== customId,
+        );
+        obj[selectedDay.id][selectedWorkplace.id].shifts = [...arr];
+        obj[selectedDay.id][selectedWorkplace.id].shifts.push({
+          id: customId,
+          ...values,
+        });
+        obj[selectedDay.id][selectedWorkplace.id].shifts.sort(sort);
+      } else {
+        obj[selectedDay.id][selectedWorkplace.id].shifts.push({
+          id: uniqid(),
+          ...values,
+        });
+        obj[selectedDay.id][selectedWorkplace.id].shifts.sort(sort);
+      }
       setSchemaData({ ...JSON.parse(JSON.stringify(obj)) });
     }
 

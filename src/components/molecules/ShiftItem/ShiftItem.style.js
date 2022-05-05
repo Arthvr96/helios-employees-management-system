@@ -52,7 +52,7 @@ export const ShiftWrapper = styled.button`
   transition: background-color 0.2s ease-in, color 0.2s ease-in;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.bg.darkGrey} !important;
+    background-color: ${({ theme }) => theme.colors.warn} !important;
   }
   &:hover p {
     color: ${({ theme }) => theme.colors.text.white} !important;

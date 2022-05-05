@@ -13,25 +13,36 @@ export const WrapperButtons = styled.div`
   border-top: 1px solid ${({ theme }) => theme.colors.decors.darkGrey};
 `;
 
-export const StyledList = styled.ol`
-  column-count: 2;
-  li {
-    margin-bottom: 1.5rem;
-
-    span {
-      padding: 0.5rem;
-      background-color: ${({ theme }) => theme.colors.bg.primary};
-      font-weight: ${({ theme }) => theme.fontWeight.regular};
-      color: ${({ theme }) => theme.colors.text.white};
-      border-radius: 5px;
-    }
-  }
+export const GraphPreview = styled.div`
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: calc(50% + 30px);
+  left: ${({ isOpen }) => (isOpen ? '50%' : '50px')};
+  transform: ${({ isOpen }) => (isOpen ? 'translate(-50%, -50%)' : 'translate(-100%, -50%)')};
+  transition: transform 0.4s ease-in, left 0.4s ease-in;
 `;
 
-export const Separator = styled.p`
-  font-size: ${({ theme }) => theme.fontSize.s};
+export const StyledButton = styled.button`
+  background-color: ${({ theme }) => theme.colors.bg.secondary};
+  border: none;
+  border-left: 1px solid ${({ theme }) => theme.colors.decors.white};
+  transform: translateX(-1px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0 10px 10px 0;
+  font-size: ${({ theme }) => theme.fontSize.m};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.text.darkGrey};
-  text-indent: -2rem;
-  margin-bottom: 1rem;
+  color: ${({ theme }) => theme.colors.text.black};
+  width: 50px;
+  height: 50px;
+  transition: background-color 0.2s ease-in, color 0.2s ease-in;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.bg.darkGrey};
+    color: ${({ theme }) => theme.colors.text.white};
+  }
 `;
