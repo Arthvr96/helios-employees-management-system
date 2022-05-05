@@ -2,7 +2,6 @@ import uniqid from 'uniqid';
 import PropTypes from 'prop-types';
 import React from 'react';
 import GraphShift from 'components/molecules/GraphShift/GraphShift';
-import { schema1 } from 'mocks/schema';
 
 const GraphRowShifts = ({ className, workplace, shiftIndex, schema }) => {
   const arr = new Array(7);

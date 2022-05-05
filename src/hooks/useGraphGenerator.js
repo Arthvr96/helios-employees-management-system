@@ -6,19 +6,20 @@ export const useGraphGenerator = (schema, dispo) => {
   const { graphGenerator, firestore } = heliosAppSdk;
 
   useEffect(() => {
-    firestore.getEmployeesList().then((respond) => {
-      const usersList = [];
-      if (respond.size) {
-        respond.forEach((user) => {
-          usersList.push(user.data());
-        });
-      }
+    firestore
+      .getEmployeesList()
+      .then((respond) => {
+        const usersList = [];
+        if (respond.size) {
+          respond.forEach((user) => {
+            usersList.push(user.data());
+          });
+        }
 
-      const { users, graph } = graphGenerator.init(schema, dispo, usersList);
-      console.log(users);
-      console.log(graph);
-      // setValues({ users, graph });
-    });
+        const { users, graph } = graphGenerator.init(schema, dispo, usersList);
+        setValues({ users, graph });
+      })
+      .catch((e) => alert(e.code));
   }, []);
 
   return values;

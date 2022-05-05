@@ -151,6 +151,11 @@ const getGraphArchive = () => {
   return __handleGetDocs__(graphArchive);
 };
 
+const createGraph = (docName, data) => {
+  const { graphArchive } = firestoreConstants.paths;
+  return __handleSetDoc__(graphArchive, docName, data);
+};
+
 export const firestoreRequest = {
   getUserInfo,
   getEmployeesList,
@@ -165,4 +170,5 @@ export const firestoreRequest = {
   updateGraphSchemaShape,
   getGraphArchive,
   getAllDispositions,
+  createGraph,
 };

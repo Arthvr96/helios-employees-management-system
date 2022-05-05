@@ -1,7 +1,4 @@
-import { schema1 } from 'mocks/schema';
 import { cloneDeep } from 'lodash';
-import { dispo1 } from 'mocks/dispo';
-import { usersInfo } from 'mocks/userInfo';
 
 const days = ['day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7'];
 const workplaces = ['obs1', 'obs2', 'bar1', 'bar2', 'coffee', 'tickets', 'help'];
@@ -220,10 +217,11 @@ const addTemporaryInfo = (usersArr, dispoArr) => {
   return cloneDeep(users);
 };
 
-export const init = (schemaBody, dispoBody) => {
-  const schema = cloneDeep(schema1.schema);
-  const dispositions = convertObjToArray(dispo1.body);
-  const users = addTemporaryInfo(usersInfo, dispositions);
+export const init = (schemaBody, dispoBody, usersInfo) => {
+  const schema = cloneDeep(schemaBody);
+  const dispositions = convertObjToArray(dispoBody);
+  const usersBody = convertObjToArray(usersInfo);
+  const users = addTemporaryInfo(usersBody, dispositions);
   const graph = getGraphShape(schema);
   const peopleWhoCanWork = getPeopleWhoCanWork(schema, dispositions, users);
 

@@ -5,6 +5,10 @@ export const Table = styled.table`
   td {
     padding: 0.2rem 1rem;
   }
+
+  td.empty {
+    background-color: ${({ theme }) => theme.colors.error};
+  }
 `;
 
 export const ScrollWrapper = styled.div`

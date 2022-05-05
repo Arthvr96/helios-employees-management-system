@@ -24,10 +24,12 @@ export const WindowTitleWrapper = styled.div`
 
 export const Table = styled.table`
   margin-bottom: 2rem;
+
   td.alias {
     font-weight: ${({ theme }) => theme.fontWeight.regular};
     text-transform: capitalize;
   }
+
   td {
     min-width: 45px;
     padding: 0.4rem 0.2rem;
@@ -49,11 +51,13 @@ export const Table = styled.table`
   .name {
     min-width: 10.5rem;
   }
+
   .day {
     min-width: 7rem;
     font-size: ${({ theme }) => theme.fontSize.xxs};
     text-transform: uppercase;
   }
+
   .weekend {
     background-color: ${({ theme }) => theme.colors.bg.grey};
   }
@@ -72,6 +76,10 @@ export const Table = styled.table`
 
   td.green {
     background-color: ${({ theme }) => theme.colors.success} !important;
+  }
+
+  td.shift {
+    background-color: rgba(120, 255, 6, 0.8) !important;
   }
 `;
 

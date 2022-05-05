@@ -20,6 +20,7 @@ const ScheduleGeneratorView = () => {
       setPage(nrPage);
     }
   };
+
   return (
     <ViewTemplate
       minWidth="1150px"

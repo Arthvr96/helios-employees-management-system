@@ -143,12 +143,13 @@ const GraphPage = ({ setHidden, isHidden }) => {
                 />
               </label>
               <SubmitButton
-                disabled={selectedGraph === 'default'}
+                // disabled={selectedGraph === 'default'}
+                disabled
                 onClick={handleEditGraph}
                 margin="1.5rem 0 0 0"
                 type="button"
               >
-                Stwórz grafik
+                Edytuj grafik
               </SubmitButton>
             </>
           )}
@@ -156,6 +157,7 @@ const GraphPage = ({ setHidden, isHidden }) => {
       )}
       {page === '3' && (
         <GraphCreator
+          closeCreator={handleBack}
           isHidden={isHidden}
           setHidden={setHidden}
           mode="create"
