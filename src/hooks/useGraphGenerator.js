@@ -1,7 +1,7 @@
 import heliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
 import { useEffect, useState } from 'react';
 
-export const useGraphGenerator = (schema, dispo) => {
+export const useGraphGenerator = (schema, dispo, workdays) => {
   const [values, setValues] = useState({ users: [], graph: [] });
   const { graphGenerator, firestore } = heliosAppSdk;
 
@@ -16,7 +16,7 @@ export const useGraphGenerator = (schema, dispo) => {
           });
         }
 
-        const { users, graph } = graphGenerator.init(schema, dispo, usersList);
+        const { users, graph } = graphGenerator.init(schema, dispo, usersList, workdays);
         setValues({ users, graph });
       })
       .catch((e) => alert(e.code));

@@ -10,6 +10,7 @@ import {
   __archiveActualDispo__,
   __cleanupDispoEmployees__,
   __cleanupDispoCycles__,
+  __cleanupGraphsArchive__,
 } from './onChangeStateFunctions';
 
 const __runOnNewCycle__ = (values, dispoSendInfo) => {
@@ -23,9 +24,9 @@ const __runOnBlockSendingDispo__ = (appState) => {
   return __archiveActualDispo__(date, appState.workDays);
 };
 const __runOnEndCycle__ = () => {
-  return __cleanupDispoEmployees__().then((x) => {
-    return __cleanupDispoCycles__();
-  });
+  return __cleanupDispoEmployees__()
+    .then(() => __cleanupDispoCycles__())
+    .then(() => __cleanupGraphsArchive__());
 };
 
 const changeStateApp = async (target, values, appState, dispoSendInfo) => {

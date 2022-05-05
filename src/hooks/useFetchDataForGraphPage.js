@@ -11,6 +11,13 @@ export const useFetchDataForGraphPage = () => {
   const [optionsDispositions, setOptionsDispositions] = useState([]);
   const [optionsSchema, setOptionsSchema] = useState([]);
 
+  const sortDates = (a, b) => {
+    const date1 = new Date(a.slice(0, 10));
+    const date2 = new Date(b.slice(0, 10));
+
+    return date2 - date1;
+  };
+
   useEffect(() => {
     getGraphArchive().then((respond) => {
       if (respond.size) {
@@ -20,6 +27,7 @@ export const useFetchDataForGraphPage = () => {
           arr.push(el.id);
           obj[el.id] = el.data();
         });
+        arr.sort(sortDates);
         setOptionsGraphs([...arr]);
         setGraphs({ ...obj });
       }
@@ -32,6 +40,7 @@ export const useFetchDataForGraphPage = () => {
           arr.push(el.id);
           obj[el.id] = el.data();
         });
+        arr.sort(sortDates);
         setOptionsDispositions([...arr]);
         setDispositions({ ...obj });
       }

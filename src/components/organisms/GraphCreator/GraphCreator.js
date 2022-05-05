@@ -29,7 +29,7 @@ const GraphCreator = ({
   closeCreator,
 }) => {
   const { createGraph } = heliosAppSdk.firestore;
-  const { users, graph } = useGraphGenerator(schema, dispo);
+  const { users, graph } = useGraphGenerator(schema, dispo, workdays);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const tableRef = useRef(null);
@@ -62,9 +62,20 @@ const GraphCreator = ({
           workplace.forEach((shift, shiftIndex) => {
             const address = `.${workplaces[workplaceIndex]}-${shiftIndex}-${days[dayIndex]}-name`;
             const target = tableRef.current.querySelector(address);
-            target.innerHTML = shift;
-            if (shift === 'empty') {
-              target.classList.add('empty');
+            if (workdays[days[dayIndex]]) {
+              target.innerHTML = shift;
+              if (shift === 'empty') {
+                target.classList.add('empty');
+              }
+            } else {
+              const addressTo = `.${workplaces[workplaceIndex]}-${shiftIndex}-${days[dayIndex]}-to`;
+              const addressFrom = `.${workplaces[workplaceIndex]}-${shiftIndex}-${days[dayIndex]}-from`;
+              const target2 = tableRef.current.querySelector(addressTo);
+              const target3 = tableRef.current.querySelector(addressFrom);
+              target.innerHTML = 'wolne';
+              target.classList.add('freeDay');
+              target2.classList.add('freeDay');
+              target3.classList.add('freeDay');
             }
           });
         });

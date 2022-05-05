@@ -154,3 +154,30 @@ export const __cleanupDispoCycles__ = () => {
     });
   });
 };
+
+export const __cleanupGraphsArchive__ = () => {
+  const { graphArchive } = firestoreConstants.paths;
+
+  const asyncFunc = (querySnapshot) => {
+    const graphs = [];
+    querySnapshot.forEach((el) => {
+      graphs.push(el.id);
+    });
+    graphs.sort((a, b) => {
+      const date1 = new Date(a.slice(0, 10));
+      const date2 = new Date(b.slice(0, 10));
+
+      return date2 - date1;
+    });
+    return __handleDeleteDoc__(graphArchive, graphs[graphs.length - 1]);
+  };
+  return __handleGetDocs__(graphArchive).then((querySnapshot) => {
+    return new Promise((resolve) => {
+      if (querySnapshot.size > 15) {
+        resolve(asyncFunc(querySnapshot));
+      } else {
+        resolve();
+      }
+    });
+  });
+};
