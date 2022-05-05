@@ -102,19 +102,20 @@ const DispoTableWindow = React.forwardRef(
               ))}
               {!isShowCase && <th className="name">Podpis</th>}
               {msgVisible ? <th>Msg?</th> : null}
+              {isShowCase && <th className="percent">zmiany/dyspo</th>}
             </tr>
           </thead>
           <tbody>
             {sortedDispo &&
               setSortedDispo &&
-              sortedDispo.map((dispo) => (
+              sortedDispo.map((dispo, rowIndex) => (
                 <tr
                   key={dispo.alias}
                   className={`${dispo.alias.replace(' ', '')} ${dispo.coffee ? 'coffee' : ''} ${
                     !dispo.disposition.day1 ? 'notSent' : 'sent'
                   }`}
                 >
-                  <td className="alias">{dispo.alias}</td>
+                  <td className={`alias alias-row-${rowIndex}`}>{dispo.alias}</td>
                   {dispo.disposition.day1 ? (
                     <>
                       <td className={`${!workDays[0] ? 'dayFree' : ''}`}>
@@ -150,6 +151,7 @@ const DispoTableWindow = React.forwardRef(
                           )}
                         </td>
                       ) : null}
+                      {isShowCase && <td className={`percentTarget percent-row-${rowIndex}`} />}
                     </>
                   ) : (
                     <>
@@ -162,6 +164,7 @@ const DispoTableWindow = React.forwardRef(
                       <td className={`${!workDays[6] ? 'dayFree' : ''}`}>-</td>
                       {!isShowCase && <td />}
                       {msgVisible ? <td>Nie</td> : null}
+                      {isShowCase && <td />}
                     </>
                   )}
                 </tr>
