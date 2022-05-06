@@ -32,6 +32,8 @@ const GraphPage = ({ setHidden, isHidden }) => {
   const [selectedSchema, setSelectedSchema] = useState('default');
   const [selectedGraph, setSelectedGraph] = useState('default');
   const [selectedDispo, setSelectedDispo] = useState('default');
+  const [selectedGraphData, setSelectedGraphData] = useState({});
+  const [editMode, setEditMode] = useState(false);
 
   const initCreateGraph = () => {
     if (isVisible) {
@@ -51,15 +53,27 @@ const GraphPage = ({ setHidden, isHidden }) => {
   };
 
   const handleEditGraph = () => {
-    // TODO: create edit mode
+    const { date } = graphs[selectedGraph];
+    const dispoCopy = JSON.parse(graphs[selectedGraph].dispo);
+    const graphCopy = JSON.parse(graphs[selectedGraph].graph);
+    const schemaCopy = JSON.parse(graphs[selectedGraph].schema);
+    const usersCopy = JSON.parse(graphs[selectedGraph].users);
+    const workdaysCopy = graphs[selectedGraph].workdays
+      ? JSON.parse(graphs[selectedGraph].workdays)
+      : workdays;
+    setSelectedGraphData({ date, dispoCopy, graphCopy, schemaCopy, usersCopy, workdaysCopy });
+    setEditMode(true);
+    initCreateGraph();
   };
 
   const handleBack = () => {
-    setVisibility(false);
     setPage('0');
+    setVisibility(false);
+    setSelectedSchema('default');
     setSelectedGraph('default');
     setSelectedDispo('default');
-    setSelectedSchema('default');
+    setSelectedGraphData({});
+    setEditMode(false);
   };
 
   return (
@@ -129,7 +143,7 @@ const GraphPage = ({ setHidden, isHidden }) => {
           {page === '2' && (
             <>
               <label htmlFor="graphs">
-                <LabelError labelName="Wybierz dyspozycje dla grafiku" />
+                <LabelError labelName="Wybierz grafik do edycji" />
                 <InputSelect
                   margin="0.5rem 0 0 0"
                   width="100%"
@@ -143,8 +157,7 @@ const GraphPage = ({ setHidden, isHidden }) => {
                 />
               </label>
               <SubmitButton
-                // disabled={selectedGraph === 'default'}
-                disabled
+                disabled={selectedGraph === 'default'}
                 onClick={handleEditGraph}
                 margin="1.5rem 0 0 0"
                 type="button"
@@ -155,7 +168,7 @@ const GraphPage = ({ setHidden, isHidden }) => {
           )}
         </CardTemplate>
       )}
-      {page === '3' && (
+      {page === '3' && !editMode && (
         <GraphCreator
           closeCreator={handleBack}
           isHidden={isHidden}
@@ -171,6 +184,22 @@ const GraphPage = ({ setHidden, isHidden }) => {
           workdays={
             dispositions[selectedDispo].newType ? dispositions[selectedDispo].workDays : workdays
           }
+        />
+      )}
+      {page === '3' && editMode && (
+        <GraphCreator
+          closeCreator={handleBack}
+          isHidden={isHidden}
+          setHidden={setHidden}
+          mode="edit"
+          date={selectedGraphData.date}
+          schema={selectedGraphData.schemaCopy}
+          dispo={selectedGraphData.dispoCopy}
+          workdays={selectedGraphData.workdaysCopy}
+          graphGeneratorData={{
+            usersGenerated: selectedGraphData.usersCopy,
+            graphGenerated: selectedGraphData.graphCopy,
+          }}
         />
       )}
     </>

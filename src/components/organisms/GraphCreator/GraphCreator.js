@@ -8,23 +8,28 @@ import { useGraphGenerator } from 'hooks/useGraphGenerator';
 import { Button } from 'components/atoms/Button/Button';
 import heliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
 import { GraphTable } from 'components/atoms/GraphTable/GraphTable';
+import { cloneDeep } from 'lodash';
 import { DispoWrapper, HideNavButton, ScrollWrapper, StyledButton } from './GraphCreator.style';
 
 const days = ['day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7'];
 const workplaces = ['obs1', 'obs2', 'bar1', 'bar2', 'coffee', 'tickets', 'help'];
 
 const GraphCreator = ({
-  mode,
-  date,
-  dispo,
-  schema,
-  workdays,
+  closeCreator,
   isHidden,
   setHidden,
-  closeCreator,
+  mode,
+  date,
+  schema,
+  dispo,
+  workdays,
+  graphGeneratorData = { usersGenerated: [], graphGenerated: [] },
 }) => {
   const { createGraph } = heliosAppSdk.firestore;
-  const { users, graph } = useGraphGenerator(schema, dispo, workdays);
+  const { users, graph } = useGraphGenerator(schema, dispo, workdays, mode);
+  const { usersGenerated, graphGenerated } = graphGeneratorData;
+  const [usersData, setUsersData] = useState([]);
+  const [graphData, setGraphData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const tableRef = useRef(null);
@@ -40,8 +45,9 @@ const GraphCreator = ({
     const data = {
       schema: JSON.stringify(schema),
       dispo: JSON.stringify(dispo),
-      graph: JSON.stringify(graph),
-      users: JSON.stringify(users),
+      graph: JSON.stringify(graphData),
+      users: JSON.stringify(usersData),
+      workdays: JSON.stringify(workdays),
       date,
     };
     createGraph(date, data)
@@ -53,8 +59,26 @@ const GraphCreator = ({
   };
 
   useEffect(() => {
-    if (graph.length) {
-      graph.forEach((day, dayIndex) => {
+    if (mode === 'create' && users.length) {
+      setUsersData(cloneDeep(users));
+    }
+    if (mode === 'create' && graph.length) {
+      setGraphData(cloneDeep(graph));
+    }
+  }, [users, graph]);
+
+  useEffect(() => {
+    if (mode === 'edit' && usersGenerated.length) {
+      setUsersData(cloneDeep(usersGenerated));
+    }
+    if (mode === 'edit' && graphGenerated.length) {
+      setGraphData(cloneDeep(graphGenerated));
+    }
+  }, [usersGenerated, graphGenerated]);
+
+  useEffect(() => {
+    if (graphData.length) {
+      graphData.forEach((day, dayIndex) => {
         day.forEach((workplace, workplaceIndex) => {
           workplace.forEach((shift, shiftIndex) => {
             const address = `.${workplaces[workplaceIndex]}-${shiftIndex}-${days[dayIndex]}-name`;
@@ -78,7 +102,7 @@ const GraphCreator = ({
         });
       });
     }
-  }, [graph]);
+  }, [graphData]);
 
   useEffect(() => {
     const percentFields1 = [...dispoLeftRef.current.querySelectorAll('.percentTarget')];
@@ -90,7 +114,7 @@ const GraphCreator = ({
       const alias = dispoLeftRef.current.querySelector(address).innerHTML;
       const {
         temporaryInfo: { shiftsCount, dispoCount },
-      } = users.find((u) => u.alias === alias);
+      } = usersData.find((u) => u.alias === alias);
       const percentage = (shiftsCount / dispoCount).toFixed(2);
       el.innerHTML = percentage;
       if (percentage < 0.3) {
@@ -112,7 +136,7 @@ const GraphCreator = ({
       percentFields2.forEach(iterator);
     }
 
-    users.forEach((user) => {
+    usersData.forEach((user) => {
       const shifts = user.temporaryInfo.shiftTaken;
       const address = `.${user.alias.replace(' ', '')}`;
       const el1 = dispoLeftRef.current.querySelector(address);
@@ -137,7 +161,7 @@ const GraphCreator = ({
         }
       });
     });
-  }, [users]);
+  }, [usersData]);
 
   return (
     <>
@@ -200,6 +224,10 @@ GraphCreator.propTypes = {
   mode: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   workdays: PropTypes.objectOf(PropTypes.bool),
+  graphGeneratorData: PropTypes.shape({
+    graphGenerated: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string))),
+    usersGenerated: PropTypes.arrayOf(PropTypes.object),
+  }),
   dispo: PropTypes.objectOf(
     PropTypes.objectOf(
       PropTypes.oneOfType([
