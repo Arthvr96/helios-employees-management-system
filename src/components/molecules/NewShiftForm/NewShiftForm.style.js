@@ -18,3 +18,16 @@ export const ButtonsWrapper = styled.div`
   display: flex;
   margin-top: 2rem;
 `;
+
+export const StyledLabel = styled.label`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 80%;
+  margin: ${({ margin }) => margin};
+
+  input {
+    width: 50px;
+  }
+`;

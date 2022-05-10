@@ -12,4 +12,5 @@ export const InputForm = styled.input`
   background-color: ${({ theme }) => theme.colors.bg.secondary};
   border: ${({ isError, theme }) =>
     isError ? `1px solid ${theme.colors.error}` : `1px solid ${theme.colors.decors.grey}`};
+  cursor: pointer;
 `;

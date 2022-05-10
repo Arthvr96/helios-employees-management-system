@@ -5,7 +5,8 @@ import PropTypes from 'prop-types';
 import LabelError from 'components/molecules/LabelError/LabelError';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { NewShiftWrapper, ButtonsWrapper } from './NewShiftForm.style';
+import { useSchemaCreatorContext } from 'providers/SchemaCreatorProvider/SchemaCreatorProvider';
+import { NewShiftWrapper, ButtonsWrapper, StyledLabel } from './NewShiftForm.style';
 
 const convertTime = (x) => {
   const p = (s) => parseInt(s, 10);
@@ -16,8 +17,14 @@ const convertTime = (x) => {
 };
 
 const NewShiftForm = ({ handleCancel, handleSave, initValues }) => {
-  const onSubmit = ({ from, to }) => {
-    handleSave({ from: convertTime(from), to: convertTime(to) });
+  const { selectedWorkplace } = useSchemaCreatorContext();
+  const onSubmit = ({ from, to, marathon, night }) => {
+    handleSave({
+      from: convertTime(from),
+      to: convertTime(to),
+      marathon: !!marathon,
+      night: !!night,
+    });
     handleCancel();
   };
 
@@ -34,7 +41,7 @@ const NewShiftForm = ({ handleCancel, handleSave, initValues }) => {
   });
   return (
     <Formik
-      initialValues={initValues || { from: '', to: '' }}
+      initialValues={initValues || { from: '', to: '', marathon: false, night: false }}
       onSubmit={onSubmit}
       validationSchema={validationSchema}
     >
@@ -72,13 +79,56 @@ const NewShiftForm = ({ handleCancel, handleSave, initValues }) => {
                 id="to"
                 name="to"
                 type="time"
-                margin="0.5rem 0 0 0"
+                margin="0.5rem 0 1rem 0"
                 value={values.to}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 isError={errors.to && touched.to}
               />
             </label>
+            {selectedWorkplace.id === 'obs1' || selectedWorkplace.id === 'obs2' ? (
+              <StyledLabel htmlFor="night" margin="1rem">
+                <InputForm
+                  id="night"
+                  name="night"
+                  type="checkbox"
+                  margin="0"
+                  checked={values.night}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  isError={errors.night && touched.night}
+                  disabled={values.marathon}
+                />
+                <LabelError
+                  labelName="Zamkniecie?"
+                  touched={touched.night}
+                  errors={errors.night}
+                  flexDirection="row"
+                  margin="0 0 0.5rem 0"
+                />
+              </StyledLabel>
+            ) : null}
+
+            <StyledLabel htmlFor="marathon">
+              <InputForm
+                id="marathon"
+                name="marathon"
+                type="checkbox"
+                margin="0"
+                checked={values.marathon}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isError={errors.marathon && touched.marathon}
+                disabled={values.night}
+              />
+              <LabelError
+                labelName="Maraton?"
+                touched={touched.marathon}
+                errors={errors.marathon}
+                flexDirection="row"
+                margin="0 0 0.5rem 0"
+              />
+            </StyledLabel>
             <ButtonsWrapper>
               <Button onClick={handleCancel} margin="0 1rem 0 0" isCancel type="button">
                 Anuluj

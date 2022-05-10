@@ -47,7 +47,20 @@ export const ShiftWrapper = styled.button`
   margin-right: 1rem;
   border: 1px solid ${({ theme }) => theme.colors.decors.darkGrey};
   border-radius: 10px;
-  background-color: ${({ theme }) => theme.colors.bg.grey};
+  background-color: ${({ theme, isMarathon, isNight }) => {
+    const defaultBg = theme.colors.bg.grey;
+    const night = '#4b7fe8';
+    const marathon = '#8f5aee';
+
+    if (isMarathon) {
+      return marathon;
+    }
+    if (isNight) {
+      return night;
+    }
+
+    return defaultBg;
+  }};
   cursor: pointer;
   transition: background-color 0.2s ease-in, color 0.2s ease-in;
 
