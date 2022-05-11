@@ -10,6 +10,7 @@ const links = [
 ];
 
 const DispoAndScheduleView = () => {
+  const [isHidden, setHidden] = useState(false);
   const [page, setPage] = useState('0');
 
   const handleSetPage = (nrPage) => {
@@ -27,9 +28,11 @@ const DispoAndScheduleView = () => {
       alignItems="center"
       justifyContent="flex-start"
     >
-      <MenuSelectVisiblePanel links={links} state={page} handleClick={handleSetPage} />
+      {!isHidden && (
+        <MenuSelectVisiblePanel links={links} state={page} handleClick={handleSetPage} />
+      )}
       {page === '1' ? <DispositionsArchive /> : null}
-      {page === '2' ? <GraphsArchive /> : null}
+      {page === '2' ? <GraphsArchive isHidden={isHidden} setHidden={setHidden} /> : null}
     </ViewTemplate>
   );
 };

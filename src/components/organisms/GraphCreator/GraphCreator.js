@@ -19,6 +19,7 @@ const GraphCreator = ({
   isHidden,
   setHidden,
   mode,
+  isPreview,
   date,
   schema,
   dispo,
@@ -201,14 +202,20 @@ const GraphCreator = ({
             <GraphDaysHeader date={date} />
             {schema && <GraphBody schema={schema} />}
           </GraphTable>
-          <div>
-            <Button onClick={handleSave} type="button">
-              Zapisz grafik
+          {isPreview ? (
+            <Button onClick={closeCreator} type="button" margin="2rem 0 0 1rem" isCancel>
+              Zamknij
             </Button>
-            <Button onClick={handleCancel} type="button" margin="2rem 0 0 1rem" isCancel>
-              Anuluj
-            </Button>
-          </div>
+          ) : (
+            <div>
+              <Button onClick={handleSave} type="button">
+                Zapisz grafik
+              </Button>
+              <Button onClick={handleCancel} type="button" margin="2rem 0 0 1rem" isCancel>
+                Anuluj
+              </Button>
+            </div>
+          )}
         </CardTemplate>
       </ScrollWrapper>
     </>
@@ -218,6 +225,7 @@ const GraphCreator = ({
 export default GraphCreator;
 
 GraphCreator.propTypes = {
+  isPreview: PropTypes.bool,
   closeCreator: PropTypes.func.isRequired,
   isHidden: PropTypes.bool.isRequired,
   setHidden: PropTypes.func.isRequired,

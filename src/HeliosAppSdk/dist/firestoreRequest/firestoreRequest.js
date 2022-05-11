@@ -156,6 +156,11 @@ const createGraph = (docName, data) => {
   return __handleSetDoc__(graphArchive, docName, data);
 };
 
+const deleteGraph = (docName) => {
+  const { graphArchive } = firestoreConstants.paths;
+  return __handleDeleteDoc__(graphArchive, docName);
+};
+
 export const firestoreRequest = {
   getUserInfo,
   getEmployeesList,
@@ -171,4 +176,5 @@ export const firestoreRequest = {
   getGraphArchive,
   getAllDispositions,
   createGraph,
+  deleteGraph,
 };
