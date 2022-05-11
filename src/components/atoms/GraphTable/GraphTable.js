@@ -13,4 +13,13 @@ export const GraphTable = styled.table`
   td.freeDay {
     background-color: ${({ theme }) => theme.colors.bg.darkGrey} !important;
   }
+
+  td.aliasGraph {
+    text-transform: capitalize;
+    cursor: pointer;
+  }
+
+  td.highlight {
+    background-color: ${({ theme }) => theme.colors.decors.highlight};
+  }
 `;

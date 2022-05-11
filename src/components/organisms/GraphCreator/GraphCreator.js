@@ -58,6 +58,58 @@ const GraphCreator = ({
       })
       .catch((e) => alert(e.code));
   };
+  // TODO: fix it !
+  // useEffect(() => {
+  //   const elements = [...tableRef.current.querySelectorAll('.aliasGraph')];
+  //   const elements2 = [...dispoLeftRef.current.querySelectorAll('.alias')];
+  //   const elements3 = [...dispoRightRef.current.querySelectorAll('.alias')];
+  //   const handleClick = (e) => {
+  //     if (e.target.classList.value.includes('name') || e.target.classList.value.includes('alias')) {
+  //       if (e.target.innerHTML !== 'empty') {
+  //         if (e.target.classList.value.includes('highlight')) {
+  //           elements.forEach((el) => {
+  //             el.classList.remove('highlight');
+  //           });
+  //           elements2.forEach((el) => {
+  //             el.classList.remove('highlight');
+  //           });
+  //           elements3.forEach((el) => {
+  //             el.classList.remove('highlight');
+  //           });
+  //         } else {
+  //           elements.forEach((el) => {
+  //             el.classList.remove('highlight');
+  //           });
+  //           elements2.forEach((el) => {
+  //             el.classList.remove('highlight');
+  //           });
+  //           elements3.forEach((el) => {
+  //             el.classList.remove('highlight');
+  //           });
+  //           elements.forEach((el) => {
+  //             if (el.innerHTML === e.target.innerHTML) {
+  //               el.classList.add('highlight');
+  //             }
+  //           });
+  //           elements2.forEach((el) => {
+  //             if (el.innerHTML === e.target.innerHTML) {
+  //               el.classList.add('highlight');
+  //             }
+  //           });
+  //           elements3.forEach((el) => {
+  //             if (el.innerHTML === e.target.innerHTML) {
+  //               el.classList.add('highlight');
+  //             }
+  //           });
+  //         }
+  //       }
+  //     }
+  //   };
+  //
+  //   tableRef.current.addEventListener('click', handleClick);
+  //   dispoLeftRef.current.addEventListener('click', handleClick);
+  //   dispoRightRef.current.addEventListener('click', handleClick);
+  // }, []);
 
   useEffect(() => {
     if (mode === 'create' && users.length) {
