@@ -28,6 +28,7 @@ export const Table = styled.table`
   td.alias {
     font-weight: ${({ theme }) => theme.fontWeight.regular};
     text-transform: capitalize;
+    cursor: pointer;
   }
 
   td {
@@ -79,7 +80,11 @@ export const Table = styled.table`
   }
 
   td.shift {
-    background-color: rgba(120, 255, 6, 0.8) !important;
+    background-color: ${({ theme }) => theme.colors.decors.shiftTaken} !important;
+  }
+
+  td.highlight {
+    background-color: ${({ theme }) => theme.colors.decors.highlight} !important;
   }
 `;
 

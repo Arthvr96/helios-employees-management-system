@@ -10,7 +10,7 @@ const GraphShift = ({ classFrom, classTo, className, from = '', to = '' }) => {
     <>
       <GraphTdHours className={classFrom}>{from && getDisplayTime(from)}</GraphTdHours>
       <GraphTdHours className={classTo}>{from && getDisplayTime(to)}</GraphTdHours>
-      <GraphTdName className={className} />
+      <GraphTdName className={`aliasGraph ${className}`} />
     </>
   );
 };

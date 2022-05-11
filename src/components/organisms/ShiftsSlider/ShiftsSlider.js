@@ -59,6 +59,8 @@ const ShiftsSlider = ({ onEdit }) => {
         {shifts.map((shift, i) => (
           <ShiftItem
             key={shift.id}
+            isMarathon={shift.marathon}
+            isNight={shift.night}
             name={`Zmiana nr${i + 1}`}
             time={`${getDisplayTime(shift.from)}-${getDisplayTime(shift.to)}`}
             onDelete={() => handleDelete(shift.id)}

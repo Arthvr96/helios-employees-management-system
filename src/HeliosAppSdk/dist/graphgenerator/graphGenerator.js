@@ -22,39 +22,29 @@ const getPeopleWhoCanWork = (schema, dispositions, users) => {
           dispositions.forEach((dispo) => {
             const userObj = users.find((user) => user.alias === dispo.alias);
             if (dispo.disposition[day] && userObj.workplaces[workplace]) {
-              // TODO: trzeba dodac przy tworzeniu schematow opcje isNight dla obs1 i obs2
-              // if ((shift.isNight && userObj.workplaces.night) || !shift.isNight) {
-              const c1 = workplace === 'obs1' || workplace === 'obs2';
-              const c2 = shift.to > 23.5 && shift.to < 26.5;
-              const c3 = shift.to <= 23;
-              if ((c1 && c2 && userObj.workplaces.night) || c3) {
+              const isNight = shift.night && userObj.workplaces.night;
+              if ((isNight && !shift.marathon) || (!shift.night && !shift.marathon)) {
                 if (dispo.disposition[day][0] !== 'freeDay') {
-                  const endLastShift =
-                    day !== 'day1' ? userObj.temporaryInfo.shiftTaken[days[dayIndex]] : null;
-                  const condition0 = endLastShift && endLastShift <= 23;
-                  const condition1 =
-                    endLastShift && endLastShift > 23 && endLastShift <= 26 && shift.from > 10;
-                  const condition2 =
-                    endLastShift && endLastShift > 26 && endLastShift <= 27 && shift.from > 13;
-                  const condition3 = endLastShift && endLastShift > 27 && shift.from > 16;
-                  if (!endLastShift || condition0 || condition1 || condition2 || condition3) {
-                    if (dispo.disposition[day][0] === 'wholeDay') {
-                      if (shift.to > 26) {
-                        if (dispo.disposition[day][3]) {
-                          shiftArr.push(userObj.alias);
-                        }
-                      } else {
-                        shiftArr.push(userObj.alias);
-                      }
+                  if (dispo.disposition[day][0] === 'wholeDay') {
+                    shiftArr.push(userObj.alias);
+                  }
+                  if (dispo.disposition[day][0] === 'range') {
+                    if (
+                      shift.from + 0.5 >= parseInt(dispo.disposition[day][1], 10) &&
+                      shift.to - 0.5 <= parseInt(dispo.disposition[day][2], 10)
+                    ) {
+                      shiftArr.push(userObj.alias);
                     }
-                    if (dispo.disposition[day][0] === 'range') {
-                      if (
-                        shift.from + 0.75 >= parseInt(dispo.disposition[day][1], 10) &&
-                        shift.to - 0.75 <= parseInt(dispo.disposition[day][2], 10)
-                      ) {
-                        shiftArr.push(userObj.alias);
-                      }
-                    }
+                  }
+                }
+              }
+              if (shift.marathon) {
+                if (dispo.disposition[day][0] === 'wholeDay' && dispo.disposition[day][4]) {
+                  const isObs = workplace === 'obs1' || workplace === 'obs2';
+                  if (isObs && userObj.workplaces.night) {
+                    shiftArr.push(userObj.alias);
+                  } else if (!isObs) {
+                    shiftArr.push(userObj.alias);
                   }
                 }
               }
@@ -104,38 +94,70 @@ const getGraphShape = (schema) => {
   return result;
 };
 
-const selectEmployee = (shift, users) => {
+const selectEmployee = (shift, users, schema) => {
+  const dayIndex = shift[0];
+  const workplaceIndex = shift[1];
+  const shiftIndex = shift[2];
+  const shiftStart = schema[days[dayIndex]][workplaces[workplaceIndex]].shifts[shiftIndex].from;
   const arr = shift[4];
   const employeesList = cloneDeep(arr);
-  const priorityList = employeesList.map((alias, i) => {
+  const employeesList2 = [];
+
+  employeesList.forEach((alias) => {
+    const obj = users.find((el) => el.alias === alias);
+
+    if (dayIndex > 0) {
+      if (obj.temporaryInfo.shiftTaken[days[dayIndex - 1]]) {
+        const x = obj.temporaryInfo.shiftTaken[days[dayIndex - 1]][3].to;
+        if (x < 23) {
+          employeesList2.push(alias);
+        }
+        if (x >= 23 && x < 26) {
+          if (shiftStart > 11) {
+            employeesList2.push(alias);
+          }
+        } else if (x > 26) {
+          if (shiftStart > 15.5) {
+            employeesList2.push(alias);
+          }
+        }
+      } else {
+        employeesList2.push(alias);
+      }
+    } else {
+      employeesList2.push(alias);
+    }
+  });
+
+  const priorityList = employeesList2.map((alias, i) => {
     const user = users.find((el) => el.alias === alias);
     const divider = user.temporaryInfo.dispoCount > 5 ? 5 : user.temporaryInfo.dispoCount;
     const boost1 = (() => {
       if (user.temporaryInfo.dispoCount === 1) {
-        return 0.7;
+        return 0.3;
       }
       if (user.temporaryInfo.dispoCount === 2) {
-        return 0.3;
+        return 0.1;
       }
       return 0;
     })();
-    const boost2 = user.temporaryInfo.isDispoSkipped ? 1.5 : 0;
+    const boost2 = user.temporaryInfo.isDispoSkipped ? 2 : 0;
     const deboost1 = (() => {
       switch (user.temporaryInfo.shiftsCount) {
         case 0:
-          return 0;
+          return -0.15;
         case 1:
-          return 0.15;
+          return 0;
         case 2:
           return 0.2;
         case 3:
-          return 0.3;
+          return 0.5;
         case 4:
-          return 0.45;
-        case 5:
           return 0.7;
+        case 5:
+          return 0.9;
         case 6:
-          return 1;
+          return 1.5;
         default:
           return 0;
       }
@@ -237,7 +259,7 @@ export const init = (schemaBody, dispoBody, usersInfo, workdays) => {
 
       while (dayCopy.length) {
         const firstShift = dayCopy[0];
-        const selectedEmployee = selectEmployee(firstShift, users);
+        const selectedEmployee = selectEmployee(firstShift, users, schema);
         graph[firstShift[0]][firstShift[1]][firstShift[2]] = selectedEmployee;
         users.forEach((user, i) => {
           if (user.alias === selectedEmployee) {
@@ -257,7 +279,6 @@ export const init = (schemaBody, dispoBody, usersInfo, workdays) => {
         });
         dayCopy = deleteSelectedEmployee(dayCopy, selectedEmployee);
         skippedDay.push(dayCopy.shift()[4]);
-
         dayCopy = deepSort(dayCopy);
       }
       const graphDay = [...new Set(graph[dayIndex].reduce((a, b) => a.concat(b), []))];

@@ -7,12 +7,14 @@ import { useSchemaCreatorContext } from 'providers/SchemaCreatorProvider/SchemaC
 import heliosAppSdk from 'HeliosAppSdk/HeliosAppSdk';
 import { Wrapper } from './WorkplaceContent.style';
 
+const initState = { from: '', to: '', id: '' };
+
 const WorkplaceContent = () => {
   const { selectedDay, selectedWorkplace, schemaData, handleUpdateSchemaDate } =
     useSchemaCreatorContext();
   const { isActive } = schemaData[selectedDay.id][selectedWorkplace.id];
   const [shiftFormIsOpen, setShiftFormState] = useState(false);
-  const [editValues, setEditValues] = useState({ from: '', to: '' });
+  const [editValues, setEditValues] = useState(initState);
   const { getDisplayTime } = heliosAppSdk.__helpers__;
 
   const editShift = (shiftId) => {
@@ -20,16 +22,29 @@ const WorkplaceContent = () => {
       (el) => el.id === shiftId,
     );
     setShiftFormState(true);
-    setEditValues({ from: getDisplayTime(shift.from), to: getDisplayTime(shift.to), id: shift.id });
+    setEditValues({
+      from: getDisplayTime(shift.from),
+      to: getDisplayTime(shift.to),
+      id: shift.id,
+      marathon: shift.marathon,
+      night: shift.night,
+    });
   };
 
   const handleSave = (values) => {
     handleUpdateSchemaDate('createShift', values, editValues.id);
+    setEditValues(initState);
+  };
+
+  const handleCancel = () => {
+    setShiftFormState(false);
+    setEditValues(initState);
   };
 
   const handleToggle = () => {
     if (isActive && shiftFormIsOpen) {
       setShiftFormState(false);
+      setEditValues(initState);
     }
     handleUpdateSchemaDate('changeToggle', { isActive: !isActive });
   };
@@ -84,9 +99,18 @@ const WorkplaceContent = () => {
       )}
       {isActive && shiftFormIsOpen && (
         <NewShiftForm
-          initValues={{ to: editValues.to, from: editValues.from }}
+          initValues={
+            editValues.id
+              ? {
+                  to: editValues.to,
+                  from: editValues.from,
+                  marathon: !!editValues.marathon,
+                  night: !!editValues.night,
+                }
+              : null
+          }
           handleSave={handleSave}
-          handleCancel={() => setShiftFormState(false)}
+          handleCancel={handleCancel}
         />
       )}
     </Wrapper>

@@ -4,6 +4,7 @@ export const theme = {
     error: '#db0000',
     success: '#05a500',
     warn: '#ffcc00',
+
     bg: {
       primary: '#002047',
       secondary: '#ffffff',
@@ -19,6 +20,8 @@ export const theme = {
       lightGrey: '#e3e3e3',
       grey: '#ACACAC',
       darkGrey: '#4A4A4A',
+      highlight: '#805cee',
+      shiftTaken: 'rgba(146,243,65,0.8)',
     },
     text: {
       white: '#ffffff',
