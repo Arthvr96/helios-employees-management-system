@@ -44,6 +44,8 @@ const GraphPage = ({ setHidden, isHidden }) => {
   };
 
   const handleCreateGraph = () => {
+    console.log('Create graph init');
+    console.log(graphs);
     const graphsKeys = Object.keys(graphs);
     if (graphsKeys.indexOf(selectedDispo) === -1) {
       initCreateGraph();

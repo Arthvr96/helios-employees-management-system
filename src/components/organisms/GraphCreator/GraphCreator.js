@@ -37,6 +37,24 @@ const GraphCreator = ({
   const dispoLeftRef = useRef(null);
   const dispoRightRef = useRef(null);
 
+  useEffect(() => {
+    console.log('-graph creator-');
+    console.log(`user data`);
+    console.log(usersData);
+    console.log(`graph Data`);
+    console.log(graphData);
+  }, [usersData]);
+
+  useEffect(() => {
+    console.log(`user data`);
+    console.log(usersData);
+  }, [usersData]);
+
+  useEffect(() => {
+    console.log(`graph Data`);
+    console.log(graphData);
+  }, [graphData]);
+
   const handleCancel = () => {
     setHidden(false);
     closeCreator();
