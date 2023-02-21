@@ -61,7 +61,7 @@ const createUser = async (values, workplaces, adminRole, dispoSendInfo, appState
   const { users, dispositionsEmployees, stateApp, dispositionsCycles } = firestoreConstants.paths;
 
   const __checkAlias__ = () => {
-    const alias = values.alias.toLowerCase();
+    const alias = values.alias.toLowerCase().trim();
     return __handleGetDocs__(users, 'alias', '==', alias);
   };
 
@@ -99,7 +99,7 @@ const createUser = async (values, workplaces, adminRole, dispoSendInfo, appState
 
   const __addUserToDispositionsEmployees__ = (uid) => {
     return __handleSetDoc__(dispositionsEmployees, uid, {
-      alias: values.alias.toLowerCase(),
+      alias: values.alias.toLowerCase().trim(),
     });
   };
 
@@ -131,7 +131,7 @@ const createUser = async (values, workplaces, adminRole, dispoSendInfo, appState
       };
       __handleUpdateDoc__(dispositionsCycles, date, {
         [uid]: {
-          alias: values.alias.toLowerCase(),
+          alias: values.alias.toLowerCase().trim(),
           disposition: dispoPlaceholder,
         },
       }).catch((error) => window.alert(error.code));
