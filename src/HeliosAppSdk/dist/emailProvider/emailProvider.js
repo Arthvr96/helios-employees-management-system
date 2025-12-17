@@ -1,16 +1,8 @@
-import { Email } from 'HeliosAppSdk/dist/emailProvider/smtp';
 import { getShiftMark } from '../helpers/helpers';
 
-export const handleSendEmail = (to, subject, body) => {
-  return Email.send({
-    Host: 'smtp.gmail.com',
-    Username: process.env.REACT_APP_EMAIL_PROVIDER_LOGIN,
-    Password: process.env.REACT_APP_EMAIL_PROVIDER_PASSWORD,
-    To: to,
-    From: 'heliosdispomail@gmail.com',
-    Subject: subject,
-    Body: body,
-  });
+export const handleSendEmail = async (to, subject, body) => {
+  console.log(to, subject, body);
+  return await Promise.resolve();
 };
 
 const generateBodyFromDispo = (currentUser, appState, disposition, message, days) => {
